@@ -1,0 +1,1962 @@
+[
+ {
+  "id": 1,
+  "predicted_sql": "CREATE POLICY \"authenticated_employee_view_active_employees\" ON hr.employees FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND is_active = true);"
+ },
+ {
+  "id": 2,
+  "predicted_sql": "CREATE POLICY employees_view_own ON hr.employees FOR SELECT USING (employee_id = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 3,
+  "predicted_sql": "CREATE POLICY employees_delete_own_draft_payroll_corrections ON hr.payroll FOR DELETE USING ( employee_id = current_setting('app.employee_id', true)::integer AND status = 'draft' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 AND pay_period_end > CURRENT_DATE );"
+ },
+ {
+  "id": 4,
+  "predicted_sql": "CREATE POLICY hr_specialists_update_employees ON hr.employees FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_specialist' AND employee_id != current_setting('app.employee_id', true)::integer) WITH CHECK (current_setting('app.job_role', true) = 'hr_specialist' AND employee_id != current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 5,
+  "predicted_sql": "CREATE POLICY finance_managers_delete_voided_reports ON finance.revenue FOR DELETE USING ( current_setting('app.job_role', true) = 'finance_manager' AND status = 'voided' AND report_status = 'correction' AND closed_at IS NOT NULL );"
+ },
+ {
+  "id": 6,
+  "predicted_sql": "CREATE POLICY core_engineers_delete_archived_duplicate_issues ON engineering.issues FOR DELETE USING ( current_setting('app.job_role', true) = 'engineer' AND assignee_id = current_setting('app.employee_id', true)::integer AND status = 'archived' AND issue_type = 'duplicate' AND (CURRENT_DATE - COALESCE(updated_at, created_at)) > 90 );"
+ },
+ {
+  "id": 7,
+  "predicted_sql": "CREATE POLICY sales_managers_view_customers ON sales.customers FOR SELECT USING ( app.job_role = 'sales_manager'::text AND EXISTS ( SELECT 1 FROM sales.regions r WHERE r.region_id = customers.region_id AND r.regional_director = current_setting('app.employee_id', true)::integer ) AND customers.last_contact_date >= CURRENT_DATE - INTERVAL '90 days' );"
+ },
+ {
+  "id": 8,
+  "predicted_sql": "CREATE POLICY employees_view_system_config_business_hours ON operations.system_config FOR SELECT USING (EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17);"
+ },
+ {
+  "id": 9,
+  "predicted_sql": "CREATE POLICY department_managers_view_salary ON hr.payroll FOR SELECT USING ( EXISTS ( WITH RECURSIVE reporting_chain AS ( SELECT employee_id, manager_id FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer UNION SELECT e.employee_id, e.manager_id FROM hr.employees e INNER JOIN reporting_chain rc ON e.manager_id = rc.employee_id ) SELECT 1 FROM reporting_chain rc WHERE rc.employee_id = hr.payroll.employee_id ) AND current_setting('app.employee_id', true) IS NOT NULL );"
+ },
+ {
+  "id": 10,
+  "predicted_sql": "CREATE POLICY senior_engineer_delete_archived_repos ON engineering.code_repository FOR DELETE USING ( current_setting('app.job_role', true) = 'senior_engineer' AND owner_id = current_setting('app.employee_id', true)::integer AND archived_at IS NOT NULL AND archived_at <= (CURRENT_TIMESTAMP - INTERVAL '90 days') );"
+ },
+ {
+  "id": 11,
+  "predicted_sql": "CREATE POLICY employees_delete_own_pending_attendance_corrections ON hr.attendance FOR DELETE USING ( tenant_id = current_setting('app.tenant_id', true)::integer AND employee_id = current_setting('app.employee_id', true)::integer AND status = 'pending' AND request_type = 'correction' AND work_date >= CURRENT_DATE - INTERVAL '30 days' AND EXTRACT(DOW FROM work_date) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM check_in) >= 9 AND EXTRACT(HOUR FROM check_out) <= 18 );"
+ },
+ {
+  "id": 12,
+  "predicted_sql": "CREATE POLICY department_managers_view_performance ON hr.performance FOR SELECT USING (EXISTS (SELECT 1 FROM hr.employees WHERE hr.employees.employee_id = current_setting('app.employee_id', true)::integer AND hr.employees.job_role = 'dept_manager' AND hr.employees.department_id = hr.performance.department_id));"
+ },
+ {
+  "id": 13,
+  "predicted_sql": "CREATE POLICY dept_manager_view_performance ON hr.performance FOR SELECT USING ( current_setting('app.job_role', true) = 'dept_manager' AND EXISTS ( WITH RECURSIVE dept_hierarchy AS ( SELECT department_id FROM hr.departments WHERE manager_id = current_setting('app.employee_id', true)::integer UNION ALL SELECT d.department_id FROM hr.departments d INNER JOIN dept_hierarchy dh ON d.parent_department_id = dh.department_id ) SELECT 1 FROM dept_hierarchy dh WHERE dh.department_id = hr.performance.department_id ) );"
+ },
+ {
+  "id": 14,
+  "predicted_sql": "CREATE POLICY product_managers_view_feedback ON product.user_feedback FOR SELECT USING (current_setting('app.job_role', true) = 'product_manager');"
+ },
+ {
+  "id": 15,
+  "predicted_sql": "CREATE POLICY employees_modify_own_record_weekdays ON hr.employees FOR UPDATE USING (employee_id = current_setting('app.employee_id', true)::integer AND EXTRACT(DOW FROM CURRENT_DATE) BETWEEN 1 AND 5) WITH CHECK (employee_id = current_setting('app.employee_id', true)::integer AND EXTRACT(DOW FROM CURRENT_DATE) BETWEEN 1 AND 5);"
+ },
+ {
+  "id": 16,
+  "predicted_sql": "CREATE POLICY auditors_delete_rejected_expenses ON finance.expenses FOR DELETE USING ( current_setting('app.job_role', true) = 'auditor' AND status = 'rejected' AND approved_by IS NOT NULL AND approved_by != current_setting('app.employee_id', true)::integer AND employee_id != current_setting('app.employee_id', true)::integer AND expense_date <= CURRENT_DATE - INTERVAL '7 years' );"
+ },
+ {
+  "id": 17,
+  "predicted_sql": "CREATE POLICY qa_engineers_view_tests ON engineering.tests FOR SELECT USING (current_setting('app.job_role', true) = 'qa_engineer');"
+ },
+ {
+  "id": 18,
+  "predicted_sql": "CREATE POLICY tax_specialists_view_all ON finance.tax_records FOR SELECT USING (current_setting('app.job_role', true) = 'tax_specialist');"
+ },
+ {
+  "id": 19,
+  "predicted_sql": "CREATE POLICY \"senior_engineers_delete_failed_old_tests\" ON engineering.tests FOR DELETE USING ( current_setting('app.job_role', true) = 'senior_engineer' AND status = 'failed' AND (release_id IS NULL OR NOT EXISTS (SELECT 1 FROM engineering.releases WHERE release_id = engineering.tests.release_id AND status = 'active')) AND last_run < (CURRENT_TIMESTAMP - INTERVAL '14 days') );"
+ },
+ {
+  "id": 20,
+  "predicted_sql": "CREATE POLICY backup_access_business_hours ON operations.backups FOR SELECT USING (current_setting('app.user_clearance_level', true)::integer >= 4 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5);"
+ },
+ {
+  "id": 21,
+  "predicted_sql": "CREATE POLICY cfo_delete_budget ON finance.budget FOR DELETE USING ( current_setting('app.job_role', true) = 'cfo' AND status = 'closed' AND budget_cycle_active = false AND date_trunc('quarter', CURRENT_DATE) + interval '3 months' - interval '1 day' = CURRENT_DATE );"
+ },
+ {
+  "id": 22,
+  "predicted_sql": "CREATE POLICY junior_engineer_delete_repo ON engineering.code_repository FOR DELETE USING ( current_setting('app.job_role', true) = 'junior_engineer' AND owner_id = current_setting('app.employee_id', true)::integer AND visibility = 'public' AND classification = 'sandbox' AND repo_status = 'archived' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 23,
+  "predicted_sql": "CREATE POLICY sales_pipeline_select_policy ON sales.sales_pipeline FOR SELECT USING (current_setting('app.job_role', true) = 'sales_rep' AND estimated_value <= 10000 * current_setting('app.position_level', true)::integer);"
+ },
+ {
+  "id": 24,
+  "predicted_sql": "CREATE POLICY hr_specialists_view_benefits ON hr.benefits FOR SELECT USING (current_setting('app.job_role', true) = 'hr_specialist');"
+ },
+ {
+  "id": 25,
+  "predicted_sql": "CREATE POLICY policy_product_analytics_select ON product.analytics FOR SELECT USING (current_setting('app.job_role', true) = 'data_analyst');"
+ },
+ {
+  "id": 26,
+  "predicted_sql": "CREATE POLICY expense_accountant_journal_posting ON finance.expenses FOR UPDATE USING ( current_setting('app.job_role', true) = 'accountant' AND status = 'approved' AND employee_id <> current_setting('app.employee_id', true)::integer AND approved_by <> current_setting('app.employee_id', true)::integer ) WITH CHECK ( current_setting('app.job_role', true) = 'accountant' AND status = 'journal-posted' );"
+ },
+ {
+  "id": 27,
+  "predicted_sql": "CREATE POLICY team_leads_view_attendance ON hr.attendance FOR SELECT USING (EXISTS (SELECT 1 FROM hr.employees WHERE employees.employee_id = current_setting('app.employee_id', true)::integer AND employees.is_team_lead = true AND employees.team_id = attendance.team_id));"
+ },
+ {
+  "id": 28,
+  "predicted_sql": "CREATE POLICY team_leads_approve_leave ON hr.attendance FOR UPDATE USING (EXISTS (WITH RECURSIVE team_hierarchy AS (SELECT team_id FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer AND is_team_lead = true UNION ALL SELECT e.team_id FROM hr.employees e INNER JOIN team_hierarchy th ON e.manager_id = th.team_id) SELECT 1 FROM team_hierarchy WHERE team_id = hr.attendance.team_id) AND hr.attendance.approval_status = 'pending') WITH CHECK (hr.attendance.approval_status IN ('approved', 'rejected') AND EXISTS (WITH RECURSIVE team_hierarchy AS (SELECT team_id FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer AND is_team_lead = true UNION ALL SELECT e.team_id FROM hr.employees e INNER JOIN team_hierarchy th ON e.manager_id = th.team_id) SELECT 1 FROM team_hierarchy WHERE team_id = hr.attendance.team_id));"
+ },
+ {
+  "id": 29,
+  "predicted_sql": "CREATE POLICY \"build_admins_view_all_builds\" ON engineering.builds FOR SELECT USING (current_setting('app.job_role', true) = 'build_admin');"
+ },
+ {
+  "id": 30,
+  "predicted_sql": "CREATE POLICY employees_log_own_attendance ON hr.attendance FOR INSERT WITH CHECK (employee_id = current_setting('app.employee_id', true)::integer AND current_setting('app.employee_id', true) IS NOT NULL);"
+ },
+ {
+  "id": 31,
+  "predicted_sql": "CREATE POLICY sales_rep_contracts_select ON sales.contracts FOR SELECT USING ( (current_setting('app.job_role', true) = 'sales_rep') AND (contract_value <= (SELECT AVG(contract_value) FROM sales.contracts WHERE department_id = current_setting('app.department_id', true)::integer)) );"
+ },
+ {
+  "id": 32,
+  "predicted_sql": "CREATE POLICY product_directors_modify_features_during_maintenance ON product.features FOR UPDATE USING (app.job_role = 'product_director' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (app.job_role = 'product_director' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 33,
+  "predicted_sql": "CREATE POLICY employees_can_delete_own_draft_orders ON sales.orders FOR DELETE USING (employee_id = current_setting('app.employee_id', true)::integer AND status = 'draft');"
+ },
+ {
+  "id": 34,
+  "predicted_sql": "CREATE POLICY audit_logs_delete_auditors ON operations.audit_logs FOR DELETE USING ( current_setting('app.job_role', true) = 'auditor' AND archived = true AND logged_at < (CURRENT_TIMESTAMP - INTERVAL '7 years') AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 35,
+  "predicted_sql": "CREATE POLICY policy_product_metrics ON product.metrics FOR SELECT USING ( (current_setting('app.position_level', true)::integer >= 7) AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 36,
+  "predicted_sql": "CREATE POLICY employees_edit_own_drafts ON operations.documents FOR UPDATE USING ( author_id = current_setting('app.employee_id', true)::integer AND document_status = 'draft' AND created_at >= CURRENT_TIMESTAMP - INTERVAL '30 days' ) WITH CHECK ( author_id = current_setting('app.employee_id', true)::integer AND document_status = 'draft' AND created_at >= CURRENT_TIMESTAMP - INTERVAL '30 days' );"
+ },
+ {
+  "id": 37,
+  "predicted_sql": "CREATE POLICY regional_directors_view_orders ON sales.orders FOR SELECT USING ( EXISTS ( SELECT 1 FROM sales.regions r WHERE r.region_id = sales.orders.region_id AND r.regional_director = current_setting('app.employee_id', true)::integer ) AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 38,
+  "predicted_sql": "CREATE POLICY \"admin_maintenance_window_update\" ON operations.system_config FOR UPDATE USING (current_setting('app.job_role', true) = 'admin' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (current_setting('app.job_role', true) = 'admin' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 39,
+  "predicted_sql": "CREATE POLICY procurement_officers_approve_purchase_orders ON finance.expenses FOR UPDATE USING (current_setting('app.job_role', true) = 'procurement_officer' AND status = 'pending' AND amount <= 10000 * current_setting('app.position_level', true)::integer) WITH CHECK (current_setting('app.job_role', true) = 'procurement_officer' AND status IN ('approved', 'rejected') AND amount <= 10000 * current_setting('app.position_level', true)::integer);"
+ },
+ {
+  "id": 40,
+  "predicted_sql": "CREATE POLICY \"vp_engineering_delete_archived_projects\" ON engineering.projects FOR DELETE USING ( current_setting('app.job_role', true) = 'vp_engineering' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND project_status = 'archived' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 AND NOT EXISTS ( SELECT 1 FROM engineering.issues WHERE project_id = engineering.projects.project_id AND tenant_id = current_setting('app.tenant_id', true)::integer AND status IN ('open', 'in-progress') ) );"
+ },
+ {
+  "id": 41,
+  "predicted_sql": "CREATE POLICY customer_support_delete_feedback ON product.user_feedback FOR DELETE USING ( current_setting('app.job_role', true) = 'customer_support' AND EXISTS ( SELECT 1 FROM product.user_feedback f2 WHERE f2.feedback_id != user_feedback.feedback_id AND f2.feedback_text = user_feedback.feedback_text AND f2.user_id = user_feedback.user_id AND f2.product_id = user_feedback.product_id ) AND user_feedback.resolved = true AND user_feedback.created_at >= (CURRENT_TIMESTAMP - INTERVAL '7 days') );"
+ },
+ {
+  "id": 42,
+  "predicted_sql": "CREATE POLICY \"senior_engineer_reviewer_update\" ON engineering.pull_requests FOR UPDATE USING (EXISTS (SELECT 1 FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer AND job_role = 'senior_engineer' AND employee_id = ANY(reviewers)) AND author_id != current_setting('app.employee_id', true)::integer) WITH CHECK (EXISTS (SELECT 1 FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer AND job_role = 'senior_engineer' AND employee_id = ANY(reviewers)) AND author_id != current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 43,
+  "predicted_sql": "CREATE POLICY \"compliance_officers_view_all_tax_records\" ON finance.tax_records FOR SELECT USING (current_setting('app.job_role', true) = 'compliance_officer');"
+ },
+ {
+  "id": 44,
+  "predicted_sql": "CREATE POLICY project_managers_view_issues ON engineering.issues FOR SELECT USING ( current_setting('app.job_role', true) = 'project_manager' AND EXISTS (SELECT 1 FROM engineering.projects p WHERE p.project_id = engineering.issues.project_id AND p.pm_id = current_setting('app.employee_id', true)::integer) AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 45,
+  "predicted_sql": "CREATE POLICY regional_directors_view_contracts ON sales.contracts FOR SELECT USING ( tenant_id = current_setting('app.tenant_id', true)::integer AND EXISTS ( WITH RECURSIVE region_hierarchy AS ( SELECT region_id FROM sales.regions WHERE regional_director = current_setting('app.employee_id', true)::integer UNION ALL SELECT r.region_id FROM sales.regions r INNER JOIN region_hierarchy rh ON r.parent_region_id = rh.region_id ) SELECT 1 FROM region_hierarchy WHERE region_hierarchy.region_id = sales.contracts.region_id ) );"
+ },
+ {
+  "id": 46,
+  "predicted_sql": "CREATE POLICY budget_select_high_level_employees ON finance.budget FOR SELECT USING ( current_setting('app.position_level', true)::integer >= 7 AND current_setting('app.user_clearance_level', true)::integer >= 4 AND sensitivity <= 3 );"
+ },
+ {
+  "id": 47,
+  "predicted_sql": "CREATE POLICY sales_pipeline_delete_abandoned ON sales.sales_pipeline FOR DELETE USING ( (current_setting('app.job_role', true) = 'sales_rep' AND current_setting('app.employee_id', true) IS NOT NULL) AND ( (stage IN ('prospecting', 'qualification')) OR (stage = 'proposal' AND (CURRENT_DATE - updated_at::date) > 180) ) );"
+ },
+ {
+  "id": 48,
+  "predicted_sql": "CREATE POLICY devops_delete_failed_backups ON operations.backups FOR DELETE USING ( current_setting('app.job_role', true) = 'devops_engineer' AND backup_status = 'failed' AND verification_status = 'failed' AND start_time < (CURRENT_TIMESTAMP - INTERVAL '24 hours') );"
+ },
+ {
+  "id": 49,
+  "predicted_sql": "CREATE POLICY \"ceo_employee_all\" ON hr.employees FOR ALL USING (current_setting('app.tenant_id', true)::integer = tenant_id AND current_setting('app.job_role', true) = 'ceo') WITH CHECK (current_setting('app.tenant_id', true)::integer = tenant_id AND current_setting('app.job_role', true) = 'ceo');"
+ },
+ {
+  "id": 50,
+  "predicted_sql": "CREATE POLICY employees_view_planned_roadmaps ON product.roadmap FOR SELECT USING (status = 'planned' AND current_setting('app.employee_id', true) IS NOT NULL);"
+ },
+ {
+  "id": 51,
+  "predicted_sql": "CREATE POLICY team_leads_view_performance_reviews ON hr.performance FOR SELECT USING (team_lead_id = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 52,
+  "predicted_sql": "CREATE POLICY sales_managers_compliance_officers_terminate_contracts ON sales.contracts FOR UPDATE USING ( (current_setting('app.job_role', true) IN ('sales_manager', 'compliance_officer')) AND (end_date < CURRENT_DATE) AND (approval_status != 'pending') AND NOT EXISTS (SELECT 1 FROM sales.invoices WHERE sales.invoices.contract_id = sales.contracts.contract_id AND sales.invoices.payment_status = 'pending') ) WITH CHECK ( (current_setting('app.job_role', true) IN ('sales_manager', 'compliance_officer')) AND (end_date < CURRENT_DATE) AND (approval_status != 'pending') AND NOT EXISTS (SELECT 1 FROM sales.invoices WHERE sales.invoices.contract_id = sales.contracts.contract_id AND sales.invoices.payment_status = 'pending') );"
+ },
+ {
+  "id": 53,
+  "predicted_sql": "CREATE POLICY employees_view_own_tax_documents ON finance.tax_records FOR SELECT USING (employee_id = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 54,
+  "predicted_sql": "CREATE POLICY \"build_admins_view_system_config\" ON operations.system_config FOR SELECT USING (current_setting('app.job_role', true) = 'build_admin');"
+ },
+ {
+  "id": 55,
+  "predicted_sql": "CREATE POLICY engineers_assign_low_estimate_issues ON engineering.issues FOR UPDATE USING (tenant_id = current_setting('app.tenant_id', true)::integer AND assignee_id IS NULL AND estimated_hours < 8 AND current_setting('app.job_role', true) = 'engineer') WITH CHECK (assignee_id = current_setting('app.employee_id', true)::integer AND tenant_id = current_setting('app.tenant_id', true)::integer);"
+ },
+ {
+  "id": 56,
+  "predicted_sql": "CREATE POLICY department_managers_view_expenses ON finance.expenses FOR SELECT USING (department_id = current_setting('app.department_id', true)::integer AND current_setting('app.job_role', true) = 'dept_manager');"
+ },
+ {
+  "id": 57,
+  "predicted_sql": "CREATE POLICY region_director_view_sales_data ON sales.orders FOR SELECT USING ( EXISTS ( SELECT 1 FROM sales.regions r WHERE r.region_id = sales.orders.region_id AND r.regional_director = current_setting('app.employee_id', true)::integer ) AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 58,
+  "predicted_sql": "CREATE POLICY procurement_officer_approve_expenses ON finance.expenses FOR UPDATE USING (current_setting('app.job_role', true) = 'procurement_officer' AND status = 'pending' AND employee_id != current_setting('app.employee_id', true)::integer) WITH CHECK (current_setting('app.job_role', true) = 'procurement_officer' AND status = 'pending' AND employee_id != current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 59,
+  "predicted_sql": "CREATE POLICY employees_delete_expired_contract_documents ON operations.documents FOR DELETE USING ( current_setting('app.employee_id', true) IS NOT NULL AND author_id = current_setting('app.employee_id', true)::integer AND document_type = 'contract' AND expires_at < CURRENT_TIMESTAMP );"
+ },
+ {
+  "id": 60,
+  "predicted_sql": "CREATE POLICY qa_engineers_view_owned_tests ON engineering.tests FOR SELECT USING (current_setting('app.job_role', true) = 'qa_engineer' AND owner_id = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 61,
+  "predicted_sql": "CREATE POLICY \"security_analysts_view_security_event_logs\" ON operations.security_events FOR SELECT USING (current_setting('app.job_role', true) = 'security_analyst');"
+ },
+ {
+  "id": 62,
+  "predicted_sql": "CREATE POLICY audit_leads_delete_audit_logs ON operations.audit_logs FOR DELETE USING ( current_setting('app.job_role', true) = 'audit_lead' AND archived = true AND EXTRACT(DOW FROM logged_at) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM logged_at) BETWEEN 9 AND 17 AND logged_at < CURRENT_TIMESTAMP - INTERVAL '7 years' );"
+ },
+ {
+  "id": 63,
+  "predicted_sql": "CREATE POLICY compliance_officer_delete_expired_docs ON operations.documents FOR DELETE USING ( current_setting('app.job_role', true) = 'compliance_officer' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND document_type = 'Compliance' AND expires_at < CURRENT_TIMESTAMP );"
+ },
+ {
+  "id": 64,
+  "predicted_sql": "CREATE POLICY risk_managers_delete_archived_analytics ON product.analytics FOR DELETE USING (app.job_role = 'risk_manager' AND status = 'archived' AND calculated_at < (CURRENT_DATE - INTERVAL '1 year'));"
+ },
+ {
+  "id": 65,
+  "predicted_sql": "CREATE POLICY hr_view_all_employees ON hr.employees FOR SELECT USING (current_setting('app.job_role', true) IN ('hr_admin', 'hr_specialist'));"
+ },
+ {
+  "id": 66,
+  "predicted_sql": "CREATE POLICY \"accountants_finance_analysts_finance_managers_tax_specialists_delete_voided_balance_sheet_corrections\" ON finance.balance_sheet FOR DELETE USING ( current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.job_role', true) IN ('accountant', 'finance_analyst', 'finance_manager', 'tax_specialist') AND status = 'voided' AND entry_date < CURRENT_DATE );"
+ },
+ {
+  "id": 67,
+  "predicted_sql": "CREATE POLICY project_managers_view_issues ON engineering.issues FOR SELECT USING ( current_setting('app.job_role', true) = 'project_manager' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND EXISTS ( WITH RECURSIVE project_hierarchy AS ( SELECT project_id, owner_id, parent_project_id FROM engineering.projects WHERE project_id = engineering.issues.project_id UNION ALL SELECT p.project_id, p.owner_id, p.parent_project_id FROM engineering.projects p INNER JOIN project_hierarchy ph ON p.parent_project_id = ph.project_id ) SELECT 1 FROM project_hierarchy WHERE owner_id = current_setting('app.employee_id', true)::integer ) );"
+ },
+ {
+  "id": 68,
+  "predicted_sql": "CREATE POLICY sales_managers_delete_inactive_customers ON sales.customers FOR DELETE USING ( current_setting('app.job_role', true) = 'sales_manager' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 AND is_active = false AND (last_contact_date IS NULL OR last_contact_date < CURRENT_DATE - INTERVAL '3 years') AND NOT EXISTS ( SELECT 1 FROM sales.contracts c WHERE c.customer_id = customers.customer_id AND c.status = 'active' ) );"
+ },
+ {
+  "id": 69,
+  "predicted_sql": "CREATE POLICY security_analysts_archive_security_events ON operations.security_events FOR UPDATE USING ( current_setting('app.job_role', true) = 'security_analyst' AND resolved = true AND event_time < (CURRENT_TIMESTAMP - INTERVAL '90 days') AND supervisor_reviewed = true ) WITH CHECK ( current_setting('app.job_role', true) = 'security_analyst' AND resolved = true AND event_time < (CURRENT_TIMESTAMP - INTERVAL '90 days') AND supervisor_reviewed = true );"
+ },
+ {
+  "id": 70,
+  "predicted_sql": "CREATE POLICY employees_view_own_attendance ON hr.attendance FOR SELECT USING (employee_id = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 71,
+  "predicted_sql": "CREATE POLICY sales_managers_approve_discounts ON sales.contracts FOR UPDATE USING ( current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.job_role', true) = 'sales_manager' AND approval_required = true AND status = 'pending' AND discount_percentage > department_discount_threshold ) WITH CHECK ( current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.job_role', true) = 'sales_manager' AND approval_required = true AND status = 'pending' AND discount_percentage > department_discount_threshold );"
+ },
+ {
+  "id": 72,
+  "predicted_sql": "CREATE POLICY customers_delete_own_draft_orders ON sales.orders FOR DELETE USING ( current_setting('app.customer_id', true) IS NOT NULL AND customer_id = current_setting('app.customer_id', true)::integer AND tenant_id = current_setting('app.tenant_id', true)::integer AND status = 'draft' AND fulfillment_status IS NULL AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 73,
+  "predicted_sql": "CREATE POLICY qa_engineers_approve_qa_tests ON engineering.tests FOR UPDATE USING ( current_setting('app.job_role', true) = 'qa_engineer' AND current_setting('app.employee_id', true) IS NOT NULL AND assigned_developer IS DISTINCT FROM current_setting('app.employee_id', true)::integer AND qa_reviewer = current_setting('app.employee_id', true)::integer ) WITH CHECK ( current_setting('app.job_role', true) = 'qa_engineer' AND current_setting('app.employee_id', true) IS NOT NULL AND assigned_developer IS DISTINCT FROM current_setting('app.employee_id', true)::integer AND qa_reviewer = current_setting('app.employee_id', true)::integer );"
+ },
+ {
+  "id": 74,
+  "predicted_sql": "CREATE POLICY procurement_officers_insert_orders ON sales.orders FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'procurement_officer' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND fulfillment_status = 'pending' );"
+ },
+ {
+  "id": 75,
+  "predicted_sql": "CREATE POLICY procurement_officers_view_inventory ON engineering.code_repository FOR SELECT USING (current_setting('app.job_role', true) = 'procurement_officer' AND tenant_id = current_setting('app.tenant_id', true)::integer AND created_at >= (CURRENT_TIMESTAMP - INTERVAL '90 days') AND artifact_type = 'inventory');"
+ },
+ {
+  "id": 76,
+  "predicted_sql": "CREATE POLICY procurement_officers_insert_vendor_contracts ON sales.contracts FOR INSERT WITH CHECK (app.job_role = 'procurement_officer' AND vendor_contract = true AND tenant_id = current_setting('app.tenant_id', true)::integer);"
+ },
+ {
+  "id": 77,
+  "predicted_sql": "CREATE POLICY \"operations_managers_insert_metrics\" ON product.metrics FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'operations_manager' AND tenant_id = current_setting('app.tenant_id', true)::integer);"
+ },
+ {
+  "id": 78,
+  "predicted_sql": "CREATE POLICY public_visitors_view_features ON product.features FOR SELECT USING ( is_public = true AND status = 'verified' AND created_at >= CURRENT_DATE - INTERVAL '90 days' );"
+ },
+ {
+  "id": 79,
+  "predicted_sql": "CREATE POLICY \"authenticated_internal_employees_view_public_internal_features\" ON product.features FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND (visibility = 'public' OR visibility = 'internal'));"
+ },
+ {
+  "id": 80,
+  "predicted_sql": "CREATE POLICY \"employees_position_level_7_or_higher_insert_strategic_roadmap\" ON product.roadmap FOR INSERT WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer AND EXISTS (SELECT 1 FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer AND position_level >= 7 AND tenant_id = current_setting('app.tenant_id', true)::integer));"
+ },
+ {
+  "id": 81,
+  "predicted_sql": "CREATE POLICY employees_insert_temporal_access_self ON operations.temporal_access FOR INSERT WITH CHECK ( current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND user_id = current_setting('app.employee_id', true)::integer AND resource_type = 'documents' AND tenant_id = current_setting('app.tenant_id', true)::integer );"
+ },
+ {
+  "id": 82,
+  "predicted_sql": "CREATE POLICY budget_owners_view_own_hierarchy ON finance.budget FOR SELECT USING ( current_setting('app.employee_id', true) IS NOT NULL AND ( budget_owner = current_setting('app.employee_id', true)::integer OR EXISTS ( WITH RECURSIVE dept_hierarchy AS ( SELECT department_id, parent_department_id FROM hr.departments WHERE department_id = current_setting('app.department_id', true)::integer UNION ALL SELECT d.department_id, d.parent_department_id FROM hr.departments d INNER JOIN dept_hierarchy dh ON d.parent_department_id = dh.department_id ) SELECT 1 FROM dept_hierarchy WHERE dept_hierarchy.department_id = budget.department_id ) ) );"
+ },
+ {
+  "id": 83,
+  "predicted_sql": "CREATE POLICY \"Employees can update non-frozen engineering project records to frozen status\" ON engineering.projects FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND status != 'frozen') WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND status = 'frozen');"
+ },
+ {
+  "id": 84,
+  "predicted_sql": "CREATE POLICY guest_insert_features ON product.features FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'guest' AND is_public = true AND visibility = 'public' AND EXTRACT(DOW FROM created_at) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM created_at) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 85,
+  "predicted_sql": "CREATE POLICY employees_reopen_own_expenses ON finance.expenses FOR UPDATE USING (employee_id = current_setting('app.employee_id', true)::integer AND status = 'rejected' AND rejected_at >= (CURRENT_TIMESTAMP - INTERVAL '7 days') AND escalated = false) WITH CHECK (employee_id = current_setting('app.employee_id', true)::integer AND status = 'rejected' AND rejected_at >= (CURRENT_TIMESTAMP - INTERVAL '7 days') AND escalated = false);"
+ },
+ {
+  "id": 86,
+  "predicted_sql": "CREATE POLICY build_admins_insert_audit_logs ON operations.audit_logs FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'build_admin' AND archived IS NOT NULL);"
+ },
+ {
+  "id": 87,
+  "predicted_sql": "CREATE POLICY employees_create_own_expenses ON finance.expenses FOR INSERT WITH CHECK ( employee_id = current_setting('app.employee_id', true)::integer AND EXISTS ( SELECT 1 FROM hr.employee_allowances ea WHERE ea.employee_id = current_setting('app.employee_id', true)::integer AND ea.effective_from <= CURRENT_DATE AND (ea.effective_to IS NULL OR ea.effective_to >= CURRENT_DATE) AND finance.expenses.amount <= 3 * ea.monthly_allowance ) );"
+ },
+ {
+  "id": 88,
+  "predicted_sql": "CREATE POLICY build_admin_restore_backups ON operations.backups FOR UPDATE USING ( current_setting('app.job_role', true) = 'build_admin' AND backup_status = 'approved' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5 ) WITH CHECK ( restored_at IS NOT NULL AND backup_status = 'Restored' );"
+ },
+ {
+  "id": 89,
+  "predicted_sql": "CREATE POLICY finance_managers_update_budget ON finance.budget FOR UPDATE USING (current_setting('app.job_role', true) = 'finance_manager' AND department_id != current_setting('app.department_id', true)::integer) WITH CHECK (current_setting('app.job_role', true) = 'finance_manager' AND department_id != current_setting('app.department_id', true)::integer);"
+ },
+ {
+  "id": 90,
+  "predicted_sql": "CREATE POLICY employees_access_contracts_by_region ON sales.contracts FOR SELECT USING (EXISTS (SELECT 1 FROM sales.regions r WHERE r.region_id = sales.contracts.region_id AND r.region_id = current_setting('app.region_id', true)::integer) AND current_setting('app.region_id', true) IS NOT NULL);"
+ },
+ {
+  "id": 91,
+  "predicted_sql": "CREATE POLICY budget_access_by_department_hours ON finance.budget FOR SELECT USING ( department_id = current_setting('app.department_id', true)::integer AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 92,
+  "predicted_sql": "CREATE POLICY employees_access_sales_contracts ON sales.contracts FOR SELECT USING (tenant_id = current_setting('app.tenant_id', true)::integer AND created_at >= CURRENT_DATE - INTERVAL '90 days');"
+ },
+ {
+  "id": 93,
+  "predicted_sql": "CREATE POLICY hr_specialists_delete_attendance ON hr.attendance FOR DELETE USING (app.job_role = 'hr_specialist' AND status = 'erroneous' AND notes LIKE '%flagged for removal%');"
+ },
+ {
+  "id": 94,
+  "predicted_sql": "CREATE POLICY employees_view_data_after_hire ON hr.employees FOR SELECT USING (hire_date <= CURRENT_DATE);"
+ },
+ {
+  "id": 95,
+  "predicted_sql": "CREATE POLICY employees_insert_own_expenses ON finance.expenses FOR INSERT WITH CHECK ( employee_id = current_setting('app.employee_id', true)::integer AND (confidential_until IS NULL OR confidential_until <= CURRENT_TIMESTAMP) );"
+ },
+ {
+  "id": 96,
+  "predicted_sql": "CREATE POLICY division_executives_access_employees ON hr.employees FOR SELECT USING (EXISTS (WITH RECURSIVE division_hierarchy AS (SELECT region_id FROM sales.regions WHERE regional_director = current_setting('app.employee_id', true)::integer UNION ALL SELECT r.region_id FROM sales.regions r INNER JOIN division_hierarchy dh ON r.parent_region_id = dh.region_id) SELECT 1 FROM division_hierarchy dh WHERE hr.employees.region_id = dh.region_id));"
+ },
+ {
+  "id": 97,
+  "predicted_sql": "CREATE POLICY build_admin_update_code_repo ON engineering.code_repository FOR UPDATE USING (current_setting('app.job_role', true) = 'build_admin' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (status = 'staging');"
+ },
+ {
+  "id": 98,
+  "predicted_sql": "CREATE POLICY changes_during_working_hours ON operations.audit_logs FOR UPDATE USING (EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 AND current_setting('app.employee_id', true) IS NOT NULL) WITH CHECK (EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 AND current_setting('app.employee_id', true) IS NOT NULL);"
+ },
+ {
+  "id": 99,
+  "predicted_sql": "CREATE POLICY \"policy_operations_temporal_access_select\" ON operations.temporal_access FOR SELECT USING (resource_type = 'api_access' AND user_id = current_setting('app.user_id', true)::integer AND EXISTS (SELECT 1 FROM hr.employees e WHERE e.employee_id = current_setting('app.employee_id', true)::integer AND e.position_level IS NOT NULL AND (SELECT COUNT(*) FROM operations.temporal_access ota WHERE ota.user_id = current_setting('app.user_id', true)::integer AND ota.start_time >= date_trunc('hour', CURRENT_TIMESTAMP)) < 100 * e.position_level));"
+ },
+ {
+  "id": 100,
+  "predicted_sql": "CREATE POLICY \"engineering_projects_department_office_hours\" ON engineering.projects FOR SELECT USING ( department_id = current_setting('app.department_id', true)::integer AND office_location = (SELECT office_location FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer) AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 101,
+  "predicted_sql": "CREATE POLICY product_managers_deprecate_features ON product.features FOR UPDATE USING (current_setting('app.job_role', true) = 'product_manager' AND NOT EXISTS (SELECT 1 FROM product.feature_usage fu WHERE fu.feature_id = features.feature_id AND fu.last_active_at > CURRENT_TIMESTAMP - INTERVAL '180 days') AND NOT EXISTS (SELECT 1 FROM product.feature_dependencies fd WHERE fd.feature_id = features.feature_id AND fd.is_active = true)) WITH CHECK (current_setting('app.job_role', true) = 'product_manager' AND NOT EXISTS (SELECT 1 FROM product.feature_usage fu WHERE fu.feature_id = features.feature_id AND fu.last_active_at > CURRENT_TIMESTAMP - INTERVAL '180 days') AND NOT EXISTS (SELECT 1 FROM product.feature_dependencies fd WHERE fd.feature_id = features.feature_id AND fd.is_active = true));"
+ },
+ {
+  "id": 102,
+  "predicted_sql": "CREATE POLICY product_directors_insert_roadmap_business_hours ON product.roadmap FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'product_director' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 103,
+  "predicted_sql": "CREATE POLICY procurement_officers_insert_supplier_contracts ON sales.contracts FOR INSERT WITH CHECK (app.job_role = 'procurement_officer' AND created_at >= CURRENT_TIMESTAMP - INTERVAL '90 days');"
+ },
+ {
+  "id": 104,
+  "predicted_sql": "CREATE POLICY security_analyst_clear_alerts ON operations.security_events FOR UPDATE USING ( app.job_role = 'security_analyst' AND app.user_id IS NOT NULL AND user_id != current_setting('app.user_id', true)::integer );"
+ },
+ {
+  "id": 105,
+  "predicted_sql": "CREATE POLICY \"ehs_officer_insert_incident_reports\" ON operations.security_events FOR INSERT WITH CHECK (app.job_role = 'ehs_officer' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17);"
+ },
+ {
+  "id": 106,
+  "predicted_sql": "CREATE POLICY sales_managers_modify_contracts_near_expiry ON sales.contracts FOR UPDATE USING ( current_setting('app.job_role', true) = 'sales_manager' AND end_date <= CURRENT_DATE + INTERVAL '30 days' AND end_date >= CURRENT_DATE ) WITH CHECK ( current_setting('app.job_role', true) = 'sales_manager' AND end_date <= CURRENT_DATE + INTERVAL '30 days' AND end_date >= CURRENT_DATE );"
+ },
+ {
+  "id": 107,
+  "predicted_sql": "CREATE POLICY sustainability_officers_insert_analytics ON product.analytics FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'sustainability_officer');"
+ },
+ {
+  "id": 108,
+  "predicted_sql": "CREATE POLICY team_leads_view_experimental_projects ON engineering.projects FOR SELECT USING ( (current_setting('app.job_role', true) = 'team_lead' OR EXISTS (SELECT 1 FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer AND job_role = 'team_lead')) AND category = 'experimental' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 109,
+  "predicted_sql": "CREATE POLICY customer_advocacy_managers_view_feedback ON product.user_feedback FOR SELECT USING (current_setting('app.job_role', true) = 'customer_advocacy_manager');"
+ },
+ {
+  "id": 110,
+  "predicted_sql": "CREATE POLICY operations_managers_insert_disaster_recovery_config ON operations.system_config FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'operations_manager' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 111,
+  "predicted_sql": "CREATE POLICY managers_view_attendance ON hr.attendance FOR SELECT USING ( current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND EXISTS ( WITH RECURSIVE reporting_chain AS ( SELECT employee_id, manager_id FROM hr.employees WHERE employee_id = hr.attendance.employee_id UNION SELECT e.employee_id, e.manager_id FROM hr.employees e INNER JOIN reporting_chain rc ON e.manager_id = rc.employee_id ) SELECT 1 FROM reporting_chain WHERE manager_id = current_setting('app.employee_id', true)::integer ) );"
+ },
+ {
+  "id": 112,
+  "predicted_sql": "CREATE POLICY \"auditors_insert_high_critical_security_events_business_hours\" ON operations.security_events FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'auditor' AND severity IN ('high', 'critical') AND EXTRACT(DOW FROM event_time) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM event_time) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 113,
+  "predicted_sql": "CREATE POLICY finance_managers_update_budget ON finance.budget FOR UPDATE USING (current_setting('app.job_role', true) = 'finance_manager') WITH CHECK (remaining_amount > allocated_amount * 0.10);"
+ },
+ {
+  "id": 114,
+  "predicted_sql": "CREATE POLICY devops_engineers_modify_temporal_access_api_routing ON operations.temporal_access FOR UPDATE USING (current_setting('app.job_role', true) = 'devops_engineer' AND current_setting('app.job_role', true) IS NOT NULL) WITH CHECK (current_setting('app.job_role', true) = 'devops_engineer' AND current_setting('app.job_role', true) IS NOT NULL);"
+ },
+ {
+  "id": 115,
+  "predicted_sql": "CREATE POLICY data_analysts_insert_analytics ON product.analytics FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'data_analyst' AND is_anonymized = true);"
+ },
+ {
+  "id": 116,
+  "predicted_sql": "CREATE POLICY hr_specialists_update_deactivated ON hr.employees FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_specialist' AND current_setting('app.job_role', true) IS NOT NULL) WITH CHECK (status = 'deactivated' AND last_login_date < CURRENT_TIMESTAMP - INTERVAL '90 days' AND NOT EXISTS (SELECT 1 FROM engineering.issues WHERE assignee_id = employees.employee_id AND status NOT IN ('closed', 'resolved')) AND account_type != 'system');"
+ },
+ {
+  "id": 117,
+  "predicted_sql": "CREATE POLICY finance_analysts_insert_revenue ON finance.revenue FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'finance_analyst' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 118,
+  "predicted_sql": "CREATE POLICY account_managers_discount_invoices ON sales.invoices FOR UPDATE USING (current_setting('app.job_role', true) = 'account_manager' AND NOT EXISTS (SELECT 1 FROM sales.customers WHERE customers.customer_id = invoices.customer_id AND customers.account_manager_id = current_setting('app.employee_id', true)::integer)) WITH CHECK (current_setting('app.job_role', true) = 'account_manager' AND NOT EXISTS (SELECT 1 FROM sales.customers WHERE customers.customer_id = invoices.customer_id AND customers.account_manager_id = current_setting('app.employee_id', true)::integer));"
+ },
+ {
+  "id": 119,
+  "predicted_sql": "CREATE POLICY customer_support_insert_incident_issues ON engineering.issues FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'customer_support' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 120,
+  "predicted_sql": "CREATE POLICY \"compliance_officers_insert_system_config\" ON operations.system_config FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer');"
+ },
+ {
+  "id": 121,
+  "predicted_sql": "CREATE POLICY employees_view_eligible_benefits ON hr.benefits FOR SELECT USING (employee_id = current_setting('app.employee_id', true)::integer AND is_eligible = true);"
+ },
+ {
+  "id": 122,
+  "predicted_sql": "CREATE POLICY finance_managers_insert_merger_acquisition_docs ON operations.documents FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'finance_manager' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 AND document_type IN ('merger', 'acquisition') );"
+ },
+ {
+  "id": 123,
+  "predicted_sql": "CREATE POLICY \"ehs_officer_safety_events_business_hours\" ON operations.security_events FOR ALL USING (current_setting('app.job_role', true) = 'ehs_officer' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17) WITH CHECK (current_setting('app.job_role', true) = 'ehs_officer' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17);"
+ },
+ {
+  "id": 124,
+  "predicted_sql": "CREATE POLICY procurement_officers_modify_vendor_customers ON sales.customers FOR UPDATE USING (current_setting('app.job_role', true) = 'procurement_officer' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (current_setting('app.job_role', true) = 'procurement_officer' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 125,
+  "predicted_sql": "CREATE POLICY employees_submit_own_overtime ON hr.attendance FOR INSERT WITH CHECK ( employee_id = current_setting('app.employee_id', true)::integer AND overtime_hours <= 10 AND current_setting('app.employee_id', true) IS NOT NULL );"
+ },
+ {
+  "id": 126,
+  "predicted_sql": "CREATE POLICY \"senior_engineers_all_operations_on_schema_design\" ON engineering.code_repository FOR ALL USING (current_setting('app.job_role', true) = 'senior_engineer' AND design_type = 'schema') WITH CHECK (current_setting('app.job_role', true) = 'senior_engineer' AND design_type = 'schema');"
+ },
+ {
+  "id": 127,
+  "predicted_sql": "CREATE POLICY \"Administrators can only modify configuration entries that are not archived, not locked, and have been reviewed within the last 90 days.\" ON operations.system_config FOR UPDATE USING (current_setting('app.job_role', true) = 'admin' AND archived = false AND locked = false AND last_review_date >= (CURRENT_DATE - INTERVAL '90 days')) WITH CHECK (current_setting('app.job_role', true) = 'admin' AND archived = false AND locked = false AND last_review_date >= (CURRENT_DATE - INTERVAL '90 days'));"
+ },
+ {
+  "id": 128,
+  "predicted_sql": "CREATE POLICY finance_managers_grant_budget_hours ON finance.budget FOR ALL USING (app.job_role = 'finance_manager'::text AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17) WITH CHECK (app.job_role = 'finance_manager'::text AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17);"
+ },
+ {
+  "id": 129,
+  "predicted_sql": "CREATE POLICY compliance_officers_patent_access ON operations.documents FOR SELECT USING (current_setting('app.job_role', true) = 'compliance_officer' AND document_type = 'Patent Application');"
+ },
+ {
+  "id": 130,
+  "predicted_sql": "CREATE POLICY \"compliance_officers_business_hours\" ON operations.system_config FOR ALL USING (current_setting('app.job_role', true) = 'compliance_officer' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17) WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17);"
+ },
+ {
+  "id": 131,
+  "predicted_sql": "CREATE POLICY product_managers_analytics_policy ON product.analytics FOR ALL USING (current_setting('app.job_role', true) = 'product_manager' AND tenant_id = current_setting('app.tenant_id', true)::integer AND category = 'brand' AND analytics_type = 'mentions') WITH CHECK (current_setting('app.job_role', true) = 'product_manager' AND tenant_id = current_setting('app.tenant_id', true)::integer AND category = 'brand' AND analytics_type = 'mentions');"
+ },
+ {
+  "id": 132,
+  "predicted_sql": "CREATE POLICY audit_evidence_auditors_all ON operations.audit_logs FOR ALL USING (current_setting('app.job_role', true) = 'auditor' AND audit_status = 'in_progress') WITH CHECK (current_setting('app.job_role', true) = 'auditor' AND audit_status = 'in_progress');"
+ },
+ {
+  "id": 133,
+  "predicted_sql": "CREATE POLICY compliance_officer_approve_exceptions ON operations.security_events FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND employee_id != current_setting('app.employee_id', true)::integer) WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND employee_id != current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 134,
+  "predicted_sql": "CREATE POLICY customer_support_update_feedback_maintenance ON product.user_feedback FOR UPDATE USING (current_setting('app.job_role', true) = 'customer_support' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (current_setting('app.job_role', true) = 'customer_support' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 135,
+  "predicted_sql": "CREATE POLICY finance_analyst_revenue_history ON finance.revenue FOR ALL USING (current_setting('app.job_role', true) = 'finance_analyst' AND revenue_date < CURRENT_DATE) WITH CHECK (current_setting('app.job_role', true) = 'finance_analyst' AND revenue_date < CURRENT_DATE);"
+ },
+ {
+  "id": 136,
+  "predicted_sql": "CREATE POLICY \"data_analysts_view_store_metrics\" ON product.metrics FOR SELECT USING (app.job_role = 'data_analyst' AND store_id IS NOT NULL);"
+ },
+ {
+  "id": 137,
+  "predicted_sql": "CREATE POLICY employees_record_own_export_audit_logs ON operations.audit_logs FOR INSERT WITH CHECK (employee_id = current_setting('app.employee_id', true)::integer AND current_setting('app.employee_id', true) IS NOT NULL AND EXISTS (SELECT 1 FROM hr.employee_allowances ea WHERE ea.employee_id = current_setting('app.employee_id', true)::integer AND ea.effective_from <= CURRENT_DATE AND (ea.effective_to IS NULL OR ea.effective_to >= CURRENT_DATE) AND (operations.audit_logs.export_size IS NULL OR operations.audit_logs.export_size <= ea.monthly_allowance)));"
+ },
+ {
+  "id": 138,
+  "predicted_sql": "CREATE POLICY compliance_officers_archive_superseded_documents ON operations.documents FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND document_status = 'superseded' AND created_at < (CURRENT_TIMESTAMP - INTERVAL '2 years')) WITH CHECK (document_status = 'archived');"
+ },
+ {
+  "id": 139,
+  "predicted_sql": "CREATE POLICY sales_managers_customer_access ON sales.customers FOR SELECT USING (app.job_role = 'sales_manager'::text AND assigned_territory IS NOT NULL);"
+ },
+ {
+  "id": 140,
+  "predicted_sql": "CREATE POLICY policy_system_config_modify ON operations.system_config FOR UPDATE USING (current_setting('app.job_role', true) = 'admin' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (current_setting('app.job_role', true) = 'admin' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 141,
+  "predicted_sql": "CREATE POLICY \"data_analysts_view_functional_issues\" ON engineering.issues FOR SELECT USING ( current_setting('app.job_role', true) = 'data_analyst' AND issue_category = 'Functional' );"
+ },
+ {
+  "id": 142,
+  "predicted_sql": "CREATE POLICY \"policy_devops_engineers_view_performance_metrics\" ON product.metrics FOR SELECT USING (current_setting('app.job_role', true) = 'devops_engineer' AND metric_category = 'performance-category' AND current_setting('app.job_role', true) IS NOT NULL);"
+ },
+ {
+  "id": 143,
+  "predicted_sql": "CREATE POLICY product_managers_modify_translated_content_during_maintenance ON product.features FOR UPDATE USING (current_setting('app.job_role', true) = 'product_manager' AND EXTRACT(HOUR FROM CURRENT_TIME) BETWEEN 14 AND 15) WITH CHECK (current_setting('app.job_role', true) = 'product_manager' AND EXTRACT(HOUR FROM CURRENT_TIME) BETWEEN 14 AND 15);"
+ },
+ {
+  "id": 144,
+  "predicted_sql": "CREATE POLICY \"compliance_officer_accessibility_documents\" ON operations.documents FOR ALL USING ((current_setting('app.job_role', true) = 'compliance_officer') AND (record_type = 'accessibility compliance') AND (tenant_id = current_setting('app.tenant_id', true)::integer)) WITH CHECK ((current_setting('app.job_role', true) = 'compliance_officer') AND (record_type = 'accessibility compliance') AND (tenant_id = current_setting('app.tenant_id', true)::integer));"
+ },
+ {
+  "id": 145,
+  "predicted_sql": "CREATE POLICY \"devops_engineers_integration_spec_business_hours\" ON engineering.code_repository FOR ALL USING ( current_setting('app.job_role', true) = 'devops_engineer' AND artifact_type = 'integration_specification' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 ) WITH CHECK ( current_setting('app.job_role', true) = 'devops_engineer' AND artifact_type = 'integration_specification' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 146,
+  "predicted_sql": "CREATE POLICY \"data_analysts_raw_events_analytics\" ON product.analytics FOR ALL USING (current_setting('app.job_role', true) = 'data_analyst' AND current_setting('app.tenant_id', true)::integer = tenant_id AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17) WITH CHECK (current_setting('app.job_role', true) = 'data_analyst' AND current_setting('app.tenant_id', true)::integer = tenant_id AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17);"
+ },
+ {
+  "id": 147,
+  "predicted_sql": "CREATE POLICY product_managers_feature_adoption_metrics ON product.metrics FOR ALL USING (current_setting('app.job_role', true) = 'product_manager') WITH CHECK (current_setting('app.job_role', true) = 'product_manager');"
+ },
+ {
+  "id": 148,
+  "predicted_sql": "CREATE POLICY devops_view_infrastructure_designs ON engineering.code_repository FOR SELECT USING ( current_setting('app.job_role', true) = 'devops_engineer' AND design_type = 'infrastructure' );"
+ },
+ {
+  "id": 149,
+  "predicted_sql": "CREATE POLICY finance_managers_approve_budget_increase ON finance.budget FOR UPDATE USING ( current_setting('app.job_role', true) = 'finance_manager' AND current_setting('app.position_level', true)::integer >= 7 AND department_id = current_setting('app.department_id', true)::integer AND status = 'pending' AND increase_amount <= (remaining_amount * 0.10) ) WITH CHECK ( current_setting('app.job_role', true) = 'finance_manager' AND current_setting('app.position_level', true)::integer >= 7 AND department_id = current_setting('app.department_id', true)::integer AND status = 'approved' AND increase_amount <= (remaining_amount * 0.10) );"
+ },
+ {
+  "id": 150,
+  "predicted_sql": "CREATE POLICY workplace_coordinators_update_temporal_access ON operations.temporal_access FOR UPDATE USING (current_setting('app.job_role', true) = 'workplace_coordinator' AND current_setting('app.job_role', true) IS NOT NULL) WITH CHECK (current_setting('app.job_role', true) = 'workplace_coordinator' AND current_setting('app.job_role', true) IS NOT NULL);"
+ },
+ {
+  "id": 151,
+  "predicted_sql": "CREATE POLICY \"build_admins_view_release_notes\" ON engineering.code_repository FOR SELECT USING (current_setting('app.job_role', true) = 'build_admin' AND artifact_type = 'release_note');"
+ },
+ {
+  "id": 152,
+  "predicted_sql": "CREATE POLICY product_managers_modify_endpoint_project_resources ON engineering.projects FOR UPDATE USING (current_setting('app.job_role', true) = 'product_manager') WITH CHECK (current_setting('app.job_role', true) = 'product_manager');"
+ },
+ {
+  "id": 153,
+  "predicted_sql": "CREATE POLICY \"staff_augmentation_coordinators_view_contractor_employee_records\" ON hr.employees FOR SELECT USING (tenant_id = current_setting('app.tenant_id', true)::integer AND job_role = 'staff_augmentation_coordinator');"
+ },
+ {
+  "id": 154,
+  "predicted_sql": "CREATE POLICY manufacturing_engineers_view_temporal_access ON operations.temporal_access FOR SELECT USING (current_setting('app.job_role', true) = 'manufacturing_engineer' AND current_setting('app.job_role', true) IS NOT NULL);"
+ },
+ {
+  "id": 155,
+  "predicted_sql": "CREATE POLICY qa_engineer_view_defect_issues ON engineering.issues FOR SELECT USING ( current_setting('app.job_role', true) = 'qa_engineer' AND tenant_id = current_setting('app.tenant_id', true)::integer AND issue_type = 'defect' AND created_at >= CURRENT_DATE - INTERVAL '90 days' );"
+ },
+ {
+  "id": 156,
+  "predicted_sql": "CREATE POLICY operations_managers_workflow_metrics ON product.metrics FOR SELECT USING (current_setting('app.job_role', true) = 'operations_manager');"
+ },
+ {
+  "id": 157,
+  "predicted_sql": "CREATE POLICY product_managers_modify_brand_guidelines_maintenance ON product.features FOR UPDATE USING (current_setting('app.job_role', true) = 'product_manager' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 12 AND 15) WITH CHECK (current_setting('app.job_role', true) = 'product_manager' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 12 AND 15);"
+ },
+ {
+  "id": 158,
+  "predicted_sql": "CREATE POLICY procurement_officers_view_supplier_customers ON sales.customers FOR SELECT USING (current_setting('app.job_role', true) = 'procurement_officer');"
+ },
+ {
+  "id": 159,
+  "predicted_sql": "CREATE POLICY operations_managers_resource_metrics ON product.metrics FOR ALL USING (current_setting('app.job_role', true) = 'operations_manager') WITH CHECK (current_setting('app.job_role', true) = 'operations_manager');"
+ },
+ {
+  "id": 160,
+  "predicted_sql": "CREATE POLICY project_managers_view_projects ON engineering.projects FOR SELECT USING (project_coordinator = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 161,
+  "predicted_sql": "CREATE POLICY \"directors_approve_contract_renewals\" ON sales.contracts FOR UPDATE USING (app.job_role = 'director' AND app.tenant_id::integer = tenant_id AND renewal_term_months > original_term_months * 1.5 AND has_outstanding_disputes = true) WITH CHECK (app.job_role = 'director' AND app.tenant_id::integer = tenant_id AND renewal_term_months > original_term_months * 1.5 AND has_outstanding_disputes = true);"
+ },
+ {
+  "id": 162,
+  "predicted_sql": "CREATE POLICY compliance_officer_delete_security_events ON operations.security_events FOR DELETE USING (app.job_role = 'compliance_officer' AND app.job_role IS NOT NULL AND retention_days IS NOT NULL AND (event_time + (retention_days || ' days')::interval) < CURRENT_TIMESTAMP);"
+ },
+ {
+  "id": 163,
+  "predicted_sql": "CREATE POLICY managers_view_attendance ON hr.attendance FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND EXISTS (SELECT 1 FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer AND (job_role = 'manager' OR job_role = 'dept_manager' OR job_role = 'engineering_manager' OR job_role = 'operations_manager' OR job_role = 'sales_manager' OR job_role = 'finance_manager' OR job_role = 'project_manager' OR job_role = 'product_manager' OR job_role = 'regional_director' OR job_role = 'division_executive' OR job_role = 'vp_engineering' OR job_role = 'vp_sales' OR job_role = 'coo' OR job_role = 'ceo' OR job_role = 'cfo') AND manager_id = hr.attendance.employee_id));"
+ },
+ {
+  "id": 164,
+  "predicted_sql": "CREATE POLICY account_managers_view_customer_communications ON sales.customer_communications FOR SELECT USING ( current_setting('app.job_role', true) = 'account_manager' AND EXISTS ( SELECT 1 FROM sales.customers c WHERE c.customer_id = sales.customer_communications.customer_id AND c.account_manager_id = current_setting('app.employee_id', true)::integer ) AND EXTRACT(DOW FROM sales.customer_communications.occurred_at) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM sales.customer_communications.occurred_at) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 165,
+  "predicted_sql": "CREATE POLICY data_analyst_revenue_view ON finance.revenue FOR SELECT USING ( (current_setting('app.job_role', true) = 'data_analyst') AND (is_current = true OR is_current = false) );"
+ },
+ {
+  "id": 166,
+  "predicted_sql": "CREATE POLICY product_managers_view_campaign_performance ON product.analytics FOR SELECT USING ( app.job_role = 'product_manager'::text AND EXISTS ( SELECT 1 FROM product.features f WHERE f.feature_id = analytics.feature_id AND f.product_owner = current_setting('app.employee_id', true)::integer ) );"
+ },
+ {
+  "id": 167,
+  "predicted_sql": "CREATE POLICY \"security_analysts_team_11_access_active_security_events\" ON operations.security_events FOR SELECT USING (current_setting('app.job_role', true) = 'security_analyst' AND current_setting('app.team_id', true)::integer = 11 AND status = 'active');"
+ },
+ {
+  "id": 168,
+  "predicted_sql": "CREATE POLICY finance_managers_view_expenses ON finance.expenses FOR SELECT USING ( current_setting('app.job_role', true) = 'finance_manager' AND department_id = current_setting('app.department_id', true)::integer AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 169,
+  "predicted_sql": "CREATE POLICY sales_managers_view_active_subscription_contracts ON sales.contracts FOR SELECT USING (current_setting('app.job_role', true) = 'sales_manager' AND status = 'active' AND contract_type = 'subscription');"
+ },
+ {
+  "id": 170,
+  "predicted_sql": "CREATE POLICY procurement_officers_view_orders ON sales.orders FOR SELECT USING (app.job_role = 'procurement_officer' AND status = 'pending fulfillment');"
+ },
+ {
+  "id": 171,
+  "predicted_sql": "CREATE POLICY policy_engineering_projects_select ON engineering.projects FOR SELECT USING ( (owner_id = current_setting('app.employee_id', true)::integer OR current_setting('app.employee_id', true)::integer = ANY(team_members)) AND created_at >= (CURRENT_DATE - INTERVAL '90 days') );"
+ },
+ {
+  "id": 172,
+  "predicted_sql": "CREATE POLICY \"compliance_officers_view_contracts_legal_review_business_hours\" ON sales.contracts FOR SELECT USING ( current_setting('app.job_role', true) = 'compliance_officer' AND legal_review = true AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 173,
+  "predicted_sql": "CREATE POLICY operations_managers_approve_config_changes ON operations.system_config FOR UPDATE USING ( current_setting('app.job_role', true) = 'operations_manager' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) NOT BETWEEN 2 AND 5) AND change_risk_level IN ('High', 'Critical') AND locked = false AND archived = false AND last_review_date >= CURRENT_DATE - INTERVAL '90 days' ) WITH CHECK ( current_setting('app.job_role', true) = 'operations_manager' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) NOT BETWEEN 2 AND 5) AND change_risk_level IN ('High', 'Critical') AND locked = false AND archived = false AND last_review_date >= CURRENT_DATE - INTERVAL '90 days' );"
+ },
+ {
+  "id": 174,
+  "predicted_sql": "CREATE POLICY \"tax_consultants_view_documents_business_hours\" ON operations.documents FOR SELECT USING ( (current_setting('app.job_role', true) = 'tax_specialist') AND (EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5) AND (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17) );"
+ },
+ {
+  "id": 175,
+  "predicted_sql": "CREATE POLICY sales_managers_view_metrics ON product.metrics FOR SELECT USING ( app.job_role = 'sales_manager'::text AND owner_id = current_setting('app.employee_id', true)::integer AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 176,
+  "predicted_sql": "CREATE POLICY sales_managers_renewal_window ON sales.contracts FOR SELECT USING ( app.job_role = 'sales_manager'::text AND end_date <= CURRENT_DATE + INTERVAL '90 days' AND end_date >= CURRENT_DATE );"
+ },
+ {
+  "id": 177,
+  "predicted_sql": "CREATE POLICY hr_specialists_modify_benefits ON hr.benefits FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_specialist') WITH CHECK (current_setting('app.job_role', true) = 'hr_specialist');"
+ },
+ {
+  "id": 178,
+  "predicted_sql": "CREATE POLICY policy_accountants_payroll ON hr.payroll FOR SELECT USING ( current_setting('app.job_role', true) = 'accountant' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 179,
+  "predicted_sql": "CREATE POLICY compliance_officers_view_security_events ON operations.security_events FOR SELECT USING (current_setting('app.job_role', true) = 'compliance_officer');"
+ },
+ {
+  "id": 180,
+  "predicted_sql": "CREATE POLICY sales_contracts_readable ON sales.contracts FOR SELECT USING (partner_id = current_setting('app.user_id', true)::integer AND current_setting('app.user_id', true) IS NOT NULL);"
+ },
+ {
+  "id": 181,
+  "predicted_sql": "CREATE POLICY policy_invoices_accountants_view_pending ON sales.invoices FOR SELECT USING (current_setting('app.job_role', true) = 'accountant' AND status = 'pending');"
+ },
+ {
+  "id": 182,
+  "predicted_sql": "CREATE POLICY accountant_view_past_due_invoices ON sales.invoices FOR SELECT USING ( current_setting('app.job_role', true) = 'accountant' AND due_date < CURRENT_DATE AND status != 'paid' );"
+ },
+ {
+  "id": 183,
+  "predicted_sql": "CREATE POLICY sales_managers_view_onboarding ON sales.customer_onboarding FOR SELECT USING ( (current_setting('app.job_role', true) = 'sales_manager'::text) AND (onboarding_manager = current_setting('app.employee_id', true)::integer) AND (EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5) AND (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17) );"
+ },
+ {
+  "id": 184,
+  "predicted_sql": "CREATE POLICY assigned_employees_modify_feedback ON product.user_feedback FOR UPDATE USING (employee_id = current_setting('app.employee_id', true)::integer AND status != 'closed') WITH CHECK (employee_id = current_setting('app.employee_id', true)::integer AND status != 'closed');"
+ },
+ {
+  "id": 185,
+  "predicted_sql": "CREATE POLICY employees_data_clearance_jurisdiction ON hr.employees FOR SELECT USING ( current_setting('app.user_clearance_level', true) IS NOT NULL AND current_setting('app.user_clearance_level', true)::integer >= security_clearance AND status != 'under legal hold' AND region_id = current_setting('app.region_id', true)::integer );"
+ },
+ {
+  "id": 186,
+  "predicted_sql": "CREATE POLICY hr_specialists_enroll_benefits ON hr.benefits FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'hr_specialist' AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.employee_id', true)::integer = employee_id AND enrollment_start <= CURRENT_DATE AND enrollment_end >= CURRENT_DATE AND is_eligible = true);"
+ },
+ {
+  "id": 187,
+  "predicted_sql": "CREATE POLICY sales_managers_view_customer_feedback ON product.user_feedback FOR SELECT USING ( current_setting('app.job_role', true) = 'sales_manager' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND escalation_owner = current_setting('app.employee_id', true)::integer );"
+ },
+ {
+  "id": 188,
+  "predicted_sql": "CREATE POLICY operations_managers_view_issues_during_business_hours ON engineering.issues FOR SELECT USING ( current_setting('app.job_role', true) = 'operations_manager' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 189,
+  "predicted_sql": "CREATE POLICY call_center_supervisors_view_team_recordings ON support.call_recordings FOR SELECT USING (current_setting('app.job_role', true) = 'call_center_supervisor' AND team_id = current_setting('app.team_id', true)::integer AND tenant_id = current_setting('app.tenant_id', true)::integer);"
+ },
+ {
+  "id": 190,
+  "predicted_sql": "CREATE POLICY procurement_officers_approve_contracts_during_maintenance ON sales.contracts FOR UPDATE USING (app.job_role = 'procurement_officer' AND status = 'pending' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (app.job_role = 'procurement_officer' AND status = 'pending' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 191,
+  "predicted_sql": "CREATE POLICY procurement_officers_view_in_transit_shipment_orders ON sales.orders FOR SELECT USING (current_setting('app.job_role', true) = 'procurement_officer' AND shipment_status = 'in-transit');"
+ },
+ {
+  "id": 192,
+  "predicted_sql": "CREATE POLICY \"policy_analytics\" ON product.analytics FOR SELECT USING ( current_setting('app.job_role', true) = 'data_analyst' AND is_anonymized = true AND calculated_at >= (CURRENT_TIMESTAMP - INTERVAL '90 days') );"
+ },
+ {
+  "id": 193,
+  "predicted_sql": "CREATE POLICY policy_data_analysts_view_market_analysis ON product.analytics FOR SELECT USING ( app.job_role = 'data_analyst' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND report_type = 'market_analysis' );"
+ },
+ {
+  "id": 194,
+  "predicted_sql": "CREATE POLICY compliance_trainers_maintenance_window ON hr.benefits FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer') WITH CHECK (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5 AND current_setting('app.job_role', true) = 'compliance_officer');"
+ },
+ {
+  "id": 195,
+  "predicted_sql": "CREATE POLICY procurement_officers_update_vendor_contracts ON sales.contracts FOR UPDATE USING (current_setting('app.job_role', true) = 'procurement_officer') WITH CHECK (current_setting('app.job_role', true) = 'procurement_officer');"
+ },
+ {
+  "id": 196,
+  "predicted_sql": "CREATE POLICY department_managers_view_asset_depreciation_config ON operations.system_config FOR SELECT USING (app.job_role = 'dept_manager'::text AND app.job_role IS NOT NULL);"
+ },
+ {
+  "id": 197,
+  "predicted_sql": "CREATE POLICY security_analysts_view_vulnerability_reports ON engineering.tests FOR SELECT USING (current_setting('app.job_role', true) = 'security_analyst');"
+ },
+ {
+  "id": 198,
+  "predicted_sql": "CREATE POLICY \"team_12_access_feedback_announcements\" ON product.user_feedback FOR SELECT USING (team_id = 12 AND current_setting('app.employee_id', true) IS NOT NULL);"
+ },
+ {
+  "id": 199,
+  "predicted_sql": "CREATE POLICY employees_view_company_policy_configs ON operations.system_config FOR SELECT USING ( EXISTS ( SELECT 1 FROM hr.employees e WHERE e.employee_id = current_setting('app.employee_id', true)::integer AND e.hire_date >= system_config.effective_from AND (system_config.effective_until IS NULL OR system_config.effective_until >= e.hire_date) ) );"
+ },
+ {
+  "id": 200,
+  "predicted_sql": "CREATE POLICY employees_on_leave_view_benefits ON hr.benefits FOR SELECT USING ( EXISTS ( SELECT 1 FROM hr.employees e WHERE e.employee_id = current_setting('app.employee_id', true)::integer AND e.leave_status = 'on_leave' ) );"
+ },
+ {
+  "id": 201,
+  "predicted_sql": "CREATE POLICY department_managers_view_salary ON hr.payroll FOR SELECT USING ( current_setting('app.job_role', true) = 'dept_manager' AND current_setting('app.employee_id', true) IS NOT NULL AND manager_id = current_setting('app.employee_id', true)::integer AND pay_period_end >= CURRENT_DATE - INTERVAL '90 days' );"
+ },
+ {
+  "id": 202,
+  "predicted_sql": "CREATE POLICY employees_view_own_retention_bonus ON hr.benefits FOR SELECT USING (employee_id = current_setting('app.employee_id', true)::integer AND benefit_type = 'retention_bonus' AND coverage_start_date <= CURRENT_DATE - INTERVAL '2 years');"
+ },
+ {
+  "id": 203,
+  "predicted_sql": "CREATE POLICY employees_view_own_emergency_contact ON hr.employees FOR SELECT USING (employee_id = current_setting('app.employee_id', true)::integer AND record_type = 'Emergency Contact');"
+ },
+ {
+  "id": 204,
+  "predicted_sql": "CREATE POLICY managers_approve_time_off ON hr.attendance FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND EXISTS (SELECT 1 FROM hr.employees e WHERE e.employee_id = current_setting('app.employee_id', true)::integer AND e.job_role = 'manager' AND hr.attendance.employee_id = e.employee_id)) WITH CHECK (status = 'approved');"
+ },
+ {
+  "id": 205,
+  "predicted_sql": "CREATE POLICY employees_view_payroll_records ON hr.payroll FOR SELECT USING (employee_id = current_setting('app.employee_id', true)::integer AND job_role = current_setting('app.job_role', true) AND total_compensation = 'salary band information' AND pay_period_end >= CURRENT_DATE - INTERVAL '90 days');"
+ },
+ {
+  "id": 206,
+  "predicted_sql": "CREATE POLICY employees_update_own_payroll_direct_deposit ON hr.payroll FOR UPDATE USING (employee_id = current_setting('app.employee_id', true)::integer AND direct_deposit = true AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6) WITH CHECK (employee_id = current_setting('app.employee_id', true)::integer AND direct_deposit = true AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6);"
+ },
+ {
+  "id": 207,
+  "predicted_sql": "CREATE POLICY managers_modify_assignment_attendance ON hr.attendance FOR UPDATE USING (EXISTS (SELECT 1 FROM hr.employees WHERE employees.employee_id = current_setting('app.employee_id', true)::integer AND employees.manager_id = attendance.employee_id) AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (EXISTS (SELECT 1 FROM hr.employees WHERE employees.employee_id = current_setting('app.employee_id', true)::integer AND employees.manager_id = attendance.employee_id) AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 208,
+  "predicted_sql": "CREATE POLICY reviewers_modify_draft_performance_reviews ON hr.performance FOR UPDATE USING ( reviewer_id = current_setting('app.employee_id', true)::integer AND status = 'draft' ) WITH CHECK ( reviewer_id = current_setting('app.employee_id', true)::integer AND status = 'draft' );"
+ },
+ {
+  "id": 209,
+  "predicted_sql": "CREATE POLICY \"employees_view_own_career_plan_business_hours\" ON hr.performance FOR SELECT USING ( employee_id = current_setting('app.employee_id', true)::integer AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 210,
+  "predicted_sql": "CREATE POLICY department_managers_view_payroll ON hr.payroll FOR SELECT USING ( current_setting('app.job_role', true) = 'dept_manager' AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.department_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND department_id = current_setting('app.department_id', true)::integer AND can_export = true );"
+ },
+ {
+  "id": 211,
+  "predicted_sql": "CREATE POLICY budget_owners_modify_own_current_fiscal_year ON finance.budget FOR UPDATE USING (budget_owner = current_setting('app.employee_id', true)::integer AND fiscal_year = EXTRACT(YEAR FROM CURRENT_DATE) AND budget_cycle_active = true) WITH CHECK (budget_owner = current_setting('app.employee_id', true)::integer AND fiscal_year = EXTRACT(YEAR FROM CURRENT_DATE) AND budget_cycle_active = true);"
+ },
+ {
+  "id": 212,
+  "predicted_sql": "CREATE POLICY finance_analysts_view_budget_reports ON product.metrics FOR SELECT USING ( app.job_role = 'finance_analyst' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 213,
+  "predicted_sql": "CREATE POLICY finance_managers_approve_budget ON finance.budget FOR UPDATE USING (current_setting('app.job_role', true) = 'finance_manager' AND status = 'pending' AND budget_owner = current_setting('app.employee_id', true)::integer AND budget_cycle_active = true) WITH CHECK (current_setting('app.job_role', true) = 'finance_manager' AND status = 'pending' AND budget_owner = current_setting('app.employee_id', true)::integer AND budget_cycle_active = true);"
+ },
+ {
+  "id": 214,
+  "predicted_sql": "CREATE POLICY \"data_analysts_view_expenses\" ON finance.expenses FOR SELECT USING (app.job_role = 'data_analyst' AND expense_date >= CURRENT_DATE - INTERVAL '12 months');"
+ },
+ {
+  "id": 215,
+  "predicted_sql": "CREATE POLICY expense_approvers_approve ON finance.expenses FOR UPDATE USING ( current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.position_level', true) IS NOT NULL AND status = 'pending' AND approver_id = current_setting('app.employee_id', true)::integer AND employee_id != current_setting('app.employee_id', true)::integer AND EXISTS ( SELECT 1 FROM hr.employees e WHERE e.employee_id = current_setting('app.employee_id', true)::integer AND e.position_level >= current_setting('app.position_level', true)::integer ) ) WITH CHECK ( current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.position_level', true) IS NOT NULL AND status = 'approved' AND approver_id = current_setting('app.employee_id', true)::integer AND employee_id != current_setting('app.employee_id', true)::integer AND EXISTS ( SELECT 1 FROM hr.employees e WHERE e.employee_id = current_setting('app.employee_id', true)::integer AND e.position_level >= current_setting('app.position_level', true)::integer ) );"
+ },
+ {
+  "id": 216,
+  "predicted_sql": "CREATE POLICY tax_specialists_view_current_year ON finance.tax_records FOR SELECT USING (current_setting('app.job_role', true) = 'tax_specialist' AND tax_year = EXTRACT(YEAR FROM CURRENT_DATE));"
+ },
+ {
+  "id": 217,
+  "predicted_sql": "CREATE POLICY finance_analysts_view_revenue ON finance.revenue FOR SELECT USING ( current_setting('app.job_role', true) = 'finance_analyst' AND report_period <= CURRENT_DATE );"
+ },
+ {
+  "id": 218,
+  "predicted_sql": "CREATE POLICY employees_view_own_commission_expenses ON finance.expenses FOR SELECT USING (employee_id = current_setting('app.employee_id', true)::integer AND category = 'commission');"
+ },
+ {
+  "id": 219,
+  "predicted_sql": "CREATE POLICY sales_managers_view_commission_expenses ON finance.expenses FOR SELECT USING ( current_setting('app.job_role', true) = 'sales_manager' AND current_setting('app.employee_id', true) IS NOT NULL AND EXISTS ( SELECT 1 FROM hr.employees e WHERE e.employee_id = finance.expenses.employee_id AND e.manager_id = current_setting('app.employee_id', true)::integer ) AND finance.expenses.expense_date >= CURRENT_DATE - INTERVAL '90 days' );"
+ },
+ {
+  "id": 220,
+  "predicted_sql": "CREATE POLICY \"senior_engineers_view_code_review_issues\" ON engineering.issues FOR SELECT USING ( current_setting('app.job_role', true) = 'senior_engineer' AND EXISTS ( SELECT 1 FROM engineering.projects p WHERE p.project_id = engineering.issues.project_id AND p.project_lead = current_setting('app.employee_id', true)::integer ) );"
+ },
+ {
+  "id": 221,
+  "predicted_sql": "CREATE POLICY code_reviewers_approve_prs ON engineering.pull_requests FOR UPDATE USING ( current_setting('app.job_role', true) = 'code_reviewer' AND EXISTS ( SELECT 1 FROM engineering.code_repository cr WHERE cr.repo_id = engineering.pull_requests.repo_id AND cr.assigned_reviewer = current_setting('app.employee_id', true)::integer ) AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6 ) WITH CHECK ( current_setting('app.job_role', true) = 'code_reviewer' AND EXISTS ( SELECT 1 FROM engineering.code_repository cr WHERE cr.repo_id = engineering.pull_requests.repo_id AND cr.assigned_reviewer = current_setting('app.employee_id', true)::integer ) AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6 );"
+ },
+ {
+  "id": 222,
+  "predicted_sql": "CREATE POLICY engineers_view_assigned_tests ON engineering.tests FOR SELECT USING (assigned_developer = current_setting('app.employee_id', true)::integer AND current_setting('app.employee_id', true) IS NOT NULL);"
+ },
+ {
+  "id": 223,
+  "predicted_sql": "CREATE POLICY devops_deploy_maintenance_window ON engineering.releases FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'devops_engineer' AND current_setting('app.job_role', true) IS NOT NULL AND EXTRACT(HOUR FROM CURRENT_TIME) BETWEEN 2 AND 5 AND deployment_approved = true );"
+ },
+ {
+  "id": 224,
+  "predicted_sql": "CREATE POLICY qa_engineers_view_assigned_bug_issues_during_business_hours ON engineering.issues FOR SELECT USING ( current_setting('app.job_role', true) = 'qa_engineer' AND assignee_id = current_setting('app.employee_id', true)::integer AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 225,
+  "predicted_sql": "CREATE POLICY \"assigned_technical_writers_update\" ON operations.documents FOR UPDATE USING (EXISTS (SELECT 1 FROM engineering.projects p WHERE p.project_id = operations.documents.project_id AND p.tech_writer = current_setting('app.employee_id', true)::integer)) WITH CHECK (EXISTS (SELECT 1 FROM engineering.projects p WHERE p.project_id = operations.documents.project_id AND p.tech_writer = current_setting('app.employee_id', true)::integer));"
+ },
+ {
+  "id": 226,
+  "predicted_sql": "CREATE POLICY product_owners_view_feature_request_feedback ON product.features FOR SELECT USING (current_setting('app.job_role', true) = 'product_manager' AND EXISTS (SELECT 1 FROM product.user_feedback WHERE user_feedback.feature_id = features.feature_id AND user_feedback.feedback_type = 'Feature Request'));"
+ },
+ {
+  "id": 227,
+  "predicted_sql": "CREATE POLICY designer_draft_feature_update ON product.features FOR UPDATE USING ( current_setting('app.job_role', true) = 'designer' AND assignee_id = current_setting('app.employee_id', true)::integer AND status = 'draft' AND EXTRACT(HOUR FROM CURRENT_TIME) BETWEEN 2 AND 5 ) WITH CHECK ( current_setting('app.job_role', true) = 'designer' AND assignee_id = current_setting('app.employee_id', true)::integer AND status = 'draft' AND item_type = 'UI mockup' );"
+ },
+ {
+  "id": 228,
+  "predicted_sql": "CREATE POLICY customers_view_own_contract_balance ON sales.contracts FOR SELECT USING ( tenant_id = current_setting('app.tenant_id', true)::integer AND customer_id = current_setting('app.customer_id', true)::integer AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 229,
+  "predicted_sql": "CREATE POLICY sales_pipeline_select_policy ON sales.sales_pipeline FOR SELECT USING (sales_rep_id = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 230,
+  "predicted_sql": "CREATE POLICY account_managers_update_contracts ON sales.contracts FOR UPDATE USING (current_setting('app.job_role', true) = 'account_manager' AND account_manager = current_setting('app.employee_id', true)::integer) WITH CHECK (current_setting('app.job_role', true) = 'account_manager' AND account_manager = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 231,
+  "predicted_sql": "CREATE POLICY \"negotiators_view_assigned_draft_contracts\" ON sales.contracts FOR SELECT USING (status = 'draft' AND negotiator_id = current_setting('app.employee_id', true)::integer AND current_setting('app.employee_id', true) IS NOT NULL);"
+ },
+ {
+  "id": 232,
+  "predicted_sql": "CREATE POLICY \"employees_assigned_as_processors_can_modify_delivered_fulfillment_stage_contract_records_only_during_maintenance_windows\" ON sales.contracts FOR UPDATE USING ( current_setting('app.employee_id', true) IS NOT NULL AND EXISTS ( SELECT 1 FROM hr.employees e WHERE e.employee_id = current_setting('app.employee_id', true)::integer AND e.job_role = 'processor' ) AND fulfillment_stage = 'delivered' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5 ) WITH CHECK ( current_setting('app.employee_id', true) IS NOT NULL AND EXISTS ( SELECT 1 FROM hr.employees e WHERE e.employee_id = current_setting('app.employee_id', true)::integer AND e.job_role = 'processor' ) AND fulfillment_stage = 'delivered' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5 );"
+ },
+ {
+  "id": 233,
+  "predicted_sql": "CREATE POLICY customers_view_own_invoice_during_business_hours ON sales.invoices FOR SELECT USING (customer_id = current_setting('app.customer_id', true)::integer AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17);"
+ },
+ {
+  "id": 234,
+  "predicted_sql": "CREATE POLICY \"Accountants can update payment status for verified invoices only during maintenance windows (02:00-06:00)\" ON sales.invoices FOR UPDATE USING ( current_setting('app.job_role', true) = 'accountant' AND status = 'verified' AND EXTRACT(HOUR FROM CURRENT_TIME) BETWEEN 2 AND 5 ) WITH CHECK ( current_setting('app.job_role', true) = 'accountant' AND status = 'verified' AND EXTRACT(HOUR FROM CURRENT_TIME) BETWEEN 2 AND 5 );"
+ },
+ {
+  "id": 235,
+  "predicted_sql": "CREATE POLICY policy_data_analysts_view_verified_feedback ON product.user_feedback FOR SELECT USING (current_setting('app.job_role', true) = 'data_analyst' AND resolved = true);"
+ },
+ {
+  "id": 236,
+  "predicted_sql": "CREATE POLICY product_managers_set_feature_priority ON product.features FOR UPDATE USING (current_setting('app.job_role', true) = 'product_manager' AND assigned_to = current_setting('app.employee_id', true)::integer AND status = 'pending') WITH CHECK (current_setting('app.job_role', true) = 'product_manager' AND assigned_to = current_setting('app.employee_id', true)::integer AND status = 'pending' AND priority_status = 'High');"
+ },
+ {
+  "id": 237,
+  "predicted_sql": "CREATE POLICY policy_data_analysts_view_public_analytics ON product.analytics FOR SELECT USING (app.job_role = 'data_analyst' AND is_public = true);"
+ },
+ {
+  "id": 238,
+  "predicted_sql": "CREATE POLICY \"metrics_owners_update_kpi_during_maintenance\" ON product.metrics FOR UPDATE USING (owner_id = current_setting('app.employee_id', true)::integer AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (owner_id = current_setting('app.employee_id', true)::integer AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 239,
+  "predicted_sql": "CREATE POLICY engineers_view_metrics_during_review_season ON product.metrics FOR SELECT USING ( (current_setting('app.job_role', true) = 'engineer'::text) AND (EXISTS (SELECT 1 FROM product.metrics m WHERE m.metric_id = product.metrics.metric_id AND m.review_season_start <= CURRENT_TIMESTAMP AND m.review_season_end >= CURRENT_TIMESTAMP)) );"
+ },
+ {
+  "id": 240,
+  "predicted_sql": "CREATE POLICY \"operations_leads_view_system_metrics_business_hours\" ON product.metrics FOR SELECT USING ( current_setting('app.job_role', true) = 'operations_manager' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 241,
+  "predicted_sql": "CREATE POLICY devops_engineers_audit_logs ON operations.audit_logs FOR SELECT USING (app.job_role = 'devops_engineer' AND incident_id IS NOT NULL);"
+ },
+ {
+  "id": 242,
+  "predicted_sql": "CREATE POLICY oncall_devops_incident_access ON engineering.issues FOR SELECT USING ( current_setting('app.job_role', true) = 'devops_engineer' AND status = 'active' AND severity IN ('Critical', 'Blocker') AND assignee_id = current_setting('app.employee_id', true)::integer );"
+ },
+ {
+  "id": 243,
+  "predicted_sql": "CREATE POLICY \"DevOps engineers can create post mortem document records\" ON operations.documents FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'devops_engineer' AND document_type = 'post mortem');"
+ },
+ {
+  "id": 244,
+  "predicted_sql": "CREATE POLICY \"devops_engineers_create_published_incident_updates\" ON operations.security_events FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'devops_engineer' AND status = 'published' AND incident_id IS NOT NULL );"
+ },
+ {
+  "id": 245,
+  "predicted_sql": "CREATE POLICY \"runbook_owners_update_own_during_maintenance\" ON engineering.projects FOR UPDATE USING (owner_id = current_setting('app.employee_id', true)::integer AND current_setting('app.job_role', true) = 'runbook_owner' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (owner_id = current_setting('app.employee_id', true)::integer AND current_setting('app.job_role', true) = 'runbook_owner' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 246,
+  "predicted_sql": "CREATE POLICY \"DevOps engineers can update alert threshold system configuration records only during off-hours (before 08:00 or after 18:59).\" ON operations.system_config FOR UPDATE USING (current_setting('app.job_role', true) = 'devops_engineer' AND (EXTRACT(HOUR FROM CURRENT_TIME) < 8 OR EXTRACT(HOUR FROM CURRENT_TIME) > 18)) WITH CHECK (current_setting('app.job_role', true) = 'devops_engineer' AND (EXTRACT(HOUR FROM CURRENT_TIME) < 8 OR EXTRACT(HOUR FROM CURRENT_TIME) > 18));"
+ },
+ {
+  "id": 247,
+  "predicted_sql": "CREATE POLICY team_13_access ON product.analytics FOR SELECT USING (team_id = 13 AND current_setting('app.employee_id', true) IS NOT NULL);"
+ },
+ {
+  "id": 248,
+  "predicted_sql": "CREATE POLICY junior_engineers_create_chaos_issues ON engineering.issues FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'junior_engineer' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 0 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 4 );"
+ },
+ {
+  "id": 249,
+  "predicted_sql": "CREATE POLICY \"Administrators can update non-production database access records where the permitted operation is Maintenance.\" ON operations.temporal_access FOR UPDATE USING (current_setting('app.job_role', true) = 'admin' AND environment != 'production' AND permitted_op = 'Maintenance') WITH CHECK (current_setting('app.job_role', true) = 'admin' AND environment != 'production' AND permitted_op = 'Maintenance');"
+ },
+ {
+  "id": 250,
+  "predicted_sql": "CREATE POLICY \"security_admins_audit_access_logs\" ON operations.audit_logs FOR SELECT TO PUBLIC USING (current_setting('app.job_role', true) = 'security_admin');"
+ },
+ {
+  "id": 251,
+  "predicted_sql": "CREATE POLICY \"compliance_officers_view_dsar_documents_business_hours\" ON operations.documents FOR SELECT USING ( current_setting('app.job_role', true) = 'compliance_officer' AND document_type = 'DSAR' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 252,
+  "predicted_sql": "CREATE POLICY policy_data_analysts_view_contracts ON sales.contracts FOR SELECT USING ( current_setting('app.job_role', true) = 'data_analyst' AND status = 'active' AND processor_id = current_setting('app.employee_id', true)::integer );"
+ },
+ {
+  "id": 253,
+  "predicted_sql": "CREATE POLICY compliance_officer_modify_dpia ON operations.documents FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND assessor_id = current_setting('app.employee_id', true)::integer AND current_setting('app.employee_id', true) IS NOT NULL) WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND assessor_id = current_setting('app.employee_id', true)::integer AND current_setting('app.employee_id', true) IS NOT NULL);"
+ },
+ {
+  "id": 254,
+  "predicted_sql": "CREATE POLICY compliance_officer_purge_inactive_employees ON hr.employees FOR DELETE USING (current_setting('app.job_role', true) = 'compliance_officer' AND current_setting('app.job_role', true) IS NOT NULL AND retention_period_elapsed = true AND separation_date IS NOT NULL);"
+ },
+ {
+  "id": 255,
+  "predicted_sql": "CREATE POLICY compliance_officers_view_analytics ON product.analytics FOR SELECT USING (current_setting('app.job_role', true) = 'compliance_officer' AND (analytics_type = 'consent' OR category = 'consent' OR subcategory = 'consent'));"
+ },
+ {
+  "id": 256,
+  "predicted_sql": "CREATE POLICY \"auditors_access_compliance_audit_records\" ON operations.audit_logs FOR SELECT USING (current_setting('app.job_role', true) = 'auditor' AND audit_status = 'compliance');"
+ },
+ {
+  "id": 257,
+  "predicted_sql": "CREATE POLICY \"auditors_view_recent_metrics\" ON product.metrics FOR SELECT USING ( (current_setting('app.job_role', true) = 'auditor' OR current_setting('app.job_role', true) = 'audit_lead') AND last_updated >= (CURRENT_TIMESTAMP - INTERVAL '90 days') );"
+ },
+ {
+  "id": 258,
+  "predicted_sql": "CREATE POLICY risk_managers_create_risk_issues ON engineering.issues FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'risk_manager' AND reporter_id = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 259,
+  "predicted_sql": "CREATE POLICY risk_managers_own_metrics ON product.metrics FOR SELECT USING (app.job_role = 'risk_manager' AND owner_id = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 260,
+  "predicted_sql": "CREATE POLICY compliance_officers_modify_policy_review_workflow_records ON operations.security_events FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6) WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6);"
+ },
+ {
+  "id": 261,
+  "predicted_sql": "CREATE POLICY employees_access_own_export_records ON operations.audit_logs FOR SELECT USING (employee_id = current_setting('app.employee_id', true)::integer AND record_type = 'export');"
+ },
+ {
+  "id": 262,
+  "predicted_sql": "CREATE POLICY employees_delete_own_record ON hr.employees FOR DELETE USING (employee_id = current_setting('app.employee_id', true)::integer AND request_date >= CURRENT_DATE - INTERVAL '30 days');"
+ },
+ {
+  "id": 263,
+  "predicted_sql": "CREATE POLICY compliance_officers_team6_export_access ON operations.temporal_access FOR SELECT USING (current_setting('app.job_role', true) = 'compliance_officer' AND EXISTS (SELECT 1 FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer AND team_id = 6) AND inventory_type = 'Data Processing');"
+ },
+ {
+  "id": 264,
+  "predicted_sql": "CREATE POLICY procurement_officers_view_vendor_customers ON sales.customers FOR SELECT USING (app.job_role = 'procurement_officer' AND vendor_compliance_officer = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 265,
+  "predicted_sql": "CREATE POLICY compliance_officer_contracts_tracking ON sales.contracts FOR SELECT USING ( current_setting('app.job_role', true) = 'compliance_officer' AND processor_id = current_setting('app.employee_id', true)::integer AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 266,
+  "predicted_sql": "CREATE POLICY compliance_officers_view_regulatory_records ON finance.tax_records FOR SELECT USING (app.job_role = 'compliance_officer' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 18);"
+ },
+ {
+  "id": 267,
+  "predicted_sql": "CREATE POLICY compliance_officers_modify_tia_projects_during_maintenance ON engineering.projects FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND owner_id = current_setting('app.employee_id', true)::integer AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND owner_id = current_setting('app.employee_id', true)::integer AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 268,
+  "predicted_sql": "CREATE POLICY compliance_officers_modify_scc_contracts_during_maintenance ON sales.contracts FOR UPDATE USING (app.job_role = 'compliance_officer' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (app.job_role = 'compliance_officer' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 269,
+  "predicted_sql": "CREATE POLICY \"compliance_officers_publish_bcr_project_records\" ON engineering.projects FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer') WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND project_type = 'BCR' AND status = 'published');"
+ },
+ {
+  "id": 270,
+  "predicted_sql": "CREATE POLICY derogation_manager_view_issues ON engineering.issues FOR SELECT USING ( current_setting('app.job_role', true) = 'derogation_manager' AND derogation_manager = current_setting('app.employee_id', true)::integer );"
+ },
+ {
+  "id": 271,
+  "predicted_sql": "CREATE POLICY compliance_officers_cross_border_transfers ON operations.temporal_access FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND access_type = 'cross_border_transfer' AND approval_required = true AND approval_documented = true AND EXTRACT(HOUR FROM start_time) >= 2 AND EXTRACT(HOUR FROM start_time) < 6) WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND access_type = 'cross_border_transfer' AND approval_required = true AND approval_documented = true AND EXTRACT(HOUR FROM start_time) >= 2 AND EXTRACT(HOUR FROM start_time) < 6);"
+ },
+ {
+  "id": 272,
+  "predicted_sql": "CREATE POLICY compliance_officers_update_adequacy_projects ON engineering.projects FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer') WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer');"
+ },
+ {
+  "id": 273,
+  "predicted_sql": "CREATE POLICY \"auditors_review_audit_logs_data_collection\" ON operations.audit_logs FOR SELECT USING (current_setting('app.job_role', true) = 'auditor' AND table_name = 'data_collection');"
+ },
+ {
+  "id": 274,
+  "predicted_sql": "CREATE POLICY compliance_officers_view_purpose_analytics ON product.analytics FOR SELECT USING (app.job_role = 'compliance_officer' AND category = 'Purpose');"
+ },
+ {
+  "id": 275,
+  "predicted_sql": "CREATE POLICY compliance_officers_modify_temporal_access_deletion_schedule ON operations.temporal_access FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND config_type = 'Deletion Schedule' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND config_type = 'Deletion Schedule' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 276,
+  "predicted_sql": "CREATE POLICY \"auditors_view_encryption_config\" ON operations.system_config FOR SELECT USING (current_setting('app.job_role', true) = 'auditor');"
+ },
+ {
+  "id": 277,
+  "predicted_sql": "CREATE POLICY compliance_officers_modify_pseudonym_key_records ON operations.temporal_access FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND item_type = 'pseudonym_key') WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND item_type = 'pseudonym_key');"
+ },
+ {
+  "id": 278,
+  "predicted_sql": "CREATE POLICY compliance_officers_view_analytics ON product.analytics FOR SELECT USING ( current_setting('app.job_role', true) = 'compliance_officer' AND validation_type = 'Effectiveness' AND EXTRACT(HOUR FROM CURRENT_TIME) BETWEEN 9 AND 17 AND EXTRACT(DOW FROM CURRENT_DATE) BETWEEN 1 AND 5 );"
+ },
+ {
+  "id": 279,
+  "predicted_sql": "CREATE POLICY compliance_officer_create_engineering_projects ON engineering.projects FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND owner_id = current_setting('app.employee_id', true)::integer AND doc_category = 'accountability');"
+ },
+ {
+  "id": 280,
+  "predicted_sql": "CREATE POLICY compliance_officers_modify_privacy_default_settings_during_maintenance ON operations.system_config FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6) WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6);"
+ },
+ {
+  "id": 281,
+  "predicted_sql": "CREATE POLICY compliance_officers_update_issues ON engineering.issues FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND status IN ('open', 'in-progress')) WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND status IN ('open', 'in-progress'));"
+ },
+ {
+  "id": 282,
+  "predicted_sql": "CREATE POLICY \"compliance_officers_access_privacy_critical_documents\" ON operations.documents FOR SELECT USING (current_setting('app.job_role', true) = 'compliance_officer' AND document_type = 'privacy_critical' AND project_id IS NOT NULL AND EXISTS (SELECT 1 FROM engineering.projects p WHERE p.project_id = operations.documents.project_id));"
+ },
+ {
+  "id": 283,
+  "predicted_sql": "CREATE POLICY legal_hold_audit_log_view ON operations.audit_logs FOR SELECT USING (current_setting('app.team_id', true)::integer = 2 AND record_type = 'legal_hold');"
+ },
+ {
+  "id": 284,
+  "predicted_sql": "CREATE POLICY \"members_of_records_management_team_15_can_update_temporal_access_records_for_retention_schedules\" ON operations.temporal_access FOR UPDATE USING (current_setting('app.team_id', true)::integer = 15 AND current_setting('app.job_role', true) = 'records_management') WITH CHECK (current_setting('app.team_id', true)::integer = 15 AND current_setting('app.job_role', true) = 'records_management');"
+ },
+ {
+  "id": 285,
+  "predicted_sql": "CREATE POLICY \"auditors_view_audit_log_litigation_hold\" ON operations.audit_logs FOR SELECT USING (current_setting('app.job_role', true) = 'auditor' AND record_type = 'litigation_hold');"
+ },
+ {
+  "id": 286,
+  "predicted_sql": "CREATE POLICY \"auditors_access_archived_evidence_logs_business_hours\" ON operations.audit_logs FOR SELECT USING ( current_setting('app.job_role', true) = 'auditor' AND evidence_status = 'archived' AND EXTRACT(DOW FROM logged_at) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM logged_at) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 287,
+  "predicted_sql": "CREATE POLICY \"auditors_view_recent_evidence_movement_logs\" ON operations.audit_logs FOR SELECT USING ( current_setting('app.job_role', true) = 'auditor' AND record_type = 'evidence_movement' AND logged_at >= CURRENT_TIMESTAMP - INTERVAL '90 days' );"
+ },
+ {
+  "id": 288,
+  "predicted_sql": "CREATE POLICY \"auditors_create_issues\" ON engineering.issues FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'auditor');"
+ },
+ {
+  "id": 289,
+  "predicted_sql": "CREATE POLICY compliance_officers_update_issues ON engineering.issues FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND status IN ('open', 'in-progress')) WITH CHECK (status = 'Closed');"
+ },
+ {
+  "id": 290,
+  "predicted_sql": "CREATE POLICY hr_admins_disciplinary_actions ON hr.employees FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_admin' AND justification_documented = true) WITH CHECK (current_setting('app.job_role', true) = 'hr_admin' AND justification_documented = true);"
+ },
+ {
+  "id": 291,
+  "predicted_sql": "CREATE POLICY \"compliance_officers_update_security_events\" ON operations.security_events FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND event_type = 'data_breach' AND tenant_id = current_setting('app.tenant_id', true)::integer) WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND event_type = 'data_breach' AND tenant_id = current_setting('app.tenant_id', true)::integer);"
+ },
+ {
+  "id": 292,
+  "predicted_sql": "CREATE POLICY compliance_officers_create_security_events ON operations.security_events FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer');"
+ },
+ {
+  "id": 293,
+  "predicted_sql": "CREATE POLICY employees_track_cap_issues ON engineering.issues FOR SELECT USING ( current_setting('app.employee_id', true) IS NOT NULL AND status IN ('closed', 'resolved') AND cap_manager = current_setting('app.employee_id', true)::integer );"
+ },
+ {
+  "id": 294,
+  "predicted_sql": "CREATE POLICY risk_managers_update_preventive_action_issues ON engineering.issues FOR UPDATE USING (current_setting('app.job_role', true) = 'risk_manager') WITH CHECK (current_setting('app.job_role', true) = 'risk_manager');"
+ },
+ {
+  "id": 295,
+  "predicted_sql": "CREATE POLICY compliance_officer_create_documents ON operations.documents FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND current_setting('app.job_role', true) IS NOT NULL);"
+ },
+ {
+  "id": 296,
+  "predicted_sql": "CREATE POLICY team_members_view_recent_metrics ON product.metrics FOR SELECT USING ( current_setting('app.team_id', true) IS NOT NULL AND team_id = current_setting('app.team_id', true)::integer AND last_updated >= (CURRENT_TIMESTAMP - INTERVAL '90 days') );"
+ },
+ {
+  "id": 297,
+  "predicted_sql": "CREATE POLICY compliance_officers_update_draft_quality_project_docs ON operations.documents FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND current_setting('app.job_role', true) IS NOT NULL AND document_type = 'quality' AND project_id IS NOT NULL AND document_status = 'Draft') WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND current_setting('app.job_role', true) IS NOT NULL AND document_type = 'quality' AND project_id IS NOT NULL AND (document_status = 'Draft' OR document_status = 'Planning'));"
+ },
+ {
+  "id": 298,
+  "predicted_sql": "CREATE POLICY operations_managers_modify_temporal_access ON operations.temporal_access FOR UPDATE USING (current_setting('app.job_role', true) = 'operations_manager' AND status = 'active' AND EXTRACT(HOUR FROM CURRENT_TIME) BETWEEN 2 AND 5) WITH CHECK (current_setting('app.job_role', true) = 'operations_manager' AND status = 'active' AND EXTRACT(HOUR FROM CURRENT_TIME) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 299,
+  "predicted_sql": "CREATE POLICY project_coordinators_modify_status_reports_maintenance_window ON engineering.projects FOR UPDATE USING (current_setting('app.job_role', true) = 'project_manager' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (current_setting('app.job_role', true) = 'project_manager' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 300,
+  "predicted_sql": "CREATE POLICY product_managers_view_metrics ON product.metrics FOR SELECT USING ( current_setting('app.job_role', true) = 'product_manager' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND EXISTS ( SELECT 1 FROM product.features f WHERE f.feature_id = metrics.feature_id AND f.product_owner = current_setting('app.employee_id', true)::integer ) );"
+ },
+ {
+  "id": 301,
+  "predicted_sql": "CREATE POLICY employees_create_accommodation_issues ON engineering.issues FOR INSERT WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND employee_id = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 302,
+  "predicted_sql": "CREATE POLICY workplace_coordinators_view_accommodation_issues ON engineering.issues FOR SELECT USING (current_setting('app.job_role', true) = 'workplace_coordinator' AND issue_category = 'accommodation');"
+ },
+ {
+  "id": 303,
+  "predicted_sql": "CREATE POLICY hr_specialists_view_assigned_relations ON hr.employees FOR SELECT USING (current_setting('app.job_role', true) = 'hr_specialist' AND employee_id = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 304,
+  "predicted_sql": "CREATE POLICY employees_view_own_corrective_action_issues ON engineering.issues FOR SELECT USING ( employee_id = current_setting('app.employee_id', true)::integer AND status = 'resolved' AND EXTRACT(DOW FROM resolution_date) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM resolution_date) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 305,
+  "predicted_sql": "CREATE POLICY hr_admin_update_ethics_violation_maintenance ON operations.security_events FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_admin' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (current_setting('app.job_role', true) = 'hr_admin' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 306,
+  "predicted_sql": "CREATE POLICY hr_admin_view_audit_logs ON operations.audit_logs FOR SELECT USING (current_setting('app.job_role', true) = 'hr_admin');"
+ },
+ {
+  "id": 307,
+  "predicted_sql": "CREATE POLICY hr_specialists_update_issues ON engineering.issues FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_specialist') WITH CHECK (current_setting('app.job_role', true) = 'hr_specialist');"
+ },
+ {
+  "id": 308,
+  "predicted_sql": "CREATE POLICY hr_specialists_view_mediation_case_audit_logs ON operations.audit_logs FOR SELECT USING (current_setting('app.job_role', true) = 'hr_specialist' AND record_type = 'mediation-case');"
+ },
+ {
+  "id": 309,
+  "predicted_sql": "CREATE POLICY hr_specialists_access_employee_bargaining_data ON hr.employees FOR SELECT USING (current_setting('app.job_role', true) = 'hr_specialist');"
+ },
+ {
+  "id": 310,
+  "predicted_sql": "CREATE POLICY hr_specialists_access_employee_representation_data ON hr.employees FOR SELECT USING ( current_setting('app.job_role', true) = 'hr_specialist' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 311,
+  "predicted_sql": "CREATE POLICY tax_specialists_access_tax_records ON finance.tax_records FOR SELECT USING (current_setting('app.job_role', true) = 'tax_specialist' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17);"
+ },
+ {
+  "id": 312,
+  "predicted_sql": "CREATE POLICY hr_specialists_create_benefits ON hr.benefits FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'hr_specialist');"
+ },
+ {
+  "id": 313,
+  "predicted_sql": "CREATE POLICY hr_admins_update_pension_benefits ON hr.benefits FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_admin') WITH CHECK (current_setting('app.job_role', true) = 'hr_admin');"
+ },
+ {
+  "id": 314,
+  "predicted_sql": "CREATE POLICY accountant_insert_own_insurance_expense ON finance.expenses FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'accountant' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND employee_id = current_setting('app.employee_id', true)::integer AND category = 'insurance' );"
+ },
+ {
+  "id": 315,
+  "predicted_sql": "CREATE POLICY hr_specialists_update_benefits_eap ON hr.benefits FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_specialist') WITH CHECK (benefit_type = 'EAP');"
+ },
+ {
+  "id": 316,
+  "predicted_sql": "CREATE POLICY hr_specialists_benefits_access ON hr.benefits FOR SELECT USING (current_setting('app.job_role', true) = 'hr_specialist');"
+ },
+ {
+  "id": 317,
+  "predicted_sql": "CREATE POLICY hr_specialist_view_recruitment_issues ON engineering.issues FOR SELECT USING (app.job_role = 'hr_specialist' AND issue_category = 'recruitment');"
+ },
+ {
+  "id": 318,
+  "predicted_sql": "CREATE POLICY hr_specialists_view_issues ON engineering.issues FOR SELECT USING (current_setting('app.job_role', true) = 'hr_specialist');"
+ },
+ {
+  "id": 319,
+  "predicted_sql": "CREATE POLICY hr_specialists_create_interview_schedule_issues ON engineering.issues FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'hr_specialist' AND reporter_id = current_setting('app.employee_id', true)::integer );"
+ },
+ {
+  "id": 320,
+  "predicted_sql": "CREATE POLICY hr_specialists_access_feedback ON hr.performance FOR SELECT USING (app.job_role = 'hr_specialist' AND app.department_id IS NOT NULL AND department_id = current_setting('app.department_id', true)::integer);"
+ },
+ {
+  "id": 321,
+  "predicted_sql": "CREATE POLICY hr_specialists_approve_job_offer_contracts ON sales.contracts FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_specialist' AND status = 'pending' AND approval_required = true) WITH CHECK (approval_required = false);"
+ },
+ {
+  "id": 322,
+  "predicted_sql": "CREATE POLICY hr_specialists_update_issues_maintenance ON engineering.issues FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_specialist' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (current_setting('app.job_role', true) = 'hr_specialist' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 323,
+  "predicted_sql": "CREATE POLICY employees_access_own_onboarding_metrics ON product.metrics FOR SELECT USING ( employee_id = current_setting('app.employee_id', true)::integer AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 );"
+ },
+ {
+  "id": 324,
+  "predicted_sql": "CREATE POLICY hr_specialists_manage_benefits ON hr.benefits FOR ALL USING (current_setting('app.job_role', true) = 'hr_specialist') WITH CHECK (current_setting('app.job_role', true) = 'hr_specialist');"
+ },
+ {
+  "id": 325,
+  "predicted_sql": "CREATE POLICY mentor_feedback_access ON product.user_feedback FOR SELECT USING (assigned_to = current_setting('app.employee_id', true)::integer AND EXISTS (SELECT 1 FROM hr.employees WHERE employee_id = product.user_feedback.employee_id AND mentor_id = current_setting('app.employee_id', true)::integer));"
+ },
+ {
+  "id": 326,
+  "predicted_sql": "CREATE POLICY hr_specialists_view_course_enrollment_issues ON engineering.issues FOR SELECT USING (current_setting('app.job_role', true) = 'hr_specialist' AND issue_category = 'course_enrollment');"
+ },
+ {
+  "id": 327,
+  "predicted_sql": "CREATE POLICY \"policy_engineering_projects_select\" ON engineering.projects FOR SELECT USING (project_type = current_setting('app.job_role', true) AND current_setting('app.job_role', true) IS NOT NULL);"
+ },
+ {
+  "id": 328,
+  "predicted_sql": "CREATE POLICY \"Employees assigned to pending course enrollment issues can grade them\" ON engineering.issues FOR UPDATE USING (assignee_id = current_setting('app.employee_id', true)::integer AND status = 'pending' AND issue_category = 'course_enrollment') WITH CHECK (assignee_id = current_setting('app.employee_id', true)::integer AND status = 'pending' AND issue_category = 'course_enrollment');"
+ },
+ {
+  "id": 329,
+  "predicted_sql": "CREATE POLICY employees_view_own_grade_metrics ON product.metrics FOR SELECT USING ( employee_id = current_setting('app.employee_id', true)::integer AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 );"
+ },
+ {
+  "id": 330,
+  "predicted_sql": "CREATE POLICY hr_admin_update_employee_certifications ON hr.employees FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_admin' AND certifications_array IS NOT NULL) WITH CHECK (current_setting('app.job_role', true) = 'hr_admin' AND certifications_array IS NOT NULL);"
+ },
+ {
+  "id": 331,
+  "predicted_sql": "CREATE POLICY \"employees_create_skill_assessment_issues\" ON engineering.issues FOR INSERT WITH CHECK (employee_id = current_setting('app.employee_id', true)::integer AND issue_type = 'skill_assessment' AND current_setting('app.employee_id', true) IS NOT NULL);"
+ },
+ {
+  "id": 332,
+  "predicted_sql": "CREATE POLICY hr_specialists_update_skill_assessment_issues ON engineering.issues FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_specialist' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (current_setting('app.job_role', true) = 'hr_specialist' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 333,
+  "predicted_sql": "CREATE POLICY \"assigned_employees_create_skill_assessment_issues\" ON engineering.issues FOR INSERT WITH CHECK (assignee_id = current_setting('app.employee_id', true)::integer AND issue_type = 'Skill Assessment' AND current_setting('app.employee_id', true) IS NOT NULL);"
+ },
+ {
+  "id": 334,
+  "predicted_sql": "CREATE POLICY employees_access_own_assessment_metrics ON product.metrics FOR SELECT USING (employee_id = current_setting('app.employee_id', true)::integer AND (current_timestamp - created_at) > INTERVAL '48 hours');"
+ },
+ {
+  "id": 335,
+  "predicted_sql": "CREATE POLICY career_coaches_modify_plans ON hr.performance FOR UPDATE USING (reviewer_id = current_setting('app.employee_id', true)::integer AND current_setting('app.job_role', true) = 'career_coach' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (reviewer_id = current_setting('app.employee_id', true)::integer AND current_setting('app.job_role', true) = 'career_coach' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 336,
+  "predicted_sql": "CREATE POLICY hr_specialists_modify_temporal_access_records ON operations.temporal_access FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_specialist' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5) WITH CHECK (current_setting('app.job_role', true) = 'hr_specialist' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5);"
+ },
+ {
+  "id": 337,
+  "predicted_sql": "CREATE POLICY \"security_admins_update_temporal_access\" ON operations.temporal_access FOR UPDATE USING (current_setting('app.job_role', true) = 'security_admin') WITH CHECK (current_setting('app.job_role', true) = 'security_admin');"
+ },
+ {
+  "id": 338,
+  "predicted_sql": "CREATE POLICY hr_specialists_update_employee_records ON hr.employees FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_specialist' AND status = 'Pending') WITH CHECK (current_setting('app.job_role', true) = 'hr_specialist' AND (evaluation_status = 'Pending' OR evaluation_status = 'Completed'));"
+ },
+ {
+  "id": 339,
+  "predicted_sql": "CREATE POLICY finance_analysts_view_salary_benchmark ON finance.balance_sheet FOR SELECT USING (app.job_role = 'finance_analyst' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17);"
+ },
+ {
+  "id": 340,
+  "predicted_sql": "CREATE POLICY hr_benefits_manage_incentive ON hr.benefits FOR ALL USING (current_setting('app.job_role', true) = 'hr_admin') WITH CHECK (current_setting('app.job_role', true) = 'hr_admin');"
+ },
+ {
+  "id": 341,
+  "predicted_sql": "CREATE POLICY employees_view_own_approved_bonus_expenses ON finance.expenses FOR SELECT USING (employee_id = current_setting('app.employee_id', true)::integer AND status = 'approved' AND expense_type = 'bonus');"
+ },
+ {
+  "id": 342,
+  "predicted_sql": "CREATE POLICY hr_specialists_publish_award_nomination_issues ON engineering.issues FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'hr_specialist' AND current_setting('app.job_role', true) IS NOT NULL);"
+ },
+ {
+  "id": 343,
+  "predicted_sql": "CREATE POLICY \"Employees can create award nomination issue records for other employees\" ON engineering.issues FOR INSERT WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL);"
+ },
+ {
+  "id": 344,
+  "predicted_sql": "CREATE POLICY \"award_selection_committee_members_team_18_create\" ON operations.audit_logs FOR INSERT WITH CHECK (team_id = 18 AND current_setting('app.job_role', true) = 'award_selection_committee_member' AND current_setting('app.job_role', true) IS NOT NULL);"
+ },
+ {
+  "id": 345,
+  "predicted_sql": "CREATE POLICY \"communications_team_12_create_feedback\" ON product.user_feedback FOR INSERT WITH CHECK (EXISTS (SELECT 1 FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer AND team_id = 12 AND job_role = 'customer_advocacy_manager'));"
+ },
+ {
+  "id": 346,
+  "predicted_sql": "CREATE POLICY \"authenticated_employees_view_temporal_access_holiday_calendars\" ON operations.temporal_access FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND resource_type = 'company holiday calendar');"
+ },
+ {
+  "id": 347,
+  "predicted_sql": "CREATE POLICY \"Accountants can update payroll records during maintenance windows\" ON hr.payroll FOR UPDATE USING ( current_setting('app.job_role', true) = 'accountant' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5 AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 ) WITH CHECK ( current_setting('app.job_role', true) = 'accountant' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5 AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 );"
+ },
+ {
+  "id": 348,
+  "predicted_sql": "CREATE POLICY \"policy_hr_payroll_select_own_exportable_past_business_hours\" ON hr.payroll FOR SELECT USING ( employee_id = current_setting('app.employee_id', true)::integer AND can_export = true AND pay_period_end < CURRENT_DATE AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 349,
+  "predicted_sql": "CREATE POLICY hr_admin_create_issues ON engineering.issues FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'hr_admin' AND issue_type = 'contract_review' AND assignee_id = current_setting('app.employee_id', true)::integer );"
+ },
+ {
+  "id": 350,
+  "predicted_sql": "CREATE POLICY employees_create_self_employment_reference_issues ON engineering.issues FOR INSERT WITH CHECK (employee_id = current_setting('app.employee_id', true)::integer AND issue_type = 'employment_reference_request');"
+ },
+ {
+  "id": 351,
+  "predicted_sql": "CREATE POLICY hr_specialists_complete_exit_interview_issues ON engineering.issues FOR UPDATE USING (current_setting('app.job_role', true) = 'hr_specialist' AND status = 'pending' AND issue_category = 'exit_interview') WITH CHECK (current_setting('app.job_role', true) = 'hr_specialist' AND status = 'pending' AND issue_category = 'exit_interview');"
+ },
+ {
+  "id": 352,
+  "predicted_sql": "CREATE POLICY exit_feedback_self_insert ON product.user_feedback FOR INSERT WITH CHECK ( employee_id = current_setting('app.employee_id', true)::integer AND EXISTS ( SELECT 1 FROM hr.employees e WHERE e.employee_id = current_setting('app.employee_id', true)::integer AND e.separation_date IS NOT NULL ) );"
+ },
+ {
+  "id": 353,
+  "predicted_sql": "CREATE POLICY \"security_admins_revoke_temporal_access\" ON operations.temporal_access FOR UPDATE USING (current_setting('app.job_role', true) = 'security_admin' AND active = true AND termination_date IS NOT NULL) WITH CHECK (current_setting('app.job_role', true) = 'security_admin' AND active = true AND termination_date IS NOT NULL);"
+ },
+ {
+  "id": 354,
+  "predicted_sql": "CREATE POLICY \"operations_managers_view_asset_return_docs\" ON operations.documents FOR SELECT USING ( current_setting('app.job_role', true) = 'operations_manager' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND document_type = 'asset_return' );"
+ },
+ {
+  "id": 355,
+  "predicted_sql": "CREATE POLICY compliance_officer_delete_separated_employees ON hr.employees FOR DELETE USING (app.job_role = 'compliance_officer' AND separation_date IS NOT NULL AND retention_period_elapsed = true);"
+ },
+ {
+  "id": 356,
+  "predicted_sql": "CREATE POLICY terminated_employees_access_payroll ON hr.payroll FOR SELECT USING (employee_id = current_setting('app.employee_id', true)::integer AND termination_date IS NOT NULL AND termination_date >= (CURRENT_DATE - INTERVAL '1 year') AND is_current = true);"
+ },
+ {
+  "id": 357,
+  "predicted_sql": "CREATE POLICY data_analyst_access_archived_employee_records ON hr.employees FOR SELECT USING (app.job_role = 'data_analyst' AND deleted_at IS NOT NULL);"
+ },
+ {
+  "id": 358,
+  "predicted_sql": "CREATE POLICY compliance_officers_view_logs_during_business_hours ON operations.audit_logs FOR SELECT USING (app.job_role = 'compliance_officer' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17);"
+ },
+ {
+  "id": 359,
+  "predicted_sql": "CREATE POLICY compliance_officer_grant_exception ON operations.temporal_access FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'compliance_officer' AND start_time IS NOT NULL AND end_time IS NOT NULL AND end_time > CURRENT_TIMESTAMP );"
+ },
+ {
+  "id": 360,
+  "predicted_sql": "CREATE POLICY compliance_officer_view_access_records ON operations.temporal_access FOR SELECT USING ( current_setting('app.job_role', true) = 'compliance_officer' AND expiration_date IS NOT NULL );"
+ },
+ {
+  "id": 361,
+  "predicted_sql": "CREATE POLICY finance_managers_update_contracts ON sales.contracts FOR UPDATE USING (app.job_role = 'finance_manager'::text AND approval_level >= current_setting('app.position_level', true)::integer) WITH CHECK (app.job_role = 'finance_manager'::text AND approval_level >= current_setting('app.position_level', true)::integer);"
+ },
+ {
+  "id": 362,
+  "predicted_sql": "CREATE POLICY finance_managers_approve_budget ON finance.budget FOR UPDATE USING ( current_setting('app.job_role', true) = 'finance_manager' AND approval_status = 'unapproved' AND allocated_amount > 500000 AND current_setting('app.employee_id', true) IS NOT NULL ) WITH CHECK ( approved_by = current_setting('app.employee_id', true)::integer AND approval_date = CURRENT_TIMESTAMP );"
+ },
+ {
+  "id": 363,
+  "predicted_sql": "CREATE POLICY dept_managers_approve_pending_expenses ON finance.expenses FOR UPDATE USING ( current_setting('app.job_role', true) = 'dept_manager' AND current_setting('app.department_id', true) IS NOT NULL AND department_id = current_setting('app.department_id', true)::integer AND status = 'pending' AND amount < 5000.00 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5 ) WITH CHECK ( current_setting('app.job_role', true) = 'dept_manager' AND current_setting('app.department_id', true) IS NOT NULL AND department_id = current_setting('app.department_id', true)::integer AND status = 'pending' AND amount < 5000.00 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 2 AND 5 );"
+ },
+ {
+  "id": 364,
+  "predicted_sql": "CREATE POLICY \"executives_approve_pending_expenses_5001_25000_maintenance_window\" ON finance.expenses FOR UPDATE USING ( (current_setting('app.job_role', true) IN ('vp_sales', 'cfo', 'coo', 'vp_engineering')) AND (status = 'pending') AND (amount >= 5001.00) AND (amount <= 25000.00) AND (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2) AND (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6) ) WITH CHECK ( (current_setting('app.job_role', true) IN ('vp_sales', 'cfo', 'coo', 'vp_engineering')) AND (status = 'pending') AND (amount >= 5001.00) AND (amount <= 25000.00) AND (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2) AND (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6) );"
+ },
+ {
+  "id": 365,
+  "predicted_sql": "CREATE POLICY \"c_suite_and_division_executives_can_approve_pending_expenses_over_25000\" ON finance.expenses FOR UPDATE USING ( (current_setting('app.job_role', true) IN ('ceo', 'cfo', 'coo', 'division_executive')) AND status = 'pending' AND amount > 25000 ) WITH CHECK ( (current_setting('app.job_role', true) IN ('ceo', 'cfo', 'coo', 'division_executive')) AND status = 'pending' AND amount > 25000 );"
+ },
+ {
+  "id": 366,
+  "predicted_sql": "CREATE POLICY regional_directors_sign_contracts ON sales.contracts FOR UPDATE USING ( current_setting('app.job_role', true) = 'regional_director' AND EXISTS ( SELECT 1 FROM sales.regions r WHERE r.regional_director = current_setting('app.employee_id', true)::integer AND r.region_id = contracts.region_id ) AND contracts.status = 'pending' ) WITH CHECK ( current_setting('app.job_role', true) = 'regional_director' AND EXISTS ( SELECT 1 FROM sales.regions r WHERE r.regional_director = current_setting('app.employee_id', true)::integer AND r.region_id = contracts.region_id ) AND contracts.status = 'pending' );"
+ },
+ {
+  "id": 367,
+  "predicted_sql": "CREATE POLICY procurement_officer_supplier_contracts ON sales.contracts FOR UPDATE USING ( current_setting('app.job_role', true) = 'procurement_officer' AND contract_status = 'pending' AND contract_value > 1000000 ) WITH CHECK ( current_setting('app.job_role', true) = 'procurement_officer' AND contract_status = 'pending' AND contract_value > 1000000 );"
+ },
+ {
+  "id": 368,
+  "predicted_sql": "CREATE POLICY employees_access_confidential_documents ON operations.documents FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND EXISTS (SELECT 1 FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer AND security_clearance >= operations.documents.required_clearance));"
+ },
+ {
+  "id": 369,
+  "predicted_sql": "CREATE POLICY \"employees_clearance_4_view_restricted_ip_artifacts\" ON engineering.code_repository FOR SELECT USING (current_setting('app.user_clearance_level', true) IS NOT NULL AND current_setting('app.user_clearance_level', true)::integer >= 4 AND artifact_type = 'restricted_ip');"
+ },
+ {
+  "id": 370,
+  "predicted_sql": "CREATE POLICY \"employees_clearance_5_view_strategic_plan_roadmap\" ON product.roadmap FOR SELECT USING (current_setting('app.user_clearance_level', true)::integer >= 5);"
+ },
+ {
+  "id": 371,
+  "predicted_sql": "CREATE POLICY \"policy_metrics_select\" ON product.metrics FOR SELECT USING ( (current_setting('app.user_clearance_level', true)::integer >= 7) AND (current_setting('app.job_role', true) IN ('data_analyst', 'finance_analyst')) AND (report_type = 'variance') );"
+ },
+ {
+  "id": 372,
+  "predicted_sql": "CREATE POLICY policy_analytics_select ON product.analytics FOR SELECT USING (current_setting('app.position_level', true)::integer IN (5, 6));"
+ },
+ {
+  "id": 373,
+  "predicted_sql": "CREATE POLICY policy_product_analytics_select ON product.analytics FOR SELECT USING ((current_setting('app.position_level', true)::integer < 5 AND is_public = true) OR (current_setting('app.position_level', true)::integer >= 5));"
+ },
+ {
+  "id": 374,
+  "predicted_sql": "CREATE POLICY \"teams_1_5_access_priority_customers\" ON sales.customers FOR SELECT USING (team_id = ANY(ARRAY[1,2,3,4,5]) AND account_priority = 'priority');"
+ },
+ {
+  "id": 375,
+  "predicted_sql": "CREATE POLICY customer_support_update_issues ON engineering.issues FOR UPDATE USING ( (current_setting('app.job_role', true) = 'customer_support') AND (severity IN ('minor', 'medium')) AND (EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5) AND (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17) ) WITH CHECK ( (current_setting('app.job_role', true) = 'customer_support') AND (severity IN ('minor', 'medium')) AND (EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5) AND (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17) );"
+ },
+ {
+  "id": 376,
+  "predicted_sql": "CREATE POLICY engineering_issues_update_severity ON engineering.issues FOR UPDATE USING (current_setting('app.job_role', true) IN ('engineer', 'engineering_manager', 'devops_engineer', 'qa_engineer', 'secops_engineer', 'sre', 'build_admin', 'product_manager', 'project_manager') AND severity IN ('High', 'Critical', 'Blocker')) WITH CHECK (current_setting('app.job_role', true) IN ('engineer', 'engineering_manager', 'devops_engineer', 'qa_engineer', 'secops_engineer', 'sre', 'build_admin', 'product_manager', 'project_manager') AND severity IN ('High', 'Critical', 'Blocker'));"
+ },
+ {
+  "id": 377,
+  "predicted_sql": "CREATE POLICY data_analysts_access_non_sensitive ON product.analytics FOR SELECT USING (current_setting('app.job_role', true) = 'data_analyst' AND is_sensitive = false);"
+ },
+ {
+  "id": 378,
+  "predicted_sql": "CREATE POLICY compliance_officers_analytics_access ON product.analytics FOR SELECT USING (app.job_role = 'compliance_officer' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17);"
+ },
+ {
+  "id": 379,
+  "predicted_sql": "CREATE POLICY \"data_analysts_view_access_records\" ON operations.temporal_access FOR SELECT USING ( current_setting('app.job_role', true) = 'data_analyst' AND EXTRACT(HOUR FROM CURRENT_TIME) BETWEEN 9 AND 17 AND EXTRACT(DOW FROM CURRENT_DATE) BETWEEN 1 AND 5 );"
+ },
+ {
+  "id": 380,
+  "predicted_sql": "CREATE POLICY engineer_update_staging_config_during_maintenance ON operations.system_config FOR UPDATE USING (current_setting('app.job_role', true) = 'engineer' AND config_type = 'staging' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6) WITH CHECK (current_setting('app.job_role', true) = 'engineer' AND config_type = 'staging' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6);"
+ },
+ {
+  "id": 381,
+  "predicted_sql": "CREATE POLICY \"Administrators can access any environment during business hours\" ON operations.temporal_access FOR SELECT USING ( current_setting('app.job_role', true) = 'admin' AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 382,
+  "predicted_sql": "CREATE POLICY qa_engineers_view_tests ON engineering.tests FOR SELECT USING (current_setting('app.job_role', true) = 'qa_engineer');"
+ },
+ {
+  "id": 383,
+  "predicted_sql": "CREATE POLICY policy_test_staging_config ON operations.system_config FOR SELECT USING ( (current_setting('app.job_role', true) IN ('secops_engineer', 'security_admin', 'security_analyst')) AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17 AND EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5 AND (environment = 'test' OR environment = 'staging') );"
+ },
+ {
+  "id": 384,
+  "predicted_sql": "CREATE POLICY \"devops_engineers_update_config_during_maintenance\" ON operations.system_config FOR UPDATE USING ( current_setting('app.job_role', true) = 'devops_engineer' AND status = 'approved' AND environment = 'production' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6 ) WITH CHECK ( current_setting('app.job_role', true) = 'devops_engineer' AND status = 'approved' AND environment = 'production' AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6 );"
+ },
+ {
+  "id": 385,
+  "predicted_sql": "CREATE POLICY \"operations_managers_backup_config\" ON operations.system_config FOR SELECT USING (current_setting('app.job_role', true) = 'operations_manager');"
+ },
+ {
+  "id": 386,
+  "predicted_sql": "CREATE POLICY compliance_officers_audit_access_logs ON operations.audit_logs FOR SELECT USING ( current_setting('app.job_role', true) = 'compliance_officer' AND current_setting('app.department_id', true) IS NOT NULL AND department_id = current_setting('app.department_id', true)::integer AND EXTRACT(DOW FROM logged_at) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM logged_at) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 387,
+  "predicted_sql": "CREATE POLICY \"security_admins_insert_access_event_records\" ON operations.security_events FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'security_admin' AND data_sensitivity = 'high');"
+ },
+ {
+  "id": 388,
+  "predicted_sql": "CREATE POLICY security_admins_delete_audit_logs ON operations.audit_logs FOR DELETE USING (app.job_role = 'security_admin' AND logged_at >= (CURRENT_TIMESTAMP - INTERVAL '30 days'));"
+ },
+ {
+  "id": 389,
+  "predicted_sql": "CREATE POLICY \"security_admins_devops_update_config_during_maintenance\" ON operations.system_config FOR UPDATE USING ( (current_setting('app.job_role', true) IN ('security_admin', 'devops_engineer')) AND (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6) AND (enhanced_approval = true) ) WITH CHECK ( (current_setting('app.job_role', true) IN ('security_admin', 'devops_engineer')) AND (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) >= 2 AND EXTRACT(HOUR FROM CURRENT_TIMESTAMP) < 6) AND (enhanced_approval = true) );"
+ },
+ {
+  "id": 390,
+  "predicted_sql": "CREATE POLICY \"security_admins_or_devops_update_system_config\" ON operations.system_config FOR UPDATE USING ( (current_setting('app.job_role', true) IN ('security_admin', 'devops_engineer')) AND (current_setting('app.job_role', true) IS NOT NULL) ) WITH CHECK ( (current_setting('app.job_role', true) IN ('security_admin', 'devops_engineer')) AND (current_setting('app.job_role', true) IS NOT NULL) AND ( (EXTRACT(HOUR FROM CURRENT_TIME) BETWEEN 9 AND 17 AND enhanced_approval = true) OR (EXTRACT(HOUR FROM CURRENT_TIME) NOT BETWEEN 9 AND 17) ) );"
+ },
+ {
+  "id": 391,
+  "predicted_sql": "CREATE POLICY \"security_admins_delete_backups_after_retention\" ON operations.backups FOR DELETE USING (app.job_role = 'security_admin' AND (backup_status = 'expired' OR (retention_days IS NOT NULL AND (start_time + (retention_days || ' days')::interval) < CURRENT_TIMESTAMP)));"
+ },
+ {
+  "id": 392,
+  "predicted_sql": "CREATE POLICY \"operations_managers_insert_backups_when_documentation_required\" ON operations.backups FOR INSERT WITH CHECK (app.job_role = 'operations_manager' AND documentation_required = true);"
+ },
+ {
+  "id": 393,
+  "predicted_sql": "CREATE POLICY build_admin_update_patch_records ON engineering.releases FOR UPDATE USING ( current_setting('app.job_role', true) = 'build_admin' AND status = 'approved' AND deployment_date IS NOT NULL AND deployment_date <= release_date + INTERVAL '7 days' ) WITH CHECK ( current_setting('app.job_role', true) = 'build_admin' AND status = 'approved' AND deployment_date IS NOT NULL AND deployment_date <= release_date + INTERVAL '7 days' );"
+ },
+ {
+  "id": 394,
+  "predicted_sql": "CREATE POLICY security_analysts_mark_patched ON engineering.issues FOR UPDATE USING (current_setting('app.job_role', true) = 'security_analyst') WITH CHECK (resolution_date IS NOT NULL AND resolution_date <= created_at + INTERVAL '24 hours');"
+ },
+ {
+  "id": 395,
+  "predicted_sql": "CREATE POLICY \"auditors_compliance_officers_view_access_request_issues_resolved_within_2_days\" ON engineering.issues FOR SELECT USING ( (current_setting('app.job_role', true) IN ('auditor', 'compliance_officer')) AND issue_category = 'access_request' AND resolution_date IS NOT NULL AND resolution_date <= created_at + INTERVAL '2 days' );"
+ },
+ {
+  "id": 396,
+  "predicted_sql": "CREATE POLICY temporal_access_high_sensitivity_view ON operations.temporal_access FOR SELECT USING ( (current_setting('app.job_role', true) IN ('security_admin', 'compliance_officer')) AND (encryption_in_transit = true AND encryption_at_rest = true) );"
+ },
+ {
+  "id": 397,
+  "predicted_sql": "CREATE POLICY \"security_admins_view_tls12_business_hours\" ON operations.system_config FOR SELECT USING ( (current_setting('app.job_role', true) = 'security_admin') AND (config_key = 'database_connection_tls_version') AND (config_value = 'TLS 1.2') AND (EXTRACT(DOW FROM CURRENT_TIMESTAMP) BETWEEN 1 AND 5) AND (EXTRACT(HOUR FROM CURRENT_TIMESTAMP) BETWEEN 9 AND 17) );"
+ },
+ {
+  "id": 398,
+  "predicted_sql": "CREATE POLICY \"security_admins_rotate_api_credentials_after_90_days\" ON operations.system_config FOR UPDATE USING ( (current_setting('app.job_role', true) = 'security_admin') AND (current_setting('app.job_role', true) IS NOT NULL) AND (config_key LIKE '%api_credential%') AND (last_rotation_date IS NULL OR last_rotation_date <= CURRENT_TIMESTAMP - INTERVAL '90 days') ) WITH CHECK ( (current_setting('app.job_role', true) = 'security_admin') AND (current_setting('app.job_role', true) IS NOT NULL) AND (config_key LIKE '%api_credential%') AND (last_rotation_date IS NULL OR last_rotation_date <= CURRENT_TIMESTAMP - INTERVAL '90 days') );"
+ },
+ {
+  "id": 399,
+  "predicted_sql": "CREATE POLICY security_admin_password_policy ON operations.system_config FOR SELECT USING ( (current_setting('app.job_role', true) = 'security_admin') AND (config_key = 'min_password_length' AND config_value::integer >= 12) OR (config_key = 'password_history_count' AND config_value::integer >= 5) );"
+ },
+ {
+  "id": 400,
+  "predicted_sql": "CREATE POLICY \"security_admins_auditors_view_privileged_accounts\" ON operations.security_events FOR SELECT USING ((current_setting('app.job_role', true) IN ('security_admin', 'auditor')) AND (account_privilege_level >= 3) AND (mfa_enabled = true));"
+ },
+ {
+  "id": 401,
+  "predicted_sql": "CREATE POLICY \"security_admins_review_access_session_records\" ON operations.temporal_access FOR SELECT USING (current_setting('app.job_role', true) = 'security_admin' AND inactivity_timeout = 30);"
+ },
+ {
+  "id": 402,
+  "predicted_sql": "CREATE POLICY \"security_admins_update_sensitive_access_operation_records\" ON operations.security_events FOR UPDATE USING ( current_setting('app.job_role', true) = 'security_admin' AND operation_sensitivity = 'sensitive' AND stepup_auth_completed = true AND stepup_auth_timestamp >= (CURRENT_TIMESTAMP - INTERVAL '5 minutes') ) WITH CHECK ( current_setting('app.job_role', true) = 'security_admin' AND operation_sensitivity = 'sensitive' AND stepup_auth_completed = true AND stepup_auth_timestamp >= (CURRENT_TIMESTAMP - INTERVAL '5 minutes') );"
+ },
+ {
+  "id": 403,
+  "predicted_sql": "CREATE POLICY security_admin_insert_privilege_escalation ON operations.security_events FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'security_admin' AND approval_documented = true AND approval_required = true);"
+ },
+ {
+  "id": 404,
+  "predicted_sql": "CREATE POLICY security_admin_create_temporal_access ON operations.temporal_access FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'security_admin' AND approval_required = true AND approved_by IS NOT NULL AND approved_at IS NOT NULL AND start_time IS NOT NULL AND end_time IS NOT NULL );"
+ },
+ {
+  "id": 405,
+  "predicted_sql": "CREATE POLICY \"security_admins_delete_expired_privileged_access\" ON operations.temporal_access FOR DELETE USING (current_setting('app.job_role', true) = 'security_admin' AND end_time < CURRENT_TIMESTAMP);"
+ },
+ {
+  "id": 406,
+  "predicted_sql": "CREATE POLICY vault_secret_view ON operations.system_config FOR SELECT USING (current_setting('app.job_role', true) = 'security_admin' AND encryption_enabled = true AND item_type = 'vault-stored secret');"
+ },
+ {
+  "id": 407,
+  "predicted_sql": "CREATE POLICY \"security_admins_update_old_secrets\" ON operations.system_config FOR UPDATE USING (current_setting('app.job_role', true) = 'security_admin' AND (last_rotation_date IS NULL OR last_rotation_date < CURRENT_TIMESTAMP - INTERVAL '30 days')) WITH CHECK (current_setting('app.job_role', true) = 'security_admin' AND (last_rotation_date IS NULL OR last_rotation_date < CURRENT_TIMESTAMP - INTERVAL '30 days'));"
+ },
+ {
+  "id": 408,
+  "predicted_sql": "CREATE POLICY \"security_admins_create_hotfix_with_gpg\" ON engineering.code_repository FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'security_admin' AND gpg_signature_valid = true);"
+ },
+ {
+  "id": 409,
+  "predicted_sql": "CREATE POLICY project_merge_update ON engineering.projects FOR UPDATE USING ( (owner_id = current_setting('app.employee_id', true)::integer OR reviewer_id = current_setting('app.employee_id', true)::integer) AND current_setting('app.employee_id', true) IS NOT NULL ) WITH CHECK ( (owner_id = current_setting('app.employee_id', true)::integer OR reviewer_id = current_setting('app.employee_id', true)::integer) AND current_setting('app.employee_id', true) IS NOT NULL AND (merge_status != 'approved' OR approval_count >= 2) );"
+ },
+ {
+  "id": 410,
+  "predicted_sql": "CREATE POLICY security_admin_update_project_review ON engineering.projects FOR UPDATE USING (current_setting('app.job_role', true) = 'security_admin') WITH CHECK (security_check = true);"
+ },
+ {
+  "id": 411,
+  "predicted_sql": "CREATE POLICY test_dependency_scan_passed ON engineering.tests FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'security_admin' AND change_type = 'package_dependency' AND dependency_scan_status = 'passed' );"
+ },
+ {
+  "id": 412,
+  "predicted_sql": "CREATE POLICY \"security_admins_update_tests\" ON engineering.tests FOR UPDATE USING (current_setting('app.job_role', true) = 'security_admin') WITH CHECK (current_setting('app.job_role', true) = 'security_admin' AND vuln_scan_passed = true AND deployment_approved = true);"
+ },
+ {
+  "id": 413,
+  "predicted_sql": "CREATE POLICY \"security_admins_peer_review_infra_artifacts\" ON engineering.code_repository FOR UPDATE USING ( current_setting('app.job_role', true) = 'security_admin' AND EXTRACT(HOUR FROM CURRENT_TIME) BETWEEN 2 AND 5 AND artifact_type = 'infrastructure' ) WITH CHECK ( current_setting('app.job_role', true) = 'security_admin' AND EXTRACT(HOUR FROM CURRENT_TIME) BETWEEN 2 AND 5 AND artifact_type = 'infrastructure' AND review_status = 'reviewed' );"
+ },
+ {
+  "id": 414,
+  "predicted_sql": "CREATE POLICY security_admins_update_network_acl ON operations.system_config FOR UPDATE USING (current_setting('app.job_role', true) = 'security_admin') WITH CHECK (current_setting('app.job_role', true) = 'security_admin' AND documented = true AND approval_status = 'approved');"
+ },
+ {
+  "id": 415,
+  "predicted_sql": "CREATE POLICY \"security_admins_view_firewall_config_recent\" ON operations.system_config FOR SELECT USING (current_setting('app.job_role', true) = 'security_admin' AND config_type = 'firewall' AND last_review_date >= (CURRENT_DATE - INTERVAL '90 days'));"
+ },
+ {
+  "id": 416,
+  "predicted_sql": "CREATE POLICY \"security_admins_compliance_officers_view_vpn_access\" ON operations.temporal_access FOR SELECT USING ((current_setting('app.job_role', true) IN ('security_admin', 'compliance_officer')) AND (device_approved = true));"
+ },
+ {
+  "id": 417,
+  "predicted_sql": "CREATE POLICY security_admin_create_remote_session_events ON operations.security_events FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'security_admin' AND logging_enabled = true AND monitoring_enabled = true);"
+ },
+ {
+  "id": 418,
+  "predicted_sql": "CREATE POLICY \"security_admins_view_tls13_transfers\" ON operations.temporal_access FOR SELECT USING (current_setting('app.job_role', true) = 'security_admin' AND connection_type = 'TLS 1.3');"
+ },
+ {
+  "id": 419,
+  "predicted_sql": "CREATE POLICY \"security_admins_update_temporal_access\" ON operations.temporal_access FOR UPDATE USING (current_setting('app.job_role', true) = 'security_admin' AND ssl_enabled = true AND tls_version >= '1.2') WITH CHECK (current_setting('app.job_role', true) = 'security_admin' AND ssl_enabled = true AND tls_version >= '1.2');"
+ },
+ {
+  "id": 420,
+  "predicted_sql": "CREATE POLICY audit_leads_view_security_events ON operations.security_events FOR SELECT USING ( current_setting('app.job_role', true) = 'audit_lead' AND tamper_protection = true AND immutable_after_days IS NOT NULL AND EXTRACT(DOW FROM event_time) BETWEEN 1 AND 5 AND EXTRACT(HOUR FROM event_time) BETWEEN 9 AND 17 );"
+ },
+ {
+  "id": 421,
+  "predicted_sql": "CREATE POLICY hr_admin_update_employees ON hr.employees FOR UPDATE USING (tenant_id = current_setting('app.tenant_id', true)::integer AND is_active = true) WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer AND is_active = true);"
+ },
+ {
+  "id": 422,
+  "predicted_sql": "CREATE POLICY managers_update_attendance ON hr.attendance FOR UPDATE USING (tenant_id = current_setting('app.tenant_id', true)::integer AND department_id = current_setting('app.department_id', true)::integer AND current_setting('app.job_role', true) = 'manager') WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer AND department_id = current_setting('app.department_id', true)::integer AND current_setting('app.job_role', true) = 'manager');"
+ },
+ {
+  "id": 423,
+  "predicted_sql": "CREATE POLICY hr_specialists_create_benefits ON hr.benefits FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'hr_specialist' AND tenant_id = current_setting('app.tenant_id', true)::integer);"
+ },
+ {
+  "id": 424,
+  "predicted_sql": "CREATE POLICY hr_admin_delete_payroll ON hr.payroll FOR DELETE USING (current_setting('app.job_role', true) = 'hr_admin' AND tenant_id = current_setting('app.tenant_id', true)::integer AND approval_status = 'pending');"
+ },
+ {
+  "id": 425,
+  "predicted_sql": "CREATE POLICY employees_update_own_draft_expenses ON finance.expenses FOR UPDATE USING (tenant_id = current_setting('app.tenant_id', true)::integer AND employee_id = current_setting('app.employee_id', true)::integer AND status = 'draft') WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer AND employee_id = current_setting('app.employee_id', true)::integer);"
+ },
+ {
+  "id": 426,
+  "predicted_sql": "CREATE POLICY finance_managers_update_payroll ON hr.payroll FOR UPDATE USING (current_setting('app.job_role', true) = 'finance_manager' AND tenant_id = current_setting('app.tenant_id', true)::integer AND is_current = true) WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer AND is_current = true);"
+ },
+ {
+  "id": 427,
+  "predicted_sql": "CREATE POLICY finance_analysts_insert_revenue ON finance.revenue FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'finance_analyst' AND tenant_id = current_setting('app.tenant_id', true)::integer);"
+ },
+ {
+  "id": 428,
+  "predicted_sql": "CREATE POLICY tax_specialists_delete_draft_tax_records ON finance.tax_records FOR DELETE USING (current_setting('app.job_role', true) = 'tax_specialist' AND status = 'draft' AND tenant_id = current_setting('app.tenant_id', true)::integer);"
+ },
+ {
+  "id": 429,
+  "predicted_sql": "CREATE POLICY project_owners_update_draft ON engineering.projects FOR UPDATE USING (tenant_id = current_setting('app.tenant_id', true)::integer AND owner_id = current_setting('app.employee_id', true)::integer AND status = 'draft') WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer AND owner_id = current_setting('app.employee_id', true)::integer AND status = 'draft');"
+ },
+ {
+  "id": 430,
+  "predicted_sql": "CREATE POLICY project_managers_update_issues ON engineering.issues FOR UPDATE USING (tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.job_role', true) = 'project_manager' AND status IN ('open', 'in-progress')) WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer);"
+ },
+ {
+  "id": 431,
+  "predicted_sql": "CREATE POLICY repo_owners_create_metadata ON engineering.code_repository FOR INSERT WITH CHECK ( tenant_id = current_setting('app.tenant_id', true)::integer AND owner_id = current_setting('app.employee_id', true)::integer AND current_setting('app.employee_id', true) IS NOT NULL );"
+ },
+ {
+  "id": 432,
+  "predicted_sql": "CREATE POLICY \"DevOps engineers may delete failed build rows only within their tenant.\" ON engineering.builds FOR DELETE USING (current_setting('app.job_role', true) = 'devops_engineer' AND tenant_id = current_setting('app.tenant_id', true)::integer AND status = 'failed');"
+ },
+ {
+  "id": 433,
+  "predicted_sql": "CREATE POLICY compliance_officer_update_audit_logs ON operations.audit_logs FOR UPDATE USING (current_setting('app.job_role', true) = 'compliance_officer' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND audit_status = 'pending review') WITH CHECK (current_setting('app.job_role', true) = 'compliance_officer' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND audit_status = 'reviewed');"
+ },
+ {
+  "id": 434,
+  "predicted_sql": "CREATE POLICY security_analysts_resolve_events ON operations.security_events FOR UPDATE USING (current_setting('app.tenant_id', true)::integer = tenant_id AND current_setting('app.job_role', true) = 'security_analyst' AND resolved = false) WITH CHECK (current_setting('app.tenant_id', true)::integer = tenant_id AND current_setting('app.job_role', true) = 'security_analyst' AND resolved = true);"
+ },
+ {
+  "id": 435,
+  "predicted_sql": "CREATE POLICY operations_managers_create_documents ON operations.documents FOR INSERT WITH CHECK (current_setting('app.job_role', true) = 'operations_manager' AND tenant_id = current_setting('app.tenant_id', true)::integer);"
+ },
+ {
+  "id": 436,
+  "predicted_sql": "CREATE POLICY sre_system_config_all ON operations.system_config FOR ALL USING ( current_setting('app.job_role', true) = 'sre' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND change_risk_level = 'low' ) WITH CHECK ( current_setting('app.job_role', true) = 'sre' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND change_risk_level = 'low' );"
+ },
+ {
+  "id": 437,
+  "predicted_sql": "CREATE POLICY iam_admin_revoke_expired_access_grants ON auth.access_grants FOR UPDATE USING ( tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.job_role', true) = 'iam_admin' AND expires_at < CURRENT_TIMESTAMP ) WITH CHECK ( tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.job_role', true) = 'iam_admin' AND approved = false );"
+ },
+ {
+  "id": 438,
+  "predicted_sql": "CREATE POLICY product_managers_update_features ON product.features FOR UPDATE USING (tenant_id = current_setting('app.tenant_id', true)::integer AND status = 'active' AND current_setting('app.job_role', true) = 'product_manager') WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer AND status = 'active' AND current_setting('app.job_role', true) = 'product_manager');"
+ },
+ {
+  "id": 439,
+  "predicted_sql": "CREATE POLICY product_managers_update_metrics ON product.metrics FOR UPDATE USING (tenant_id = current_setting('app.tenant_id', true)::integer AND status = 'active' AND current_setting('app.job_role', true) = 'product_manager') WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer AND status = 'active' AND current_setting('app.job_role', true) = 'product_manager');"
+ },
+ {
+  "id": 440,
+  "predicted_sql": "CREATE POLICY data_analysts_insert_analytics ON product.analytics FOR INSERT WITH CHECK (current_setting('app.tenant_id', true)::integer = tenant_id);"
+ },
+ {
+  "id": 441,
+  "predicted_sql": "CREATE POLICY roadmap_owners_delete_deferred ON product.roadmap FOR DELETE USING ( tenant_id = current_setting('app.tenant_id', true)::integer AND status = 'deferred' AND owner_id = current_setting('app.employee_id', true)::integer AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL );"
+ },
+ {
+  "id": 442,
+  "predicted_sql": "CREATE POLICY customer_support_escalate_feedback ON product.user_feedback FOR UPDATE USING ( tenant_id = current_setting('app.tenant_id', true)::integer AND assigned_to = current_setting('app.employee_id', true)::integer AND status = 'open' AND current_setting('app.job_role', true) = 'customer_support' ) WITH CHECK ( tenant_id = current_setting('app.tenant_id', true)::integer AND assigned_to = current_setting('app.employee_id', true)::integer AND status = 'open' AND current_setting('app.job_role', true) = 'customer_support' );"
+ },
+ {
+  "id": 443,
+  "predicted_sql": "CREATE POLICY account_managers_update_customers ON sales.customers FOR UPDATE USING (tenant_id = current_setting('app.tenant_id', true)::integer AND is_active = true AND account_manager_id = current_setting('app.employee_id', true)::integer AND current_setting('app.job_role', true) = 'account_manager') WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer AND is_active = true AND account_manager_id = current_setting('app.employee_id', true)::integer AND current_setting('app.job_role', true) = 'account_manager');"
+ },
+ {
+  "id": 444,
+  "predicted_sql": "CREATE POLICY account_managers_update_active_contracts ON sales.contracts FOR UPDATE USING (current_setting('app.tenant_id', true)::integer = tenant_id AND current_setting('app.job_role', true) = 'account_manager' AND status = 'active') WITH CHECK (current_setting('app.tenant_id', true)::integer = tenant_id AND current_setting('app.job_role', true) = 'account_manager' AND status = 'active');"
+ },
+ {
+  "id": 445,
+  "predicted_sql": "CREATE POLICY sales_rep_create_orders ON sales.orders FOR INSERT WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer);"
+ },
+ {
+  "id": 446,
+  "predicted_sql": "CREATE POLICY finance_managers_delete_draft_invoices ON sales.invoices FOR DELETE USING (current_setting('app.job_role', true) = 'finance_manager' AND status = 'draft' AND tenant_id = current_setting('app.tenant_id', true)::integer);"
+ },
+ {
+  "id": 447,
+  "predicted_sql": "CREATE POLICY account_managers_close_customer_communications ON sales.customer_communications FOR UPDATE USING (tenant_id = current_setting('app.tenant_id', true)::integer AND EXISTS (SELECT 1 FROM sales.customers WHERE customers.customer_id = customer_communications.customer_id AND customers.account_manager_id = current_setting('app.employee_id', true)::integer AND customers.tenant_id = current_setting('app.tenant_id', true)::integer) AND status = 'pending') WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer AND status = 'closed');"
+ },
+ {
+  "id": 448,
+  "predicted_sql": "CREATE POLICY account_managers_update_onboarding ON sales.customer_onboarding FOR UPDATE USING (tenant_id = current_setting('app.tenant_id', true)::integer AND status = 'in-progress' AND onboarding_manager = current_setting('app.employee_id', true)::integer AND current_setting('app.job_role', true) = 'account_manager') WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer AND status = 'in-progress' AND onboarding_manager = current_setting('app.employee_id', true)::integer AND current_setting('app.job_role', true) = 'account_manager');"
+ },
+ {
+  "id": 449,
+  "predicted_sql": "CREATE POLICY call_center_supervisors_update_call_recordings ON support.call_recordings FOR UPDATE USING (tenant_id = current_setting('app.tenant_id', true)::integer AND team_id = current_setting('app.team_id', true)::integer AND current_setting('app.job_role', true) = 'call_center_supervisor') WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::integer AND team_id = current_setting('app.team_id', true)::integer AND current_setting('app.job_role', true) = 'call_center_supervisor');"
+ },
+ {
+  "id": 450,
+  "predicted_sql": "CREATE POLICY call_center_supervisors_update_call_recordings ON support.call_recordings FOR UPDATE USING (current_setting('app.job_role', true) = 'call_center_supervisor' AND tenant_id = current_setting('app.tenant_id', true)::integer) WITH CHECK (current_setting('app.job_role', true) = 'call_center_supervisor' AND tenant_id = current_setting('app.tenant_id', true)::integer AND recording_status = 'reviewed');"
+ },
+ {
+  "id": 451,
+  "predicted_sql": "CREATE POLICY support_ops_customer_read ON sales.customers FOR SELECT USING ( tenant_id = current_setting('app.tenant_id', true)::integer AND ( current_setting('app.job_role', true) = 'support_ops' OR EXISTS ( SELECT 1 FROM auth.access_grants ag WHERE ag.user_id = current_setting('app.user_id', true)::integer AND ag.target_tenant_id = sales.customers.tenant_id AND ag.can_read = true AND ag.approved = true AND ag.expires_at > CURRENT_TIMESTAMP AND ag.support_case = true AND ag.emergency_override = true ) ) );"
+ },
+ {
+  "id": 452,
+  "predicted_sql": "CREATE POLICY support_ops_contract_update ON sales.contracts FOR UPDATE USING ( tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.job_role', true) = 'support_ops' ) WITH CHECK ( tenant_id = current_setting('app.tenant_id', true)::integer OR EXISTS ( SELECT 1 FROM operations.temporal_access WHERE user_id = current_setting('app.user_id', true)::integer AND resource_type = 'contract' AND resource_id = sales.contracts.contract_id AND access_level = 'emergency_update' AND active = true AND approval_required = true AND approved_by IS NOT NULL AND approved_at IS NOT NULL AND start_time <= CURRENT_TIMESTAMP AND (end_time IS NULL OR end_time >= CURRENT_TIMESTAMP) AND tenant_id = sales.contracts.tenant_id ) );"
+ },
+ {
+  "id": 453,
+  "predicted_sql": "CREATE POLICY support_ops_expense_select ON finance.expenses FOR SELECT USING ( tenant_id = current_setting('app.tenant_id', true)::integer OR EXISTS ( SELECT 1 FROM auth.access_grants WHERE user_id = current_setting('app.user_id', true)::integer AND target_tenant_id = finance.expenses.tenant_id AND can_read = true AND data_review = true AND approved = true AND expires_at > CURRENT_TIMESTAMP ) );"
+ },
+ {
+  "id": 454,
+  "predicted_sql": "CREATE POLICY sre_read_projects ON engineering.projects FOR SELECT USING ( (current_setting('app.tenant_id', true) IS NOT NULL) AND ( (current_setting('app.job_role', true) = 'sre' AND tenant_id = current_setting('app.tenant_id', true)::integer) OR EXISTS ( SELECT 1 FROM operations.temporal_access ta WHERE ta.user_id = current_setting('app.user_id', true)::integer AND ta.resource_type = 'project' AND ta.resource_id = projects.project_id AND ta.access_level = 'read' AND ta.active = true AND ta.start_time <= CURRENT_TIMESTAMP AND (ta.end_time IS NULL OR ta.end_time >= CURRENT_TIMESTAMP) AND ta.device_approved = true AND ta.stepup_auth_completed = true AND ta.stepup_auth_timestamp >= (CURRENT_TIMESTAMP - INTERVAL '8 hours') ) ) );"
+ },
+ {
+  "id": 455,
+  "predicted_sql": "CREATE POLICY sre_audit_logs_select ON operations.audit_logs FOR SELECT USING ( (current_setting('app.job_role', true) = 'sre' AND tenant_id = current_setting('app.tenant_id', true)::integer) OR EXISTS ( SELECT 1 FROM operations.temporal_access ta WHERE ta.user_id = current_setting('app.user_id', true)::integer AND ta.resource_type = 'audit_logs' AND ta.resource_id = operations.audit_logs.tenant_id AND ta.access_level = 'read' AND ta.start_time <= CURRENT_TIMESTAMP AND ta.end_time >= CURRENT_TIMESTAMP AND ta.active = true AND ta.approval_status = 'approved' ) );"
+ },
+ {
+  "id": 456,
+  "predicted_sql": "CREATE POLICY \"secops_responder_update_security_events\" ON operations.security_events FOR UPDATE USING ( tenant_id = current_setting('app.tenant_id', true)::integer AND EXISTS ( SELECT 1 FROM hr.employees e WHERE e.employee_id = current_setting('app.employee_id', true)::integer AND e.job_role = 'secops_engineer' AND e.tenant_id = operations.security_events.tenant_id ) ) WITH CHECK ( ( tenant_id = current_setting('app.tenant_id', true)::integer AND EXISTS ( SELECT 1 FROM hr.employees e WHERE e.employee_id = current_setting('app.employee_id', true)::integer AND e.job_role = 'secops_engineer' AND e.tenant_id = operations.security_events.tenant_id ) ) OR ( tenant_id != current_setting('app.tenant_id', true)::integer AND EXISTS ( SELECT 1 FROM operations.temporal_access ta WHERE ta.user_id = current_setting('app.user_id', true)::integer AND ta.resource_type = 'security_event' AND ta.access_level = 'update' AND ta.approved_license = true AND ta.realtime_alert_enabled = true AND ta.alert_response_time_sla <= 60 AND ta.start_time <= CURRENT_TIMESTAMP AND (ta.end_time IS NULL OR ta.end_time >= CURRENT_TIMESTAMP) AND ta.tenant_id = operations.security_events.tenant_id ) ) );"
+ },
+ {
+  "id": 457,
+  "predicted_sql": "CREATE POLICY customer_support_read_metrics ON product.metrics FOR SELECT USING ( (current_setting('app.tenant_id', true) IS NOT NULL) AND ( (current_setting('app.job_role', true) = 'customer_support' AND tenant_id = current_setting('app.tenant_id', true)::integer) OR EXISTS ( SELECT 1 FROM operations.temporal_access WHERE user_id = current_setting('app.user_id', true)::integer AND resource_type = 'tenant' AND resource_id = product.metrics.tenant_id AND access_level = 'minimum_necessary' AND start_time <= CURRENT_TIMESTAMP AND (end_time IS NULL OR end_time >= CURRENT_TIMESTAMP) AND active = true ) ) );"
+ },
+ {
+  "id": 458,
+  "predicted_sql": "CREATE POLICY data_analytics_select ON product.analytics FOR SELECT USING ( (app.job_role = 'data_analyst' AND tenant_id = current_setting('app.tenant_id', true)::integer) OR EXISTS ( SELECT 1 FROM auth.access_grants ag WHERE ag.user_id = current_setting('app.user_id', true)::integer AND ag.target_tenant_id = product.analytics.tenant_id AND ag.can_read = true AND ag.approved = true AND ag.expires_at > CURRENT_TIMESTAMP AND ag.approved_by IS NOT NULL ) );"
+ },
+ {
+  "id": 459,
+  "predicted_sql": "CREATE POLICY support_ops_read_call_recordings ON support.call_recordings FOR SELECT USING ( (current_setting('app.tenant_id', true) IS NOT NULL) AND ( (tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.job_role', true) = 'support_ops') OR EXISTS ( SELECT 1 FROM auth.access_grants WHERE user_id = current_setting('app.user_id', true)::integer AND target_tenant_id = support.call_recordings.tenant_id AND target_table = 'call_recordings' AND can_read = true AND approved = true AND expires_at > CURRENT_TIMESTAMP ) ) );"
+ },
+ {
+  "id": 460,
+  "predicted_sql": "CREATE POLICY hr_admins_read_employees ON hr.employees FOR SELECT USING ( (current_setting('app.job_role', true) = 'hr_admin' AND tenant_id = current_setting('app.tenant_id', true)::integer) OR (current_setting('app.job_role', true) = 'hr_admin' AND EXISTS ( SELECT 1 FROM auth.access_grants WHERE user_id = current_setting('app.user_id', true)::integer AND target_tenant_id = hr.employees.tenant_id AND can_read = true AND deleted_at IS NULL )) );"
+ },
+ {
+  "id": 461,
+  "predicted_sql": "CREATE POLICY operations_managers_documents_select ON operations.documents FOR SELECT USING ( (app.job_role = 'operations_manager' AND tenant_id = current_setting('app.tenant_id', true)::integer) OR (app.job_role = 'operations_manager' AND tenant_id != current_setting('app.tenant_id', true)::integer AND EXISTS ( SELECT 1 FROM auth.access_grants ag WHERE ag.user_id = current_setting('app.user_id', true)::integer AND ag.target_tenant_id = operations.documents.tenant_id AND ag.can_read = true AND ag.incident_response = true AND ag.case_review = true AND ag.approved = true AND ag.expires_at > CURRENT_TIMESTAMP AND ag.tenant_id = current_setting('app.tenant_id', true)::integer )) );"
+ },
+ {
+  "id": 462,
+  "predicted_sql": "CREATE POLICY finance_managers_invoice_read ON sales.invoices FOR SELECT USING ( (current_setting('app.job_role', true) = 'finance_manager' AND tenant_id = current_setting('app.tenant_id', true)::integer) OR EXISTS ( SELECT 1 FROM auth.access_grants ag WHERE ag.user_id = current_setting('app.user_id', true)::integer AND ag.target_tenant_id = sales.invoices.tenant_id AND ag.target_table = 'invoices' AND ag.can_read = true AND ag.financial_review = true AND ag.approved = true AND ag.expires_at > CURRENT_TIMESTAMP AND ag.approved_by IS NOT NULL ) );"
+ },
+ {
+  "id": 523,
+  "predicted_sql": "CREATE POLICY \"Managers and HR admins can delete archived salary history for subordinate employees only inside the current tenant and only when the salary history effective_date is older than seven years.\" ON hr.salary_history FOR DELETE USING ( tenant_id = current_setting('app.tenant_id', true)::integer AND effective_date < CURRENT_DATE - INTERVAL '7 years' AND ( current_setting('app.job_role', true) IN ('manager', 'hr_admin') AND EXISTS ( WITH RECURSIVE subordinates AS ( SELECT employee_id FROM hr.employees WHERE manager_id = current_setting('app.employee_id', true)::integer AND tenant_id = current_setting('app.tenant_id', true)::integer UNION SELECT e.employee_id FROM hr.employees e INNER JOIN subordinates s ON e.manager_id = s.employee_id WHERE e.tenant_id = current_setting('app.tenant_id', true)::integer ) SELECT 1 FROM subordinates WHERE employee_id = hr.salary_history.employee_id ) ) );"
+ },
+ {
+  "id": 524,
+  "predicted_sql": "CREATE POLICY finance_managers_delete_payroll ON hr.payroll FOR DELETE USING ( current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.job_role', true) = 'finance_manager' AND current_setting('app.department_id', true) IS NOT NULL AND department_id IN ( WITH RECURSIVE dept_hierarchy AS ( SELECT department_id FROM hr.departments WHERE department_id = current_setting('app.department_id', true)::integer AND tenant_id = current_setting('app.tenant_id', true)::integer UNION ALL SELECT d.department_id FROM hr.departments d INNER JOIN dept_hierarchy dh ON d.parent_department_id = dh.department_id WHERE d.tenant_id = current_setting('app.tenant_id', true)::integer ) SELECT department_id FROM dept_hierarchy ) AND status = 'closed' AND (CURRENT_DATE - pay_period_end) > 90 );"
+ },
+ {
+  "id": 525,
+  "predicted_sql": "CREATE POLICY finance_managers_delete_balance_sheet ON finance.balance_sheet FOR DELETE USING ( current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.job_role', true) = 'finance_manager' AND status = 'voided' AND region_id IN ( WITH RECURSIVE region_hierarchy AS ( SELECT region_id FROM sales.regions WHERE region_id = current_setting('app.region_id', true)::integer UNION ALL SELECT r.region_id FROM sales.regions r INNER JOIN region_hierarchy rh ON r.parent_region_id = rh.region_id ) SELECT region_id FROM region_hierarchy ) AND entry_date < CURRENT_DATE - INTERVAL '1 year' );"
+ },
+ {
+  "id": 526,
+  "predicted_sql": "CREATE POLICY finance_managers_delete_bank_accounts ON finance.bank_accounts FOR DELETE USING ( current_setting('app.job_role', true) = 'finance_manager' AND current_setting('app.department_id', true) IS NOT NULL AND status = 'Closed' AND is_current = false AND opened_date < CURRENT_DATE - INTERVAL '7 years' AND EXISTS ( WITH RECURSIVE dept_hierarchy AS ( SELECT department_id FROM hr.departments WHERE department_id = current_setting('app.department_id', true)::integer UNION SELECT d.department_id FROM hr.departments d INNER JOIN dept_hierarchy dh ON d.parent_department_id = dh.department_id ) SELECT 1 FROM dept_hierarchy dh WHERE dh.department_id = finance.bank_accounts.department_id ) );"
+ },
+ {
+  "id": 527,
+  "predicted_sql": "CREATE POLICY devops_delete_failed_builds ON engineering.builds FOR DELETE USING ( current_setting('app.job_role', true) = 'devops_engineer' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND status = 'failed' AND start_time < (CURRENT_TIMESTAMP - INTERVAL '90 days') AND EXISTS ( WITH RECURSIVE project_tree AS ( SELECT project_id, owner_id FROM engineering.projects WHERE project_id = engineering.builds.project_id UNION ALL SELECT p.project_id, p.owner_id FROM engineering.projects p INNER JOIN project_tree pt ON p.parent_project_id = pt.project_id ) SELECT 1 FROM project_tree WHERE owner_id = current_setting('app.employee_id', true)::integer ) );"
+ },
+ {
+  "id": 528,
+  "predicted_sql": "CREATE POLICY engineering_managers_delete_cancelled_releases ON engineering.releases FOR DELETE USING ( current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.job_role', true) = 'engineering_manager' AND status = 'cancelled' AND release_date < CURRENT_DATE - INTERVAL '180 days' AND EXISTS ( WITH RECURSIVE project_tree AS ( SELECT project_id, owner_id, parent_project_id FROM engineering.projects WHERE project_id = engineering.releases.project_id UNION ALL SELECT p.project_id, p.owner_id, p.parent_project_id FROM engineering.projects p INNER JOIN project_tree pt ON p.parent_project_id = pt.project_id ) SELECT 1 FROM project_tree WHERE owner_id = current_setting('app.employee_id', true)::integer ) );"
+ },
+ {
+  "id": 529,
+  "predicted_sql": "CREATE POLICY account_managers_delete_abandoned_pipeline ON sales.sales_pipeline FOR DELETE USING ( current_setting('app.job_role', true) = 'account_manager' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND stage = 'abandoned' AND created_at < (CURRENT_TIMESTAMP - INTERVAL '180 days') AND EXISTS ( WITH RECURSIVE customer_hierarchy AS ( SELECT customer_id, parent_customer_id FROM sales.customers WHERE customer_id = sales.sales_pipeline.customer_id AND tenant_id = current_setting('app.tenant_id', true)::integer UNION ALL SELECT c.customer_id, c.parent_customer_id FROM sales.customers c INNER JOIN customer_hierarchy ch ON c.parent_customer_id = ch.customer_id WHERE c.tenant_id = current_setting('app.tenant_id', true)::integer ) SELECT 1 FROM customer_hierarchy ch WHERE ch.customer_id IN ( SELECT customer_id FROM sales.customers WHERE account_manager_id = current_setting('app.employee_id', true)::integer AND tenant_id = current_setting('app.tenant_id', true)::integer ) ) );"
+ },
+ {
+  "id": 530,
+  "predicted_sql": "CREATE POLICY account_managers_delete_abandoned_onboarding ON sales.customer_onboarding FOR DELETE USING ( current_setting('app.job_role', true) = 'account_manager' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND created_at < (CURRENT_TIMESTAMP - INTERVAL '1 year') AND EXISTS ( WITH RECURSIVE customer_hierarchy AS ( SELECT customer_id, parent_customer_id FROM sales.customers WHERE customer_id = sales.customer_onboarding.customer_id AND tenant_id = current_setting('app.tenant_id', true)::integer UNION ALL SELECT c.customer_id, c.parent_customer_id FROM sales.customers c INNER JOIN customer_hierarchy ch ON c.parent_customer_id = ch.customer_id WHERE c.tenant_id = current_setting('app.tenant_id', true)::integer ) SELECT 1 FROM customer_hierarchy ch INNER JOIN sales.customers c ON ch.customer_id = c.customer_id WHERE c.account_manager_id = current_setting('app.employee_id', true)::integer ) );"
+ },
+ {
+  "id": 531,
+  "predicted_sql": "CREATE POLICY call_center_supervisors_delete_recordings ON support.call_recordings FOR DELETE USING ( current_setting('app.job_role', true) = 'call_center_supervisor' AND current_setting('app.tenant_id', true)::integer = tenant_id AND recording_status = 'archived' AND EXTRACT(YEAR FROM age(CURRENT_TIMESTAMP, call_start)) >= 2 AND EXISTS ( WITH RECURSIVE subordinate_agents AS ( SELECT employee_id, manager_id FROM hr.employees WHERE employee_id = agent_id UNION ALL SELECT e.employee_id, e.manager_id FROM hr.employees e INNER JOIN subordinate_agents s ON e.manager_id = s.employee_id ) SELECT 1 FROM subordinate_agents WHERE employee_id = current_setting('app.employee_id', true)::integer ) );"
+ },
+ {
+  "id": 532,
+  "predicted_sql": "CREATE POLICY audit_leads_delete_archived_logs ON operations.audit_logs FOR DELETE USING ( current_setting('app.job_role', true) = 'audit_lead' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND archived = true AND logged_at < (CURRENT_TIMESTAMP - INTERVAL '7 years') AND EXISTS ( WITH RECURSIVE reporting_hierarchy AS ( SELECT employee_id, manager_id FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer UNION ALL SELECT e.employee_id, e.manager_id FROM hr.employees e INNER JOIN reporting_hierarchy rh ON e.manager_id = rh.employee_id ) SELECT 1 FROM reporting_hierarchy WHERE employee_id = operations.audit_logs.employee_id ) );"
+ },
+ {
+  "id": 533,
+  "predicted_sql": "CREATE POLICY operations_managers_delete_security_events ON operations.security_events FOR DELETE USING ( current_setting('app.job_role', true) = 'operations_manager' AND current_setting('app.tenant_id', true)::integer = tenant_id AND severity IN ('low', 'medium') AND resolved = true AND event_time <= (CURRENT_TIMESTAMP - INTERVAL '1 year') AND EXISTS ( WITH RECURSIVE subordinate_employees AS ( SELECT employee_id, manager_id FROM hr.employees WHERE employee_id = current_setting('app.employee_id', true)::integer UNION SELECT e.employee_id, e.manager_id FROM hr.employees e INNER JOIN subordinate_employees s ON e.manager_id = s.employee_id ) SELECT 1 FROM subordinate_employees WHERE employee_id = operations.security_events.employee_id ) );"
+ },
+ {
+  "id": 534,
+  "predicted_sql": "CREATE POLICY operations_managers_delete_expired_documents ON operations.documents FOR DELETE USING ( current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.job_role', true) = 'operations_manager' AND current_setting('app.department_id', true) IS NOT NULL AND (department_id = current_setting('app.department_id', true)::integer OR EXISTS ( WITH RECURSIVE dept_hierarchy AS ( SELECT department_id, parent_department_id FROM hr.departments WHERE department_id = current_setting('app.department_id', true)::integer UNION ALL SELECT d.department_id, d.parent_department_id FROM hr.departments d INNER JOIN dept_hierarchy dh ON d.parent_department_id = dh.department_id ) SELECT 1 FROM dept_hierarchy WHERE dept_hierarchy.department_id = operations.documents.department_id ) ) AND expires_at IS NOT NULL AND expires_at < CURRENT_TIMESTAMP );"
+ },
+ {
+  "id": 535,
+  "predicted_sql": "CREATE POLICY product_managers_delete_archived_metrics ON product.metrics FOR DELETE USING ( current_setting('app.job_role', true) = 'product_manager' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND status = 'archived' AND metric_owner IS NOT NULL AND EXISTS ( WITH RECURSIVE subordinates AS ( SELECT employee_id FROM hr.employees WHERE manager_id = current_setting('app.employee_id', true)::integer AND tenant_id = current_setting('app.tenant_id', true)::integer UNION ALL SELECT e.employee_id FROM hr.employees e INNER JOIN subordinates s ON e.manager_id = s.employee_id WHERE e.tenant_id = current_setting('app.tenant_id', true)::integer ) SELECT 1 FROM subordinates WHERE employee_id = metric_owner ) AND updated_at < (CURRENT_TIMESTAMP - INTERVAL '1 year') );"
+ },
+ {
+  "id": 536,
+  "predicted_sql": "CREATE POLICY data_analyst_delete_analytics ON product.analytics FOR DELETE USING ( current_setting('app.job_role', true) = 'data_analyst' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND employee_id IS NOT NULL AND EXISTS ( WITH RECURSIVE subordinates AS ( SELECT employee_id FROM hr.employees WHERE manager_id = current_setting('app.employee_id', true)::integer AND tenant_id = current_setting('app.tenant_id', true)::integer UNION ALL SELECT e.employee_id FROM hr.employees e INNER JOIN subordinates s ON e.manager_id = s.employee_id WHERE e.tenant_id = current_setting('app.tenant_id', true)::integer ) SELECT 1 FROM subordinates WHERE employee_id = product.analytics.employee_id ) AND status = 'archived' AND updated_at < (CURRENT_TIMESTAMP - INTERVAL '1 year') );"
+ },
+ {
+  "id": 537,
+  "predicted_sql": "CREATE POLICY customer_support_delete_feedback ON product.user_feedback FOR DELETE USING ( current_setting('app.job_role', true) = 'customer_support' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND resolved = true AND EXISTS ( WITH RECURSIVE subordinates AS ( SELECT employee_id FROM hr.employees WHERE manager_id = current_setting('app.employee_id', true)::integer UNION ALL SELECT e.employee_id FROM hr.employees e INNER JOIN subordinates s ON e.manager_id = s.employee_id ) SELECT 1 FROM subordinates WHERE employee_id = product.user_feedback.assigned_to ) AND EXISTS ( SELECT 1 FROM product.user_feedback dup WHERE dup.feedback_text = product.user_feedback.feedback_text AND dup.assigned_to = product.user_feedback.assigned_to AND dup.resolved = true AND dup.feedback_id != product.user_feedback.feedback_id ) AND resolved_at < (CURRENT_TIMESTAMP - INTERVAL '30 days') );"
+ },
+ {
+  "id": 538,
+  "predicted_sql": "CREATE POLICY project_managers_delete_archived_issues ON engineering.issues FOR DELETE USING ( current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.job_role', true) = 'project_manager' AND status = 'archived' AND updated_at < CURRENT_TIMESTAMP - INTERVAL '180 days' AND EXISTS ( WITH RECURSIVE project_tree AS ( SELECT project_id, owner_id, parent_project_id FROM engineering.projects WHERE project_id = engineering.issues.project_id AND tenant_id = current_setting('app.tenant_id', true)::integer UNION ALL SELECT p.project_id, p.owner_id, p.parent_project_id FROM engineering.projects p INNER JOIN project_tree pt ON p.parent_project_id = pt.project_id WHERE p.tenant_id = current_setting('app.tenant_id', true)::integer ) SELECT 1 FROM project_tree WHERE owner_id = current_setting('app.employee_id', true)::integer ) );"
+ },
+ {
+  "id": 539,
+  "predicted_sql": "CREATE POLICY senior_engineer_delete_archived_repos ON engineering.code_repository FOR DELETE USING ( current_setting('app.job_role', true) = 'senior_engineer' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND archived_at IS NOT NULL AND archived_at < CURRENT_TIMESTAMP - INTERVAL '90 days' AND EXISTS ( WITH RECURSIVE project_tree AS ( SELECT p.project_id, p.owner_id FROM engineering.projects p WHERE p.project_id = engineering.code_repository.project_id UNION ALL SELECT child.project_id, child.owner_id FROM engineering.projects child INNER JOIN project_tree parent ON child.parent_project_id = parent.project_id ) SELECT 1 FROM project_tree WHERE owner_id = current_setting('app.employee_id', true)::integer ) );"
+ },
+ {
+  "id": 540,
+  "predicted_sql": "CREATE POLICY customers_delete_own_draft_unfulfilled_orders ON sales.orders FOR DELETE USING ( tenant_id = current_setting('app.tenant_id', true)::integer AND current_setting('app.customer_id', true) IS NOT NULL AND ( customer_id = current_setting('app.customer_id', true)::integer OR EXISTS ( WITH RECURSIVE customer_hierarchy AS ( SELECT customer_id, parent_customer_id FROM sales.customers WHERE customer_id = current_setting('app.customer_id', true)::integer AND tenant_id = current_setting('app.tenant_id', true)::integer UNION ALL SELECT c.customer_id, c.parent_customer_id FROM sales.customers c INNER JOIN customer_hierarchy ch ON c.parent_customer_id = ch.customer_id WHERE c.tenant_id = current_setting('app.tenant_id', true)::integer ) SELECT 1 FROM customer_hierarchy ch WHERE ch.customer_id = sales.orders.customer_id ) ) AND status = 'draft' AND fulfillment_status = 'unfulfilled' );"
+ },
+ {
+  "id": 541,
+  "predicted_sql": "CREATE POLICY finance_managers_delete_voided_invoices ON sales.invoices FOR DELETE USING ( current_setting('app.job_role', true) = 'finance_manager' AND current_setting('app.tenant_id', true)::integer = tenant_id AND status = 'voided' AND invoice_date < CURRENT_DATE - INTERVAL '1 year' AND EXISTS ( WITH RECURSIVE customer_hierarchy AS ( SELECT customer_id, parent_customer_id FROM sales.customers WHERE customer_id = sales.invoices.customer_id AND tenant_id = current_setting('app.tenant_id', true)::integer UNION ALL SELECT c.customer_id, c.parent_customer_id FROM sales.customers c INNER JOIN customer_hierarchy ch ON c.customer_id = ch.parent_customer_id WHERE c.tenant_id = current_setting('app.tenant_id', true)::integer ) SELECT 1 FROM customer_hierarchy ) );"
+ },
+ {
+  "id": 542,
+  "predicted_sql": "CREATE POLICY managers_delete_stale_attendance_corrections ON hr.attendance FOR DELETE USING ( current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.tenant_id', true)::integer = tenant_id AND current_setting('app.job_role', true) = 'manager' AND status = 'pending' AND request_type = 'correction' AND work_date < CURRENT_DATE - INTERVAL '30 days' AND EXISTS ( WITH RECURSIVE subordinates AS ( SELECT employee_id FROM hr.employees WHERE manager_id = current_setting('app.employee_id', true)::integer AND tenant_id = current_setting('app.tenant_id', true)::integer UNION ALL SELECT e.employee_id FROM hr.employees e INNER JOIN subordinates s ON e.manager_id = s.employee_id WHERE e.tenant_id = current_setting('app.tenant_id', true)::integer ) SELECT 1 FROM subordinates WHERE employee_id = hr.attendance.employee_id ) );"
+ },
+ {
+  "id": 543,
+  "predicted_sql": "CREATE POLICY finance_managers_balance_sheet ON finance.balance_sheet FOR ALL USING ( current_setting('app.job_role', true) = 'finance_manager' AND current_setting('app.region_id', true) IS NOT NULL AND EXISTS ( WITH RECURSIVE region_hierarchy AS ( SELECT region_id FROM sales.regions WHERE region_id = current_setting('app.region_id', true)::integer UNION ALL SELECT r.region_id FROM sales.regions r INNER JOIN region_hierarchy rh ON r.parent_region_id = rh.region_id ) SELECT 1 FROM region_hierarchy WHERE region_id = finance.balance_sheet.region_id ) AND (status IS NULL OR status != 'archived') ) WITH CHECK ( current_setting('app.job_role', true) = 'finance_manager' AND current_setting('app.region_id', true) IS NOT NULL AND EXISTS ( WITH RECURSIVE region_hierarchy AS ( SELECT region_id FROM sales.regions WHERE region_id = current_setting('app.region_id', true)::integer UNION ALL SELECT r.region_id FROM sales.regions r INNER JOIN region_hierarchy rh ON r.parent_region_id = rh.region_id ) SELECT 1 FROM region_hierarchy WHERE region_id = finance.balance_sheet.region_id ) AND (status IS NULL OR status != 'archived') );"
+ },
+ {
+  "id": 544,
+  "predicted_sql": "CREATE POLICY account_managers_own_pipeline ON sales.sales_pipeline FOR ALL USING (current_setting('app.job_role', true) = 'account_manager' AND account_manager_id = current_setting('app.employee_id', true)::integer AND status != 'archived') WITH CHECK (current_setting('app.job_role', true) = 'account_manager' AND account_manager_id = current_setting('app.employee_id', true)::integer AND status != 'archived');"
+ },
+ {
+  "id": 545,
+  "predicted_sql": "CREATE POLICY call_center_supervisors_team_call_recordings ON support.call_recordings FOR ALL USING (current_setting('app.job_role', true) = 'call_center_supervisor' AND team_id = current_setting('app.team_id', true)::integer AND archived_at IS NULL) WITH CHECK (current_setting('app.job_role', true) = 'call_center_supervisor' AND team_id = current_setting('app.team_id', true)::integer AND archived_at IS NULL);"
+ },
+ {
+  "id": 546,
+  "predicted_sql": "CREATE POLICY engineering_managers_releases ON engineering.releases FOR ALL USING ( current_setting('app.job_role', true) = 'engineering_manager' AND current_setting('app.tenant_id', true)::integer = tenant_id AND status IN ('planned', 'hotfix') AND EXISTS ( WITH RECURSIVE project_tree AS ( SELECT project_id, owner_id, parent_project_id FROM engineering.projects WHERE project_id = engineering.releases.project_id UNION ALL SELECT p.project_id, p.owner_id, p.parent_project_id FROM engineering.projects p INNER JOIN project_tree pt ON p.project_id = pt.parent_project_id ) SELECT 1 FROM project_tree WHERE owner_id = current_setting('app.employee_id', true)::integer ) ) WITH CHECK ( current_setting('app.job_role', true) = 'engineering_manager' AND current_setting('app.tenant_id', true)::integer = tenant_id AND status IN ('planned', 'hotfix') AND EXISTS ( WITH RECURSIVE project_tree AS ( SELECT project_id, owner_id, parent_project_id FROM engineering.projects WHERE project_id = engineering.releases.project_id UNION ALL SELECT p.project_id, p.owner_id, p.parent_project_id FROM engineering.projects p INNER JOIN project_tree pt ON p.project_id = pt.parent_project_id ) SELECT 1 FROM project_tree WHERE owner_id = current_setting('app.employee_id', true)::integer ) );"
+ },
+ {
+  "id": 547,
+  "predicted_sql": "CREATE POLICY finance_managers_bank_accounts ON finance.bank_accounts FOR ALL USING ( current_setting('app.job_role', true) = 'finance_manager' AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.region_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND status IN ('Active', 'Frozen', 'Closed') AND EXISTS ( WITH RECURSIVE region_hierarchy AS ( SELECT region_id FROM sales.regions WHERE region_id = current_setting('app.region_id', true)::integer UNION ALL SELECT r.region_id FROM sales.regions r INNER JOIN region_hierarchy rh ON r.parent_region_id = rh.region_id ) SELECT 1 FROM region_hierarchy WHERE region_hierarchy.region_id = bank_accounts.region_id ) ) WITH CHECK ( current_setting('app.job_role', true) = 'finance_manager' AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.region_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::integer AND status IN ('Active', 'Frozen', 'Closed') AND EXISTS ( WITH RECURSIVE region_hierarchy AS ( SELECT region_id FROM sales.regions WHERE region_id = current_setting('app.region_id', true)::integer UNION ALL SELECT r.region_id FROM sales.regions r INNER JOIN region_hierarchy rh ON r.parent_region_id = rh.region_id ) SELECT 1 FROM region_hierarchy WHERE region_hierarchy.region_id = bank_accounts.region_id ) );"
+ },
+ {
+  "id": 548,
+  "predicted_sql": "CREATE POLICY finance_managers_insert_payroll ON hr.payroll FOR INSERT WITH CHECK ( current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.tenant_id', true)::integer = tenant_id AND current_setting('app.job_role', true) = 'finance_manager' AND EXISTS ( SELECT 1 FROM hr.employees e WHERE e.employee_id = hr.payroll.employee_id AND e.tenant_id = current_setting('app.tenant_id', true)::integer AND e.department_id = hr.payroll.department_id AND EXISTS ( WITH RECURSIVE dept_hierarchy AS ( SELECT department_id, parent_department_id FROM hr.departments WHERE manager_id = current_setting('app.employee_id', true)::integer AND tenant_id = current_setting('app.tenant_id', true)::integer UNION SELECT d.department_id, d.parent_department_id FROM hr.departments d INNER JOIN dept_hierarchy dh ON d.parent_department_id = dh.department_id WHERE d.tenant_id = current_setting('app.tenant_id', true)::integer ) SELECT 1 FROM dept_hierarchy WHERE department_id = e.department_id ) ) );"
+ },
+ {
+  "id": 549,
+  "predicted_sql": "CREATE POLICY account_managers_insert_onboarding ON sales.customer_onboarding FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'account_manager' AND current_setting('app.tenant_id', true) IS NOT NULL AND status = 'Not Started' AND EXISTS ( SELECT 1 FROM sales.customers c WHERE c.customer_id = customer_onboarding.customer_id AND c.account_manager_id = current_setting('app.employee_id', true)::integer AND c.tenant_id = current_setting('app.tenant_id', true)::integer ) );"
+ },
+ {
+  "id": 550,
+  "predicted_sql": "CREATE POLICY \"DevOps engineers can insert queued build rows inside the current tenant only for planned or hotfix releases in recursive project trees rooted at projects they own\" ON engineering.builds FOR INSERT WITH CHECK ( current_setting('app.job_role', true) = 'devops_engineer' AND tenant_id = current_setting('app.tenant_id', true)::integer AND status = 'queued' AND EXISTS ( WITH RECURSIVE project_tree AS ( SELECT p.project_id, p.owner_id FROM engineering.projects p WHERE p.project_id = engineering.builds.project_id UNION ALL SELECT child.project_id, child.owner_id FROM engineering.projects child INNER JOIN project_tree parent ON child.parent_project_id = parent.project_id ) SELECT 1 FROM project_tree pt WHERE pt.owner_id = current_setting('app.employee_id', true)::integer ) AND EXISTS ( SELECT 1 FROM engineering.releases r WHERE r.release_id = engineering.builds.release_id AND r.status IN ('planned', 'hotfix') ) );"
+ }
+]

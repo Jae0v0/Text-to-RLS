@@ -1,0 +1,4952 @@
+[
+  {
+    "id": 1,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Any authenticated employee can view records of active employees.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 2,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can always view their own personnel record.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 3,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can delete only their own draft payroll correction rows during weekday business hours (09:00-18:00), and only before the pay period closes.",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 4,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can update employee records, but they cannot modify their own employee record.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 5,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can delete only voided reports marked as correction after the revenue row has been closed.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 6,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Core engineers can delete only archived duplicate issues assigned to them after the issue has been inactive for more than 90 days.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 7,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can view customers in their assigned region contacted within the last 90 days.",
+    "difficulty": "hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 8,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can only view system configuration during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 9,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Department managers can view salary information for employees in their reporting chain.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 10,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Senior engineers can delete only archived repositories they own after the repository has been archived for at least 90 days.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 11,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can delete only their own pending attendance correction requests inside the current tenant from the last 30 days during weekday business hours (09:00-18:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 12,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Department managers can view all employee performance reviews in their department.",
+    "difficulty": "hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 13,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Department managers can view all performance reviews for employees in departments they manage and all descendant departments in the hierarchy.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 14,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers can view all user feedback.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 15,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can only modify their own employee record on business days.(Monday-Friday).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 16,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors can delete rejected expense records only if the expense has a recorded approver other than themselves, they did not submit it themselves, and the record has been retained for at least seven years.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 17,
+    "db_id": "enterprise_rls_db",
+    "requirement": "QA engineers can view all test records.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 18,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Tax specialists can view all tax records.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 19,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Senior engineers can only delete test artifacts that are marked as failed, not linked to any active release, and older than 14 days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 20,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security level 4 or higher user can access backup records at any time during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 21,
+    "db_id": "enterprise_rls_db",
+    "requirement": "CFOs can delete closed department budget records only when the budget cycle is inactive and today is the last day of the quarter.",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 22,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Junior engineers can delete only their own archived public repositories classified as sandbox during weekday business hours (09:00-18:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 23,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales representatives can only view leads whose contract value does not exceed 10000 times their position level.",
+    "difficulty": "simple",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 24,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can view all employee benefits records.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 25,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can view all product analytics data",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 26,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Accountants can mark approved expense records as journal-posted only when those expenses were neither submitted nor approved by the current accountant.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 27,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Team leads can view attendance records of their team members",
+    "difficulty": "hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 28,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Team leads can approve or reject pending leave requests for employees in their team or any sub-teams they supervise.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 29,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Build administrators can view all build records",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 30,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees should be able to log their own clock-in/out times.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 31,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales representatives can only view contracts where the contract value does not exceed the average deal size of their department.",
+    "difficulty": "moderate",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 32,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product directors can modify all product features only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 33,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees are allowed to remove or discard only their own orders, and only when those orders are in draft status.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 34,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors can delete audit logs only when the logs are archived and older than seven years, and only during weekday business hours.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 35,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Pay grade 7 or higher employees can view product metrics during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 36,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can only edit documents they authored when the document status is draft and the document was created within the last 30 days.",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 37,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Regional directors can view all orders in their assigned region during business hours.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 38,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees with the admin role can modify system configuration only during the maintenance window from 02:00 to 06:00.",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 39,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can approve or reject pending purchase orders only if the order amount does not exceed 10000 times their position level.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 40,
+    "db_id": "enterprise_rls_db",
+    "requirement": "VPs of Engineering can delete archived engineering projects in their current tenant during weekday business hours (9:00-18:00) only when the project has no open or in-progress issues in the same tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 41,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customer support can delete only duplicate feedback that has already been resolved and was submitted within the last seven days.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 42,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Senior engineers assigned as reviewers can update pull requests they review, but not pull requests they authored themselves.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 43,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can view all tax records in all departments",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 44,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Project managers can view issues for which they are the assigned project manager during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 45,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Regional directors can view sales contracts in their current tenant for their region and all sub-regions.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 46,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees with position level 7 or higher and clearance level 4 or higher can view budget data classified at confidentiality level 3 or below.",
+    "difficulty": "moderate",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 47,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales representatives can delete abandoned sales pipeline opportunity records in the prospecting or qualification stage, or abandoned proposal-stage opportunity records that have not been updated for more than 180 days.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 48,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can delete only backup records whose backup status is failed and whose verification status is failed, after the backup attempt is older than 24 hours.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 49,
+    "db_id": "enterprise_rls_db",
+    "requirement": "CEOs can perform all row-level operations on employee rows in their current tenant; inserted or updated employee rows must also remain in their current tenant and pass the CEO-only policy check.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 50,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can only view planned product roadmaps",
+    "difficulty": "simple",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 51,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Team leads can view performance reviews assigned to them as team leads.",
+    "difficulty": "moderate",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 52,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers and compliance officers can terminate contracts only if they are past their renewal window, not pending approval, and have no pending payments.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 53,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view their own tax documents",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 54,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Build administrators can view all system configuration.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 55,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Engineers can assign currently unassigned low-estimate issues to themselves in their current tenant, where have estimated hours below 8.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 56,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Department managers can view their department's expenses",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 57,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Region director can view their region's sales data during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 58,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can approve pending expense records, but not records they submitted themselves.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 59,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can delete only expired contract documents they authored.",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 60,
+    "db_id": "enterprise_rls_db",
+    "requirement": "QA engineers can view test results for products they own.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 61,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security analysts can view security event logs",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 62,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Audit leads can delete audit logs only when the logs are archived, sealed, and older than seven years during weekday business hours.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 63,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can delete expired documents with Compliance document type in their current tenant only after the expiration timestamp has passed.",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 64,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Risk managers can delete archived risk assessment analytics only when the analytic row was calculated more than one year ago.",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 65,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR staff can view all employee records.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 66,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Accountants, finance analysts, finance managers, and tax specialists can delete voided balance sheet correction rows in their current tenant only when the entry date is before the current date.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 67,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Project managers can view all issues in their current tenant for projects they own or any sub-projects in the project hierarchy.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 68,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can delete inactive customer rows during weekday business hours (9:00-18:00) only when the customer has not been contacted for more than three years and has no active contract.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 69,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security analysts can archive security events only if they are resolved, older than 90 days, and have been reviewed by a supervisor.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 70,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view their attendance records",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 71,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can approve pending sales contract discount requests in their current tenant only when approval is required and the discount percentage exceeds the department standard threshold.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 72,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customers can delete only their own draft orders in their current tenant during weekday business hours (9:00-18:00) before the order has been fulfilled.",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 73,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Quality assurance engineers can approve release QA test records assigned to them, but not records where they are the assigned developer.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 74,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can insert order records with pending fulfillment status in their current tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 75,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can view inventory repository artifacts in their current tenant from the last 90 days.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 76,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can insert contracts marked as vendor contracts in their current tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 77,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations managers can insert operational metrics in their current tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 78,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Public visitors can view only verified public product features created within the last 90 days.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 79,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Authenticated internal employees can view product features with public or internal visibility.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 80,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees with position level 7 or higher can insert strategic roadmap item rows in their current tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 81,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can insert temporal access request records for documents for themselves in their current tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 82,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Budget owners can view budget details they own for their department and all subordinate departments.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 83,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can update non-frozen engineering project records to frozen status.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 84,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Guest user can insert new product feature rows only when the new feature is public, visible as public, and created time falls during weekday business hours (9:00-18:00).",
+    "difficulty": "moderate",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 85,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can reopen their own expense reports only if the reports were rejected within the last 7 days and have not been escalated.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 86,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Build administrators can insert archived audit logs.",
+    "difficulty": "simple",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 87,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can create their own new expense reports only when the new expense amount does not exceed three times their currently effective monthly allowance.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 88,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Build administrators can restore approved backups only during maintenance windows (02:00-06:00), and updated rows must record a restored timestamp with backup status Restored.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 89,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can update budget allocation records for departments other than their own.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 90,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can only access sales contracts in their assigned regions.",
+    "difficulty": "hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 91,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can access budget data for their assigned departments during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 92,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can only access sales contracts in their current tenant from the last 90 days.",
+    "difficulty": "hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 93,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can delete attendance records that are erroneous and have been flagged for removal.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 94,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can only view data created after their hire date",
+    "difficulty": "moderate",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 95,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can insert their own expense records only if the confidentiality period has expired or the confidentiality date is not set.",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 96,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Division executives can access all employee data within their division and all departments under their division.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 97,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Build administrators can modify staging code repository records only during maintenance windows (02:00-06:00), and updated rows must remain staging records.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 98,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Changes to records are only allowed by employees during working hours (9:00-17:00, Monday-Friday).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 99,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can access API access records tied to their own application user account only if their employee API request count in the current hour is below 100 times their position level.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 100,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can only view engineering project records assigned to their department's office location during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 101,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers can deprecate product features only if they have zero active users in the last 180 days and no active dependent features.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 102,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product directors can insert technology roadmap item rows during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 103,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can insert supplier contracts whose created timestamp is within the last 90 days.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 104,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security analysts can clear security alerts, but not security alerts triggered by their own application user account.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 105,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Environmental health and safety officers can insert incident reports during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 106,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can modify contracts within 30 days before expiry.",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 107,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sustainability officers can insert sustainability analytics data.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 108,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Team leads can view innovation category experimental engineering projects during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 109,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customer advocacy managers can view feature request records and announcement feedback records.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 110,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations managers can insert disaster recovery configuration during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 111,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Managers can view attendance records for employees in their tenant and indirect reporting chain.",
+    "difficulty": "hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 112,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors can insert high or critical severity security events during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 113,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can update budget records only when the remaining amount stays above 10% of the allocated amount.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 114,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can modify temporal access API routing configuration records.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 115,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can insert anonymized usage analytics data.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 116,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can update employee records to deactivated only if the employee account has been inactive for 90 days, has no open assigned issues, and is not a system account.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 117,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance analysts can insert competitive revenue data during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 118,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers can apply discounts to invoices, but not invoices for accounts they personally manage.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 119,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customer support staff can insert incident issues during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 120,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can insert software license inventory in system configuration.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 121,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view benefits they are eligible for during open enrollment",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 122,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can insert merger or acquisition document records during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 123,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Environmental health and safety officers can perform all row-level operations on safety event records during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 124,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can modify vendor customer records only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 125,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can submit their own overtime requests only if the requested overtime is at or below 10 hours.",
+    "difficulty": "simple",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 126,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Senior engineers can perform all row-level operations on schema design in the code repository.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 127,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Administrators can only modify configuration entries that are not archived, not locked, and have been reviewed within the last 90 days.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 128,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can perform all row-level operations on grant-related budget records during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 129,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can access documents with document type Patent Application.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 130,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can perform all row-level operations on data handling configuration records during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 131,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers can perform all row-level operations on analytics rows with mentions analytics and brand category in their current tenant; inserted or updated rows must remain mentions analytics rows in the brand category.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 132,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors can perform all row-level operations on audit evidence while the audit is in progress.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 133,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can mark policy exceptions as approved, but not exceptions they requested.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 134,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customer support staff can update submitted user feedback to an open moderation state only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 135,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance analysts can perform all row-level operations on historical revenue records dated before today.",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 136,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can view store-specific performance metrics.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 137,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can record their own data export audit log entries only when the export size does not exceed their currently effective monthly allowance.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 138,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can archive superseded documents that were created more than 2 years ago.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 139,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can access customer records with assigned territory metadata.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 140,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Administrators can modify system configuration only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 141,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can view engineering requirement issues categorized as Functional.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 142,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can view performance-category baseline product metrics.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 143,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers can modify translated content only during maintenance windows (14:00-16:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 144,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can perform all row-level operations on accessibility documents with compliance record type in their current tenant, and inserted or updated rows must remain accessibility compliance document records.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 145,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can perform all row-level operations on integration specification artifacts in the code repository during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 146,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can perform all row-level operations on Raw Events analytics data in their current tenant during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 147,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers can perform all row-level operations on feature adoption metrics",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 148,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can view infrastructure designs in code repository.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 149,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers with position level 7 or higher can approve pending budget increase requests for their department when the requested increase does not exceed 10% of the remaining budget.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 150,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Workplace experience coordinators can update temporal access records for event schedules.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 151,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Build administrators can view release note artifacts in the code repository.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 152,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers can modify endpoint project resources.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 153,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Staff augmentation coordinators can view contractor employee records in their current tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 154,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Manufacturing engineers can view production schedule configuration records in temporal access settings.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 155,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Quality engineers can view defect issues in their current tenant from the last 90 days.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 156,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations managers can access workflow metrics.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 157,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers can modify brand guidelines feature records only during maintenance windows (12:00-16:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 158,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can view supplier customer records.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 159,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations managers can perform all row-level operations on resource utilization metrics. ",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 160,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Project managers can view portfolio project records for projects they coordinate.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 161,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Directors can approve contract renewals in their current tenant only when the renewal term exceeds the original term by more than 50% and the contract has outstanding customer disputes.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 162,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can remove security event records after their retention window has elapsed.",
+    "difficulty": "moderate",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 163,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Managers can view time clock records for attendance rows they supervise.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 164,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers can view customer communication history for accounts they manage during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 165,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can view current and past finance revenue forecasts.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 166,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers can view campaign performance data for campaigns they manage.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 167,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security analysts on team 11 can access active security event records.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 168,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can view expenses for their department during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 169,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can view active subscription contracts.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 170,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can view orders pending fulfillment.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 171,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees who either own a project or are listed as a team member can view project documents from the last 90 days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 172,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can only view contracts awaiting legal review during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 173,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations managers can approve production system configuration changes in their current tenant outside maintenance windows (02:00-06:00) only when the risk level is High or Critical, the configuration is not locked, not archived, and has been reviewed within the last 90 days.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 174,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Tax consultants can view tax planning documents during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 175,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can view SLA metrics they own during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 176,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can access contracts within the next 90-day renewal window..",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 177,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can modify training completion benefits records.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 178,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Accountants can access payroll records in their current tenant during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 179,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can view compliance violation security events.",
+    "difficulty": "simple",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 180,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales contracts are readable only when the contract partner matches the current application user.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 181,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Accountants can view invoices pending payment.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 182,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Accountants can view invoices that are past due and not yet paid.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 183,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can view customer onboarding progress they managed during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 184,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Assigned employees can modify non-closed user feedback records assigned to them.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 185,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees data is granted only if the employees has appropriate clearance AND the status is not under legal hold AND access is within the user's geographic jurisdiction.",
+    "difficulty": "simple",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 186,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can enroll benefits for eligible employees during enrollment windows.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 187,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can view customer issue feedback records where they are the escalation owner in their current tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 188,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations managers can view work order issues during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 189,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Call center supervisors can view call recordings for their team in their current tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 190,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can approve pending contracts only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 191,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can view in-transit shipment sales order.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 192,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can access anonymized customer analytics from the last 90 days.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 193,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can view market analysis reports during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 194,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance trainers mark compliance training benefits as completed only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 195,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can update vendor contract performance rating records.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 196,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Department managers can view asset depreciation configuration records.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 197,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security analysts can view engineering vulnerability reports",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 198,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees on team 12 can access feedback announcement records.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 199,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view company policy configurations that were effective on or before their hire date and either have no expiry or whose expiry is on or after their hire date.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 200,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees on leave can view benefits continuation information",
+    "difficulty": "hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 201,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Department managers can only view salary information for their direct reports from the last 90 days.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 202,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view their own retention bonus benefits if they have been employed for at least 2 years.",
+    "difficulty": "simple",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 203,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view their own employee records classified as Emergency Contact.",
+    "difficulty": "simple",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 204,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Managers can approve pending time off records from employees they supervise.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 205,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view payroll records classified as salary band information for their role from the last 90 days.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 206,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can update their own payroll information marked as Direct Deposit only during maintenance windows (02:00-06:00)..",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 207,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Managers can modify assignment attendance records they supervise only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 208,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Reviewers can modify performance reviews assigned to them while the reviews are in draft status, and updated rows must remain draft reviews.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 209,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view their own career development plan records tracked in performance management during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 210,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Department managers can view exportable payroll records for their own department in their current tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 211,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Budget owners can modify their own current fiscal-year budget rows.",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 212,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance analysts can view budget reports in product metrics during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 213,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can approve pending budget requests assigned to them during an active budget cycle.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 214,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can view expense records from the last 12 months.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 215,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Expense approvers can approve pending expenses assigned to them withn their position level, but cannot approve expenses they submitted themselves.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 216,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Tax specialists can view only current year tax records",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 217,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance analysts can view quarterly revenue records with the report period on or before the current date.",
+    "difficulty": "simple",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 218,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view their own commission expense records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 219,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can view commission expense records for employees they manage from the last 90 days based on expense date.",
+    "difficulty": "moderate",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 220,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Senior engineers can view code review issues for projects they lead.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 221,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Code reviewers can approve pull requests from their assigned repositories only during maintenance windows (02:00-06:00).",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 222,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Engineers can only view test results assigned to them.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 223,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can deploy approved code changes only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 224,
+    "db_id": "enterprise_rls_db",
+    "requirement": "QA engineers can view bug issues assigned to them during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 225,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Assigned technical writers can update user documentation records for their engineering projects.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 226,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product owners can view feature records for their products that are classified as Feature Request feedback.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 227,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Assigned designers can modify draft product feature records only during maintenance windows (02:00-06:00), and updated rows must remain draft UI mockups assigned to them.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 228,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customers can view account balance data in their own sales contract records within their current tenant during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 229,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales representatives can view pipeline-stage contract assigned to them.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 230,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers can update primary contact contract assigned to them.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 231,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees assigned as negotiators can view draft contract assigned to them.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 232,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees assigned as processors can modify delivered fulfillment-stage contract records only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 233,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customers can only view their own invoice during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 234,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Accountants can update payment status for verified invoices only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 235,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can view only verified customer feedback records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 236,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers assigned as feature leads can set the pending priority status of features they lead to High.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 237,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can view public analytics Dashboard data only.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 238,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Metrics owners can update KPI metric only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 239,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Engineers can view performance metrics during review season.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 240,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations leads can view system metrics in real-time during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 241,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can access audit logs linked to incidents.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 242,
+    "db_id": "enterprise_rls_db",
+    "requirement": "On-call DevOps engineers can access active Critical or Blocker incident issues assigned to them.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 243,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can create post mortem document records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 244,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can create published incident status updates in security events when the update is linked to an incident.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 245,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Runbook owners can update their own Runbook engineering project records only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 246,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can update alert threshold system configuration records only during off-hours (before 08:00 or after 18:59).",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 247,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees in team 13 can access distributed trace analytics data.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 248,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Junior engineers can create chaos experiment issue records during maintenance windows (00:00-04:00).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 249,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Administrators can update non-production database access records where the permitted operation is Maintenance.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 250,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can audit all access logs",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 251,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can view DSAR documents during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 252,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can view active data processing contracts assigned to them as processor.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 253,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can modify DPIA documents assigned to them as assessor.",
+    "difficulty": "hard",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 254,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can purge inactive employee records only when the retention date has passed and the employee has a separation date.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 255,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can view consent-related analytics data.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 256,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors can access compliance audit records",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 257,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors can view control effectiveness metrics updated within the last 90 days.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 258,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Risk managers can create risk issues as the reporter.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 259,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Risk managers can track mitigation progress metrics they own.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 260,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can modify policy review workflow records only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 261,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can access their own personal data export records for download.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 262,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can request data deletion for their own employee record when the request date is within the last 30 days.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 263,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers on compliance team 6 can access all Data Processing inventory records in temporal access for export.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 264,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can view vendor customer records where they are assigned as the vendor compliance officer.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 265,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can track data processing contracts assigned to them as processor during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 266,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can view regulatory records for their assigned region/country during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 267,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can modify TIA projects they own only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 268,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can modify SCC template contracts only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 269,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can publish BCR project records.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 270,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Derogation managers can view derogation request issues assigned to them.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 271,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can approve cross border transfers that require review during maintenance windows (02:00-06:00), and the approval must be documented.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 272,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can update adequacy Projects.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 273,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors can review audit logs about data collection practices.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 274,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can view product analytics records categorized as Purpose.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 275,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can modify temporal access records where configuration type is Deletion Schedule only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 276,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors can view encryption configuration records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 277,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can modify pseudonym key records in temporal access.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 278,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can view anonymized analytics records where validation type is Effectiveness during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 279,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can create engineering project records they own for accountability documents.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 280,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can modify privacy default setting records only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 281,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can update open or in-progress rights request issues.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 282,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can access all privacy critical documents in engineering projects.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 283,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Members of legal review team 2 can view legal hold audit log records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 284,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Members of records management team 15 can update temporal access records for retention schedules.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 285,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors can view audit log litigation hold records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 286,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors can access archived evidence audit logs during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 287,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors can view evidence movement audit log records from the last 90 days.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 288,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors can create engineering issue records for investigation findings.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 289,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can update open or in-progress violation issues and set their status to Closed.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 290,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR administrators can impose disciplinary actions only when approval is documented.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 291,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can update security event records that are data breach events with breach notification reports in their current tenant.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 292,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can create regulatory filing records in security events.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 293,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can track closed or resolved corrective action issues when they are the CAP manager.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 294,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Risk managers can update preventive action issues.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 295,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can create management review documents.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 296,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Team members can view improvement metrics updated within the last 90 days.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 297,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can update draft quality-related project documents so that their status remains Draft or becomes Planning.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 298,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations managers can modify active baseline temporal access records only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 299,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Project coordinators can modify project status reports only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 300,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers can view portfolio-level metrics for portfolios they manage in their current tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 301,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can create accommodation request issues.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 302,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Workplace coordinators can view accommodation issues to track their status.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 303,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can view employee relations files assigned to them.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 304,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view their own corrective action issues if resolved during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 305,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR administrators can update ethics violation security events only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 306,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR administrators can view protected audit log records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 307,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can update employee grievance issues.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 308,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can view mediation-case audit log records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 309,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can access employee bargaining data.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 310,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can access employee representation data during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 311,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Tax specialists can access withholding tax records during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 312,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can enroll employees by creating health benefit records for an employee.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 313,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR administrators can update pension benefit records.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 314,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Accountants can insert their own insurance expense records in their current tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 315,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can update benefit records for the EAP program.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 316,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can access employee benefit records for succession planning support.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 317,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can view recruitment issues for candidate applications.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 318,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can view candidate application issues.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 319,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can create interview schedule issues they report.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 320,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can access candidate application feedback for their department.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 321,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can approve pending job offer contracts that require approval, marking them as no longer requiring approval.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 322,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can update employee onboarding checklists issues only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 323,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can access their own onboarding completion metric records during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 324,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can manage all mentorship benefit program records.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 325,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Mentors can provide feedback assigned to themselves for employees they mentor.",
+    "difficulty": "hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 326,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can view course enrollment issues.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 327,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view Learning Path project records where the type matches their job role.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 328,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees assigned to pending course enrollment issues can grade them.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 329,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view their own grade metrics during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 330,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR administrators can update employee records that have certification data.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 331,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can create skill assessment request issues for themselves.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 332,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can update skill assessment issues only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 333,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Assigned employees can create Skill Assessment issue records assigned to themselves.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 334,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can access their own assessment result metrics after 48 hours.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 335,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Career coaches can modify career development plans assigned to them only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 336,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can modify temporal access records for competency frameworks only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 337,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can update temporal access records for role definitions.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 338,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can update employee records with pending evaluation status and keep the evaluation status Pending or Completed.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 339,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance analysts can view salary benchmark data during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 340,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR administrators can manage incentive benefit programs.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 341,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view their own approved bonus expense records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 342,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can publish award nomination issues.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 343,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can create award nomination issue records for other employees.",
+    "difficulty": "moderate",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 344,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Award selection committee members in team 18 can create award vote audit log records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 345,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Members of communications team 12 can create award winner announcement feedback records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 346,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Authenticated employees can view temporal access records for company holiday calendars.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 347,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Accountants can update payroll records during maintenance windows (02:00-06:00, Monday-Friday).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 348,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can view their own exportable payroll records for past pay periods during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 349,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR administrators can create open HR request issues for contract reviews assigned to themselves.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 350,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can create employment reference request issues for themselves.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 351,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can complete pending exit interview issues.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 352,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees with a recorded separation date can submit their own exit feedback records.",
+    "difficulty": "hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 353,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can revoke active temporal access records with a recorded termination date.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 354,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations managers can view asset return documents during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 355,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can remove separated employee records once retention obligations have been met.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 356,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Terminated employees can access their own current payroll record for one year after termination.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 357,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can access archived employee records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 358,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can view compliance log records during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 359,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can grant policy exceptions themselves when the temporary access window has valid start and end times and the end time is in the future.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 360,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can view access records for policy exceptions with recorded expiration dates.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 361,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can update high-value contract records within their approval level.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 362,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can approve unapproved budget records over $500k by marking themselves as approver and setting the approval date to the current timestamp.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 363,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Department managers can approve pending expenses under $5000 in their department only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 364,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Executives in VP Sales, CFO, COO, or VP Engineering roles can approve pending expenses between $5001 and $25000 only during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 365,
+    "db_id": "enterprise_rls_db",
+    "requirement": "C-suite and division executives can approve pending expenses over $25000.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 366,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Regional directors can sign pending contracts for their region.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 367,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers can sign pending supplier contracts over $1M.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 368,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can access confidential documents when their clearance level meets the document's required clearance.",
+    "difficulty": "moderate",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 369,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees with clearance level 4 or higher can view restricted IP artifacts in the code repository.",
+    "difficulty": "moderate",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 370,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees with clearance level 5 or higher can view strategic plan roadmap item rows.",
+    "difficulty": "moderate",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 371,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Level 7 or higher data analysts and finance analysts can view variance reports in metrics.",
+    "difficulty": "moderate",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 372,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees with pay grade 5 or 6 can view internal analytics reports.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 373,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees below level 5 can view only public product analytics reports.",
+    "difficulty": "moderate",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 374,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Teams with team IDs 1 through 5 can access priority customer accounts",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 375,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customer support staff can update minor and medium severity issues only during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 376,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Core engineering roles can update engineering issues with High, Critical, or Blocker severity.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 377,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can access all non-sensitive datasets",
+    "difficulty": "moderate",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 378,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can access all analytics data including sensitive ones during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 379,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can view read-only production access records during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 380,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees with the engineer role can update staging system configuration records during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 381,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Administrators can access any environment during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 382,
+    "db_id": "enterprise_rls_db",
+    "requirement": "QA engineers can view test configuration records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 383,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Core Security employees iew test and staging system configuration records during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 384,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can update approved production system configuration records during maintenance windows (02:00-06:00).",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 385,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations managers can access backup configurations.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L1"
+  },
+  {
+    "id": 386,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can audit access logs for their departments during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 387,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can insert access event records for high-sensitivity data.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 388,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can delete audit logs logged within the last 30 days.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 389,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators and DevOps engineers can update critical production system configuration records only during maintenance windows (02:00-06:00) when enhanced approval has been recorded.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 390,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators or DevOps engineers can update infrastructure system configuration records, but during peak hours (09:00-18:00) enhanced approval is required; outside peak hours no additional approval is needed.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 391,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can delete backup records only after their retention period has expired.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 392,
+    "db_id": "enterprise_rls_db",
+    "requirement": "When documentation is required, operations managers can insert disaster recovery backup test records.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 393,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Build administrators can update approved security patch records only if the patch was deployed within 7 days of release.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 394,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security analysts can mark critical vulnerability records as patched only when the updated row records a resolution date within 24 hours of creation.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 395,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors and compliance officers can view access request issues that were resolved within 2 calendar days.",
+    "difficulty": "moderate",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 396,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators and compliance officers can view high-sensitivity temporal access records only when encryption is enabled both in transit and at rest.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 397,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security admins can view database connection records using TLS 1.2 during business hours (9:00-18:00, Monday-Friday).",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 398,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can rotate gateway-managed API credentials only after the standard 90-day rotation interval has elapsed.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 399,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can review password policy records that require passwords of at least 12 characters and remember at least 5 previous passwords.",
+    "difficulty": "moderate",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 400,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators and auditors can view level 3 or higher privileged account records through multi-factor authentication.",
+    "difficulty": "moderate",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 401,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can review access session records where a 30-minute inactivity timeout is enforced.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 402,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can update sensitive access operation records only when step-up verification was recorded within the last 5 minutes.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 403,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can insert privilege escalation event records only with required and documented approval.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 404,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can create temporary privileged access records only after approval and when an access duration is provided.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 405,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can delete expired privileged access records.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 406,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can view vault-stored secret items only when encryption is enabled.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 407,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can update secret system configuration records when the secret has not been rotated for at least 30 days.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 408,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can create hotfix code commit records only with a valid GPG signature.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 409,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Project owners or assigned reviewers can update project merge status, but a merge cannot be approved until it has at least two approvals.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 410,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can update project code review records only when the updated review includes a security check.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 411,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can create test results for package dependency changes only after the dependency scan has passed.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 412,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can update container image test records only the updated record shows a passed vulnerability scan and approved deployment.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 413,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can peer review infrastructure artifacts in the code repository only during maintenance windows (02:00-06:00), and the updated row must be marked as reviewed.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 414,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can update network ACL configuration records only when the updated record is documented and approved.",
+    "difficulty": "hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 415,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can view firewall configuration records reviewed within the last 90 days.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 416,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators and compliance officers can view VPN access records that meet the approved-device compliance requirement.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 417,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can create remote session security event records only when logging and monitoring are both enabled.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 418,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can view data-transfer access records that use TLS 1.3 encrypted channels.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 419,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators can update database replication access records only when SSL is enabled and the TLS version is at least 1.2.",
+    "difficulty": "hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 420,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Audit leads can view centralized, tamper protected security event records with immutability configured during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 421,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR administrators can update active employee rows only inside the current tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 422,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Managers may update attendance records only inside the current tenant and for rows in their department.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 423,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists may create benefit enrollment rows only for the active current tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 424,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR administrators may delete pending payroll approval rows only within their tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 425,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees can update their own draft expense rows only inside the current tenant, and updated rows must remain owned by that employee in that tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 426,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers may update current payroll rows only within their tenant, and updated rows must remain current in that tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 427,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance analysts may insert revenue records only for the active current tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 428,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Tax specialists may delete draft tax records only inside the current tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 429,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Project owners can update draft engineering projects only in the current tenant, and updated project rows must remain draft projects owned by the same requester in that tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 430,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Project managers may update issue rows whose current status is open or in-progress only within the current tenant, and updated rows must remain within that tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 431,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Repository owners may create repository metadata only for themselves inside the current tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 432,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers may delete failed build rows only within their tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 433,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can review tenant audit logs from pending review to reviewed in their current tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 434,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security analysts can resolve unresolved security events only inside their tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 435,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations managers may create documents only for the active current tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 436,
+    "db_id": "enterprise_rls_db",
+    "requirement": "SRE employees may perform all row-level operations on low-risk system configuration rows in their current tenant, and inserted or updated rows must remain low-risk and in that tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 437,
+    "db_id": "enterprise_rls_db",
+    "requirement": "IAM administrators may revoke expired access grant rows inside the current tenant only after the grant expires_at has passed; the updated row must be unapproved in that tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "temporal",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 438,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers can update active feature rows only inside the current tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 439,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers may update active metrics only within their tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 440,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts may insert analytics rows only for the current tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 441,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Roadmap owners may delete their own deferred roadmap items only within their tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 442,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customer support employees can escalate customer feedback assigned to them inside the current tenant; they may update only open feedback.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 443,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers can update active customer rows assigned to them only inside the current tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 444,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers may update active contracts only within their tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 445,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales representatives may create orders only for their tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "relational",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 446,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers may delete draft invoices only inside the current tenant.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L2"
+  },
+  {
+    "id": 447,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers can close pending customer communication records for accounts they manage inside the current tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 448,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers may update in-progress onboarding rows assigned to them only within their tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 449,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Call center supervisors can update call recording rows only for their current tenant and team.",
+    "difficulty": "simple",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 450,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Call center supervisors may update recorded call recordings to reviewed only within their tenant.",
+    "difficulty": "moderate",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 451,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Support operations employees can read customer rows in their own tenant. To read a customer from another tenant, they must have active, approved, unexpired break-glass read access granted to their application user account for that customer record.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 452,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Support operations employees can update contract rows in their own tenant. Cross-tenant contract updates require an active, approved emergency update access record granted to their application user account for the target tenant's contract records, and updated rows must stay within a permitted tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 453,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Support operations employees can read expense rows in their own tenant. Cross-tenant expense reads require an active finance-review access record granted to their application user account for the target tenant that is still within its expiration time.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 454,
+    "db_id": "enterprise_rls_db",
+    "requirement": "SRE employees can read engineering projects in their own tenant. Cross-tenant project reads require a project-specific temporal read access record granted to their application user account, from an approved device, with a completed step-up check in the last eight hours.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 455,
+    "db_id": "enterprise_rls_db",
+    "requirement": "SRE employees can read audit logs in their own tenant. Cross-tenant audit log reads require an active, verified audit-read temporal access record granted to their application user account for the target tenant that has not expired.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 456,
+    "db_id": "enterprise_rls_db",
+    "requirement": "SecOps responder employees can update security events in their own tenant. Cross-tenant event updates require a verified severity-matched update access record granted to their application user account, with real-time alerting enabled and a response SLA of at most 60 minutes, and the updated row must remain covered by the same rule.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 457,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customer support employees can read product metrics in their own tenant. Cross-tenant metric reads require an active, minimum-necessary temporal access record granted to their application user account and scoped for the target tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 458,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can read analytics rows in their own tenant; analytics rows from another tenant require an approved, unexpired read grant issued to their application account for the row's tenant and a recorded approver.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 459,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Support operations employees can read call recordings in their own tenant; a recording from another tenant requires an approved, unexpired read grant issued to their application account for that tenant and targeting support call recordings.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 460,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR administrators can read employee rows in their own tenant; employee rows from another tenant require a non-deleted read grant issued to their application account for the employee row's tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 461,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations managers can read documents in their own tenant; documents from another tenant require an approved, unexpired operations document grant issued to their application user account for the document tenant, permitting read access, marked for incident response and case review, and recorded in the manager's current tenant by a grant issuer.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 462,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can read invoices in their own tenant; invoices from another tenant require an approved, unexpired sales invoice financial-review grant issued to their application user account, permitting read access and naming an approver.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 523,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Managers and HR admins can delete archived salary history for subordinate employees only inside the current tenant and only when the salary history effective_date is older than seven years.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 524,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can delete closed payroll rows in their department hierarchy inside the current tenant only after 90 days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 525,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can delete voided balance sheet entries in their region hierarchy inside the current tenant only after one year.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 526,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can delete closed non-current bank accounts in their department hierarchy only after seven years.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 527,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can delete failed builds in recursive project trees rooted at projects they own inside the current tenant only after 90 days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 528,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Engineering managers can delete cancelled releases in recursive project trees they own inside the current tenant only when the release_date is older than 180 days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 529,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers can delete abandoned pipeline rows for customers in their recursive customer hierarchy inside the current tenant after 180 days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 530,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers can delete abandoned onboarding rows for customers in their recursive customer hierarchy inside the current tenant after one year.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 531,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Call center supervisors can delete archived recordings for recursive subordinate agents inside the current tenant only after two years.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 532,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Audit leads can delete archived audit logs for employees in their recursive reporting hierarchy inside the current tenant only after seven years.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 533,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations managers can delete resolved low or medium security events for recursive subordinate employees inside the current tenant only after one year.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 534,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Operations managers can delete expired documents in their department hierarchy inside the current tenant after the expiration timestamp passes.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 535,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers can delete archived metrics owned by recursive subordinate employees inside the current tenant only after one year.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 536,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can delete archived analytics owned by recursive subordinate employees inside the current tenant only after one year.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 537,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customer support can delete duplicate resolved feedback assigned to recursive subordinate employees inside the current tenant after 30 days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 538,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Project managers can delete archived issues in recursive project trees they own inside the current tenant only when the issue updated_at is older than 180 days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 539,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Senior engineers can delete archived repositories in recursive project trees rooted at projects they own inside the current tenant only when the repository archived_at is older than 90 days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 540,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customers can delete draft unfulfilled orders for themselves or child customers in their recursive customer hierarchy inside the current tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 541,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can delete voided invoices for customers in a recursive customer hierarchy inside the current tenant only after one year.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 542,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Managers can delete stale pending attendance correction requests for recursive subordinate employees inside the current tenant after 30 days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 543,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can perform all row-level operations on non-archived balance sheet rows in their region hierarchy, and new or updated rows must remain in that same region hierarchy and non-archived.",
+    "difficulty": "hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 544,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers can perform all operations on their own non-archived sales pipeline rows, and new or updated rows must remain assigned to them.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 545,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Call center supervisors can perform all operations on non-archived call recordings for their team, and new or updated rows must stay in that team.",
+    "difficulty": "hard",
+    "attribute_pattern": "combined",
+    "policy_type": "single",
+    "tier": "L3"
+  },
+  {
+    "id": 546,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Engineering managers can perform all row-level operations on planned or hotfix releases in recursive project trees rooted they own inside the current tenant, and new or updated rows must remain planned or hotfix releases in those project trees.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 547,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can perform all row-level operations on active or pending-review bank accounts in their region hierarchy inside the current tenant, and new or updated rows must remain in that region hierarchy and tenant with an allowed account status.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 548,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can insert pending payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 549,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers can insert Not Started onboarding rows only for customers they manage in the current tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 550,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can insert queued build rows inside the current tenant only for planned or hotfix releases in recursive project trees rooted at projects they own.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "single",
+    "tier": "L4"
+  },
+  {
+    "id": 463,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance managers can read expense rows in their current tenant. Finance managers may update expense rows in their current tenant only when the updated row is integrity verified, transaction logged, and its approval sequence does not exceed their position level. Employees may insert their own submitted expense rows in their current tenant only when the amount is at most 5000 and a receipt is required.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 464,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors, audit leads and compliance officers can read all audit logs. Only roles other than auditor and audit lead may insert or update audit log rows, and no one may write a row whose audit status is 'Audit Locked'.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "compliance_invariant",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 465,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Engineers can claim currently unassigned open issues in their current tenant only when the estimated hours are below 8, and the updated row must assign the issue to themselves. Project managers can insert open issues they report only for active projects they own in the current tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 466,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts can read anonymized public product metrics. Product managers can update non-sensitive metrics they own in their current tenant, and the updated row must have metric status 'Validated'. Data analysts may insert metrics that include security metrics in their current tenant only when the metric is anonymized, not sensitive, and starts with metric status 'Draft'.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 467,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can read sales contracts in their current region. Account managers may update contracts they manage only when the contract has no outstanding disputes, and the updated row must have verified payment and an approval status of Approved or Rejected. Account managers may insert contracts in their current tenant and region only when legal review and approval are required, and the discount percentage does not exceed the department discount threshold.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 468,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Application security analysts can read non-archived code repositories in their current tenant. They may insert private, branch-protected repository rows they own only for active projects in their current tenant whose required clearance does not exceed their session clearance level.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 469,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Project managers can read open pull requests they author in their current tenant. They may insert pull requests they author only with status Open, against the main, develop or release branch.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 470,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can read queued build rows they triggered in their current tenant. They may insert CI, Nightly or Hotfix builds they triggered.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 471,
+    "db_id": "enterprise_rls_db",
+    "requirement": "QA engineers can read security tests they own in their current tenant. They may insert security tests they own only when the referenced project is active and the linked issue is open in that same tenant and project.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 472,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can read documents they author in their current tenant and department. They may insert such documents only with a future expiration time.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 473,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Managers can read attendance rows they approved in their current tenant and department. They may insert attendance rows for employees in their recursive subordinate chain in that same department.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 474,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees with a recorded hire date may update their own performance records, and the updated row must remain theirs. Managers can insert submitted performance reviews for their current department.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 475,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees may update their own expense records in their current tenant. Finance managers may insert Submitted expense records in their current tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 476,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers and finance managers can update invoices they manage, but their writes cannot set the payment status to 'Archived'. Finance managers can insert new invoices only with payment status 'Paid'.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 477,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales representatives can update orders where they are the recorded sales rep, but their writes cannot set the fulfillment status to 'Archived'. Sales managers may insert new orders only with fulfillment status 'Pending'.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 478,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product managers with a recorded hire date and data analysts can update metrics they own in their current tenant. Data analysts can insert Live metrics in that tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 479,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Engineers can read features assigned to them in their current tenant. Product managers can delete Archived features they own in that tenant only after they have been released.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 480,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customer support agents can update unresolved feedback assigned to them in their current tenant. Support operations staff can delete resolved feedback in that tenant only after a resolution time has been recorded.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 481,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers can read customer communications for accounts they manage in their current tenant. Sales managers can insert phone communication records in that tenant only when the recorded occurrence time is not in the future.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 482,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customer support agents with a recorded hire date can insert call recordings attributed to themselves in their current tenant only with recording status 'Recorded'. Call center supervisors can delete Archived recordings in that tenant only after they have been archived for at least 30 days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 483,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can read their own current salary history. HR administrators can insert their own final salary history entries only when the effective date is not in the past. HR administrators can delete their own non-current salary history only after its end date has passed.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 484,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance analysts can read current recognized revenue records for their department in the current tenant. Finance managers can update unrecognized revenue records in that tenant, and the updated row must be recognized with a nonnegative amount.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 485,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers can read the audit logs in their current tenant that are still pending review. Audit leads work the same tenant's logs from the other side: they can update a log while it is not archived, leaving it closed with a recorded update time, and can create a new one only when it is an open security log.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 486,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers with a recorded hire date can read non-archived system configurations that require access verification in their current tenant. SREs can update configurations that are in maintenance mode in that tenant, and the updated configuration must have encryption and access verification enabled. SREs can delete archived configurations in that tenant only after their effective period has ended.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 487,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can read backup records they initiated. Database administrators can approve backups, and the updated row must record them as the approver. They may delete completed backups only after the configured retention period has elapsed since the backup end time.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 488,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Engineers can read projects when they are listed as team members and their clearance meets the project's required clearance. Project managers can update projects in that tenant that have not passed the security check, and the updated row must pass the security check with at least two approvals.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "ordinal",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 489,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR specialists can read their own current benefit records while enrollment is open. HR administrators can insert eligible benefit records in that tenant. They may delete non-current benefit records in that tenant after coverage has ended.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 490,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance analysts can read tax records they own while the filing deadline has not passed. Tax specialists can update unfiled tax records in that tenant once the due date has arrived, and the updated row must record a filing time. Tax specialists can insert tax records in that tenant only when the filing date is not after the due date.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 491,
+    "db_id": "enterprise_rls_db",
+    "requirement": "The core engineering roles hold write access to engineering issues: they can update any issue whose severity is High, Critical, or Blocker, and can delete an issue only once it is an archived duplicate assigned to them that has been inactive for more than 90 days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 492,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security administrators run the lifecycle of privileged temporal access records: they can create a temporary access record only after it has been approved and an access duration has been recorded, revoke an active record once a termination date is set, and delete a record that has already expired.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 493,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can read any contract that falls inside the next 90-day renewal window, but can modify one only within the last 30 days before it expires.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 494,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Access to system configuration is gated by the clock as much as by role: employees can read configuration rows during business hours (09:00-18:00, Monday-Friday), operations managers can add disaster recovery configuration in that same window, and administrators can change an existing row only inside the 02:00-06:00 maintenance window.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 495,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Security analysts can read the security event log and resolve any event that is still unresolved inside their own tenant, but removal is kept away from them: a compliance officer is the one who deletes an event, and only once its retention window has elapsed.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 496,
+    "db_id": "enterprise_rls_db",
+    "requirement": "HR staff can read every employee record, but only HR specialists can update one, and never their own. Deletion is held back from HR entirely: a compliance officer can purge an employee record only when it is inactive, its retention date has passed, and the employee has a recorded separation date.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 497,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Everything a product manager does to metrics stays inside their current tenant: they can read the portfolio-level metrics for portfolios they manage, update metrics that are still active, and delete archived metrics owned by employees anywhere in their recursive reporting chain once those metrics are more than a year old.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 498,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Compliance officers own the documentation side of engineering projects: they can read every privacy-critical document, create accountability-document project records under their own name, and modify the transfer impact assessment projects they own, though only during the 02:00-06:00 maintenance window.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 499,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Data analysts handle product analytics end to end within their current tenant: they can read anonymized customer analytics from the last 90 days, insert new analytics rows for that tenant, and delete archived rows owned by employees in their recursive reporting chain once those rows are more than a year old.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 500,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Auditors, working weekdays between 09:00 and 18:00, can read archived evidence audit logs and delete them once they are more than seven years old; compliance officers do the review step in between, moving logs in their current tenant from pending review to reviewed.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 501,
+    "db_id": "enterprise_rls_db",
+    "requirement": "An expense record is created by the employee it belongs to and capped at three times that employee's currently effective monthly allowance, approved by the department manager while it is still pending and under $5000 and only inside the 02:00-06:00 maintenance window, and readable by the department's finance manager during business hours (09:00-18:00, Monday-Friday).",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 502,
+    "db_id": "enterprise_rls_db",
+    "requirement": "All payroll access is confined to the current tenant. Within it, department managers can read the exportable payroll records for their own department, while finance managers can create pending payroll rows for employees inside their department hierarchy, with the payroll row's department matching that employee's department, and can update current payroll rows so long as the row stays current.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 503,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Document permissions follow authorship and project membership: an employee can read project documents from the last 90 days when they either own the project or are listed on its team, edit a document they authored while it is still a draft less than 30 days old, and delete a contract document they authored once it has expired.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 504,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Code repository rows are guarded by clearance for reading and by ownership for writing: reading a restricted IP artifact takes clearance level 4 or higher, repository owners register repository metadata under their own name inside the current tenant, and senior engineers can delete a repository they own only after it has sat archived for at least 90 days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 505,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Customer support employees can escalate the feedback assigned to them inside the current tenant while it is still open, and can delete a piece of feedback only when it is a duplicate that has already been resolved and was submitted within the last seven days.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 506,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Benefit records are maintained only by HR: HR specialists can create benefit enrollment rows for the active current tenant, and HR administrators can update the pension records.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 507,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Employees manage their own attendance entries: they can log their own clock-in and clock-out times, and can delete their own pending correction requests inside the current tenant on weekdays between 09:00 and 18:00, as long as the request is less than 30 days old.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 508,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Budget visibility runs down the department tree - a budget owner can read the budgets they own for their own department and every department beneath it - while changing one takes rank: a finance manager at position level 7 or higher can approve a pending increase request for their own department only when the requested increase stays within 10% of the remaining budget, and only a CFO can delete a closed department budget, only when its cycle is inactive, and only on the last day of the quarter.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 509,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Product feature rows are exposed and edited according to visibility: authenticated internal employees can read features marked public or internal; a guest user can add a feature row only when it is public, marked publicly visible, and created on a weekday between 09:00 and 18:00; and product managers can update active features inside the current tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 510,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Sales managers can read the customers in their assigned region that have been contacted within the last 90 days, and can delete an inactive customer only on a weekday between 09:00 and 18:00, and only when that customer has gone more than three years without contact and holds no active contract.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 511,
+    "db_id": "enterprise_rls_db",
+    "requirement": "QA engineers can read the test results for the products they own, and can approve the release QA records assigned to them except where they are also the assigned developer.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 512,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Procurement officers run the order pipeline: they can read orders that are pending fulfillment, raise new orders in that same pending state for their current tenant, and approve or reject a pending purchase order only when its amount stays within 10000 times their position level.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 513,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Accountants can read the invoices that are pending payment and update the payment status on verified invoices, though only inside the 02:00-06:00 maintenance window. Deleting an invoice is reserved for finance managers, and only while it is still a draft in their current tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 514,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Finance analysts can read quarterly revenue records whose report period is on or before today and can add new revenue rows only for the active current tenant, so nothing is booked forward and nothing crosses tenants. Removing a record is a finance manager's call, limited to voided reports marked as corrections and only after the revenue row has been closed.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 515,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Tax specialists can read only the current year's tax records, and the only rows they can delete are drafts inside their current tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 516,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Department managers can read every performance review in their department, but editing belongs to the assigned reviewer, who can change a review only while it is in draft status and must leave it in draft.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 517,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Call center supervisors own their team's recordings inside the current tenant: they can read the recordings belonging to their team, move a recording from recorded to reviewed, and delete archived recordings belonging to agents anywhere in their recursive reporting chain once those recordings are more than two years old.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 518,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Backup records are read by clearance and written by role: a user at security clearance level 4 or higher can read backup rows during business hours (09:00-18:00, Monday-Friday), build administrators restore approved backups only inside the 02:00-06:00 maintenance window and must leave the row with a restored timestamp and a backup status of Restored, and security administrators delete a backup record once its retention period has expired.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 519,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Strategic roadmap material is gated by seniority on both sides: reading a strategic plan row takes clearance level 5 or higher, and adding a strategic roadmap item to the current tenant takes position level 7 or higher. Roadmap owners can delete only their own items, and only after those items have been deferred, within their tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 520,
+    "db_id": "enterprise_rls_db",
+    "requirement": "DevOps engineers can write build rows only within the recursive project trees rooted at projects they own inside the current tenant: there they can queue a new build for a planned or hotfix release, and can delete a failed build once it is more than 90 days old.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 521,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers run customer onboarding inside the current tenant: they can open a record in the Not Started state for a customer they manage, update the in-progress records assigned to them, and delete an abandoned record for a customer anywhere in their recursive customer hierarchy once it is more than a year old.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  },
+  {
+    "id": 522,
+    "db_id": "enterprise_rls_db",
+    "requirement": "Account managers can read the communication history for the accounts they manage during business hours (09:00-18:00, Monday-Friday), and can close a pending communication record for one of those accounts inside the current tenant.",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "policy_type": "multi",
+    "tier": "L4"
+  }
+]

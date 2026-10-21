@@ -1,0 +1,1962 @@
+[
+ {
+  "id": 1,
+  "predicted_sql": "Any employee can view their own record.\nAny employee can view their manager's record.\nAny employee can view their team's records.\nAny employee can view their department's records.\nAny employee can view their region's records.\nAny employee can view their job role's records.\nAny employee can view their position level's records.\nAny employee can view their user clearance level's records.\nAny employee can view their tenant's records.\nAny employee can view their account's records.\nAny employee can view their account's status.\nAny employee can view their account's last used date.\nAny employee can view their account's type.\nAny employee can view their account's group membership.\nAny employee can view their account's group type.\nAny employee can view their account's has lowercase.\nAny employee can view their account's has numbers.\nAny employee can view their account's has special chars.\nAny employee can view their account's has uppercase.\nAny employee can view their account's hr partner.\nAny employee can view their account's is sensitive.\nAny employee can view their account's justification documented.\nAny employee can view their account's last entitlement review.\nAny employee can view their account's last login date.\nAny employee can view their account's retention date.\nAny employee can view their account's retention period elapsed.\nAny employee can view their account's separation date.\nAny employee can view their account's tenant id.\nAny employee can view their account's user clearance level.\nAny employee can view their account's user integrity level.\nAny employee can view their account's account last used date.\nAny employee can view their account's account status.\nAny employee can view their account's data section.\nAny employee can view their account's program type.\nAny employee can view their account's review status.\nAny employee can view their account's password length.\nAny employee can view their account's request type.\nAny employee can view their account's role type.\nAny employee can view their account's current role.\nAny employee can view their account's office location.\nAny employee can view their account's role.\nAny employee can view their account's phone"
+ },
+ {
+  "id": 2,
+  "predicted_sql": "Employees with the account_manager role can view and edit the personnel records of other employees in their department.\nEmployees with the hr_admin role can view and edit the personnel records of all employees."
+ },
+ {
+  "id": 3,
+  "predicted_sql": ""
+ },
+ {
+  "id": 4,
+  "predicted_sql": ""
+ },
+ {
+  "id": 5,
+  "predicted_sql": ""
+ },
+ {
+  "id": 6,
+  "predicted_sql": ""
+ },
+ {
+  "id": 7,
+  "predicted_sql": ""
+ },
+ {
+  "id": 8,
+  "predicted_sql": ""
+ },
+ {
+  "id": 9,
+  "predicted_sql": ""
+ },
+ {
+  "id": 10,
+  "predicted_sql": ""
+ },
+ {
+  "id": 11,
+  "predicted_sql": ""
+ },
+ {
+  "id": 12,
+  "predicted_sql": ""
+ },
+ {
+  "id": 13,
+  "predicted_sql": ""
+ },
+ {
+  "id": 14,
+  "predicted_sql": "Engineers can view all user feedback.\nAudit lead can view all user feedback.\nHR can view all user feedback.\nFinance can view all user feedback.\nCompliance officer can view all user feedback.\nCOO can view all user feedback.\nCustomer advocacy manager can view all user feedback.\nData analyst can view all user feedback.\nDept manager can view all user feedback.\nDerogation manager can view all user feedback.\nDesigner can view all user feedback.\nDevops engineer can view all user feedback.\nDivision executive can view all user feedback.\nEHS officer can view all user feedback.\nEngineer can view all user feedback.\nEngineering manager can view all user feedback.\nFinance analyst can view all user feedback.\nFinance manager can view all user feedback.\nGuest can view all user feedback.\nHR admin can view all user feedback.\nHR specialist can view all user feedback.\nIAM admin can view all user feedback.\nManager can view all user feedback.\nManufacturing engineer can view all user feedback.\nOperations manager can view all user feedback.\nProcurement officer can view all user feedback.\nProduct manager can view all user feedback.\nProject manager can view all user feedback.\nQA engineer can view all user feedback.\nRisk manager can view all user feedback.\nSales manager can view all user feedback.\nSales rep can view all user feedback.\nSecops engineer can view all user feedback.\nSecurity admin can view all user feedback.\nSecurity analyst can view all user feedback.\nSRE can view all user feedback.\nSustainability officer can view all user feedback.\nTax specialist can view all user feedback.\nVP engineering can view all user feedback.\nVP sales can view all user feedback."
+ },
+ {
+  "id": 15,
+  "predicted_sql": ""
+ },
+ {
+  "id": 16,
+  "predicted_sql": ""
+ },
+ {
+  "id": 17,
+  "predicted_sql": "Engineering managers can view all test records.\nProduct owners can view all test records.\nQA engineers can update test records.\nEngineering managers can update test records.\nProduct owners can update test records."
+ },
+ {
+  "id": 18,
+  "predicted_sql": ""
+ },
+ {
+  "id": 19,
+  "predicted_sql": "SELECT t.test_id, t.test_name, t.test_suite, t.status, t.execution_time, t.last_run, t.project_id, t.test_type, t.environment, t.failure_reason, t.created_at, t.category, t.required_clearance, t.approval_status, t.created_by, t.artifact_type, t.assigned_developer, t.qa_reviewer, t.attestation_signature_valid, t.build_start_time, t.chain_of_custody_documented, t.change_type, t.dependency_scan_status, t.deployment_approved, t.deployment_date, t.patch_type, t.product_owner, t.release_date, t.sbom_generated, t.sbom_valid, t.scan_timestamp, t.vuln_scan_passed, t.time, t.build_end_time, t.release_id, t.owner_id, t.issue_id, t.tenant_id, t.updated_at, t.updated_by, t.deleted_at, t.deleted_by, t.row_version FROM engineering.tests t WHERE t.status = 'failed' AND t.release_id IS NULL AND t.created_at < (CURRENT_DATE - interval '14 days') AND t.required_clearance >= 5;"
+ },
+ {
+  "id": 20,
+  "predicted_sql": ""
+ },
+ {
+  "id": 21,
+  "predicted_sql": ""
+ },
+ {
+  "id": 22,
+  "predicted_sql": ""
+ },
+ {
+  "id": 23,
+  "predicted_sql": ""
+ },
+ {
+  "id": 24,
+  "predicted_sql": ""
+ },
+ {
+  "id": 25,
+  "predicted_sql": "."
+ },
+ {
+  "id": 26,
+  "predicted_sql": ""
+ },
+ {
+  "id": 27,
+  "predicted_sql": "."
+ },
+ {
+  "id": 28,
+  "predicted_sql": ""
+ },
+ {
+  "id": 29,
+  "predicted_sql": ".\nEngineers can view all build records.\nManagers can view all build records.\nAudit leads can view all build records.\nAccount managers can view all build records.\nAccountants can view all build records.\nAdmins can view all build records.\nCompliance officers can view all build records.\nCOOs can view all build records.\nCustomer advocacy managers can view all build records.\nData analysts can view all build records.\nDept managers can view all build records.\nDerogation managers can view all build records.\nDesigners can view all build records.\nDevops engineers can view all build records.\nDivision executives can view all build records.\nEHS officers can view all build records.\nEngineers can view all build records.\nEngineering managers can view all build records.\nFinance analysts can view all build records.\nFinance managers can view all build records.\nGuests can view all build records.\nHR admins can view all build records.\nHR specialists can view all build records.\nIAM admins can view all build records.\nManagers can view all build records.\nManufacturing engineers can view all build records.\nOperations managers can view all build records.\nProcurement officers can view all build records.\nProduct managers can view all build records.\nProject managers can view all build records.\nQA engineers can view all build records.\nRisk managers can view all build records.\nSales managers can view all build records.\nSales reps can view all build records.\nSecops engineers can view all build records.\nSecurity admins can view all build records.\nSecurity analysts can view all build records.\nSREs can view all build records.\nSustainability officers can view all build records.\nTax specialists can view all build records.\nVP engineering can view all build records.\nVP sales can view all build records."
+ },
+ {
+  "id": 30,
+  "predicted_sql": ""
+ },
+ {
+  "id": 31,
+  "predicted_sql": "SELECT c.contract_id, c.contract_value FROM sales.contracts c WHERE c.department_id = current_setting('app.department_id', true)::integer AND c.contract_value <= (SELECT AVG(department_avg_contract_value) FROM sales.contracts WHERE department_id = c.department_id);"
+ },
+ {
+  "id": 32,
+  "predicted_sql": ""
+ },
+ {
+  "id": 33,
+  "predicted_sql": ""
+ },
+ {
+  "id": 34,
+  "predicted_sql": ""
+ },
+ {
+  "id": 35,
+  "predicted_sql": ""
+ },
+ {
+  "id": 36,
+  "predicted_sql": ""
+ },
+ {
+  "id": 37,
+  "predicted_sql": ""
+ },
+ {
+  "id": 38,
+  "predicted_sql": ""
+ },
+ {
+  "id": 39,
+  "predicted_sql": ""
+ },
+ {
+  "id": 40,
+  "predicted_sql": ""
+ },
+ {
+  "id": 41,
+  "predicted_sql": ""
+ },
+ {
+  "id": 42,
+  "predicted_sql": ""
+ },
+ {
+  "id": 43,
+  "predicted_sql": "."
+ },
+ {
+  "id": 44,
+  "predicted_sql": "Engineers can view issues for which they are the assigned engineer during business hours (9:00-18:00, Monday-Friday).\nOther users can view issues for which they are the assigned assignee or reporter during business hours (9:00-18:00, Monday-Friday).\nUsers can view issues for which they are the assigned QA during business hours (9:00-18:00, Monday-Friday).\nUsers can view issues for which they are the assigned cap manager during business hours (9:00-18:00, Monday-Friday).\nUsers can view issues for which they are the assigned nominator during business hours (9:00-18:00, Monday-Friday).\nUsers can view issues for which they are the assigned incident type during business hours (9:00-18:00, Monday-Friday).\nUsers can view issues for which they are the assigned owner during business hours (9:00-18:00, Monday-Friday).\nUsers can view issues for which they are the assigned repo during business hours (9:00-18:00, Monday-Friday).\nUsers can view issues for which they are the assigned created_by during business hours (9:00-18:00, Monday-Friday).\nUsers can view issues for which they are the assigned updated_by during business hours (9:00-18:00, Monday-Friday).\nUsers can view issues for which they are the assigned deleted_by during business hours (9:00-18:00, Monday-Friday).\nUsers can view issues for which they are the assigned row_version during business hours (9:00-18:00, Monday-Friday).\nUsers can view issues for which they are the assigned tenant_id during business hours (9:00-18:00, Monday-Friday)."
+ },
+ {
+  "id": 45,
+  "predicted_sql": ""
+ },
+ {
+  "id": 46,
+  "predicted_sql": ""
+ },
+ {
+  "id": 47,
+  "predicted_sql": ""
+ },
+ {
+  "id": 48,
+  "predicted_sql": ""
+ },
+ {
+  "id": 49,
+  "predicted_sql": ""
+ },
+ {
+  "id": 50,
+  "predicted_sql": "that are relevant to their department."
+ },
+ {
+  "id": 51,
+  "predicted_sql": ""
+ },
+ {
+  "id": 52,
+  "predicted_sql": ""
+ },
+ {
+  "id": 53,
+  "predicted_sql": ".\nManagers can view their team's tax documents.\nFinance can view all tax documents."
+ },
+ {
+  "id": 54,
+  "predicted_sql": ""
+ },
+ {
+  "id": 55,
+  "predicted_sql": "00."
+ },
+ {
+  "id": 56,
+  "predicted_sql": "."
+ },
+ {
+  "id": 57,
+  "predicted_sql": ""
+ },
+ {
+  "id": 58,
+  "predicted_sql": ""
+ },
+ {
+  "id": 59,
+  "predicted_sql": ""
+ },
+ {
+  "id": 60,
+  "predicted_sql": ""
+ },
+ {
+  "id": 61,
+  "predicted_sql": "for any user."
+ },
+ {
+  "id": 62,
+  "predicted_sql": ""
+ },
+ {
+  "id": 63,
+  "predicted_sql": ""
+ },
+ {
+  "id": 64,
+  "predicted_sql": ""
+ },
+ {
+  "id": 65,
+  "predicted_sql": "Engineering staff can view all employee records.\nFinance staff can view all employee records.\nAudit staff can view all employee records.\nHR staff can view all employee records.\nEngineering staff can view all employee records.\nFinance staff can view all employee records.\nAudit staff can view all employee records."
+ },
+ {
+  "id": 66,
+  "predicted_sql": ""
+ },
+ {
+  "id": 67,
+  "predicted_sql": ""
+ },
+ {
+  "id": 68,
+  "predicted_sql": ""
+ },
+ {
+  "id": 69,
+  "predicted_sql": ""
+ },
+ {
+  "id": 70,
+  "predicted_sql": ".\nManagers can view their team's attendance records.\nHR can view all attendance records."
+ },
+ {
+  "id": 71,
+  "predicted_sql": ""
+ },
+ {
+  "id": 72,
+  "predicted_sql": ""
+ },
+ {
+  "id": 73,
+  "predicted_sql": ""
+ },
+ {
+  "id": 74,
+  "predicted_sql": ""
+ },
+ {
+  "id": 75,
+  "predicted_sql": ""
+ },
+ {
+  "id": 76,
+  "predicted_sql": ""
+ },
+ {
+  "id": 77,
+  "predicted_sql": "Operations managers can update operational metrics in their current tenant.\nOperations managers can delete operational metrics in their current tenant.\nOperations managers can SELECT operational metrics in their current tenant.\nOperations managers can SELECT operational metrics in all tenants.\nOperations managers can SELECT operational metrics in all tenants, but only for metrics that are public.\nOperations managers can SELECT operational metrics in all tenants, but only for metrics that are public and have a specific product_id.\nOperations managers can SELECT operational metrics in all tenants, but only for metrics that are public and have a specific product_id, and only for metrics that have a specific metric_category.\nOperations managers can SELECT operational metrics in all tenants, but only for metrics that are public and have a specific product_id, and only for metrics that have a specific metric_category, and only for metrics that have a specific aggregation_level.\nOperations managers can SELECT operational metrics in all tenants, but only for metrics that are public and have a specific product_id, and only for metrics that have a specific metric_category, and only for metrics that have a specific aggregation_level, and only for metrics that have a specific data_class.\nOperations managers can SELECT operational metrics in all tenants, but only for metrics that are public and have a specific product_id, and only for metrics that have a specific metric_category, and only for metrics that have a specific aggregation_level, and only for metrics that have a specific data_class, and only for metrics that have a specific data_period.\nOperations managers can SELECT operational metrics in all tenants, but only for metrics that are public and have a specific product_id, and only for metrics that have a specific metric_category, and only for metrics that have a specific aggregation_level, and only for metrics that have a specific data_class, and only for metrics that have a specific data_period, and only for metrics that have a specific feature_id.\nOperations managers can SELECT operational metrics in all tenants, but only for metrics that are public and have a specific product_id, and only for metrics that have a specific metric_category, and only for metrics that have a specific aggregation_level, and only for metrics that have a"
+ },
+ {
+  "id": 78,
+  "predicted_sql": "Internal employees can view all product features."
+ },
+ {
+  "id": 79,
+  "predicted_sql": "Authenticated internal employees can create product features with public or internal visibility.\nAuthenticated internal employees can update product features with public or internal visibility.\nAuthenticated internal employees can delete product features with public or internal visibility."
+ },
+ {
+  "id": 80,
+  "predicted_sql": "Employees with position level 7 or higher can update strategic roadmap item rows in their current tenant.\nEmployees with position level 7 or higher can delete strategic roadmap item rows in their current tenant.\n SELECT * FROM product.roadmap r WHERE r.tenant_id = 1 AND r.item_type = 'strategic' AND r.priority = 'high' AND r.status = 'active' AND r.department_name = 'Engineering';"
+ },
+ {
+  "id": 81,
+  "predicted_sql": "Employees can update temporal access request records for documents for themselves in their current tenant.\nEmployees can delete temporal access request records for documents for themselves in their current tenant.\nEmployees can SELECT temporal access request records for documents for themselves in their current tenant."
+ },
+ {
+  "id": 82,
+  "predicted_sql": ""
+ },
+ {
+  "id": 83,
+  "predicted_sql": ""
+ },
+ {
+  "id": 84,
+  "predicted_sql": "Guest user can update product feature rows only when the feature is public, visible as public, and created time falls during weekday business hours (9:00-18:00).\nGuest user can delete product feature rows only when the feature is public, visible as public, and created time falls during weekday business hours (9:00-18:00).\nGuest user can SELECT product feature rows only when the feature is public, visible as public, and created time falls during weekday business hours (9:00-18:00)."
+ },
+ {
+  "id": 85,
+  "predicted_sql": ""
+ },
+ {
+  "id": 86,
+  "predicted_sql": "Engineers can update archived audit logs.\nAudit leads can delete archived audit logs."
+ },
+ {
+  "id": 87,
+  "predicted_sql": ""
+ },
+ {
+  "id": 88,
+  "predicted_sql": ""
+ },
+ {
+  "id": 89,
+  "predicted_sql": ""
+ },
+ {
+  "id": 90,
+  "predicted_sql": ""
+ },
+ {
+  "id": 91,
+  "predicted_sql": ""
+ },
+ {
+  "id": 92,
+  "predicted_sql": ""
+ },
+ {
+  "id": 93,
+  "predicted_sql": ""
+ },
+ {
+  "id": 94,
+  "predicted_sql": "."
+ },
+ {
+  "id": 95,
+  "predicted_sql": "Employees can update their own expense records only if the expense date is before the current date.\nEmployees can delete their own expense records only if the expense date is before the current date."
+ },
+ {
+  "id": 96,
+  "predicted_sql": ""
+ },
+ {
+  "id": 97,
+  "predicted_sql": ""
+ },
+ {
+  "id": 98,
+  "predicted_sql": ""
+ },
+ {
+  "id": 99,
+  "predicted_sql": ""
+ },
+ {
+  "id": 100,
+  "predicted_sql": ""
+ },
+ {
+  "id": 101,
+  "predicted_sql": ""
+ },
+ {
+  "id": 102,
+  "predicted_sql": "Product directors can update technology roadmap item rows during business hours (9:00-18:00, Monday-Friday) and only if the item is not yet completed.\nProduct directors can delete technology roadmap item rows during business hours (9:00-18:00, Monday-Friday) and only if the item is not yet completed.\nProduct directors can view technology roadmap item rows during business hours (9:00-18:00, Monday-Friday) and only if the item is not yet completed."
+ },
+ {
+  "id": 103,
+  "predicted_sql": ""
+ },
+ {
+  "id": 104,
+  "predicted_sql": ""
+ },
+ {
+  "id": 105,
+  "predicted_sql": ""
+ },
+ {
+  "id": 106,
+  "predicted_sql": ""
+ },
+ {
+  "id": 107,
+  "predicted_sql": ""
+ },
+ {
+  "id": 108,
+  "predicted_sql": ""
+ },
+ {
+  "id": 109,
+  "predicted_sql": ""
+ },
+ {
+  "id": 110,
+  "predicted_sql": "Operations managers can update disaster recovery configuration during business hours (9:00-18:00, Monday-Friday).\nOperations managers can delete disaster recovery configuration during business hours (9:00-18:00, Monday-Friday).\nOperations managers can SELECT disaster recovery configuration during business hours (9:00-18:00, Monday-Friday).\nOperations managers can SELECT disaster recovery configuration during business hours (9:00-18:00, Monday-Friday).\nOperations managers can SELECT disaster recovery configuration during business hours (9:00-18:00, Monday-Friday)."
+ },
+ {
+  "id": 111,
+  "predicted_sql": ""
+ },
+ {
+  "id": 112,
+  "predicted_sql": "Auditors can update high or critical severity security events during business hours (9:00-18:00, Monday-Friday) if the event was created by the auditor.\nAuditors can delete high or critical severity security events during business hours (9:00-18:00, Monday-Friday) if the event was created by the auditor.\nAuditors can SELECT high or critical severity security events during business hours (9:00-18:00, Monday-Friday) if the event was created by the auditor.\nAuditors can SELECT all security events during business hours (9:00-18:00, Monday-Friday) if the event was created by the auditor.\nAuditors can SELECT all security events during business hours (9:00-18:00, Monday-Friday) if the event was created by the auditor.\nAuditors can SELECT all security events during business hours (9:00-18:00, Monday-Friday) if the event was created by the auditor.\nAuditors can SELECT all security events during business hours (9:00-18:00, Monday-Friday) if the event was created by the auditor.\nAuditors can SELECT all security events during business hours (9:00-18:00, Monday-Friday) if the event was created by the auditor.\nAuditors can SELECT all security events during business hours (9:00-18:00, Monday-Friday) if the event was created by the auditor.\nAuditors can SELECT all security events during business hours (9:00-18:00, Monday-Friday) if the event was created by the auditor.\nAuditors can SELECT all security events during business hours (9:00-18:00, Monday-Friday) if the event was created by the auditor.\nAuditors can SELECT all security events during business hours (9:00-18:00, Monday-Friday) if the event was created by the auditor.\nAuditors can SELECT all security events during business hours (9:00-18"
+ },
+ {
+  "id": 113,
+  "predicted_sql": ""
+ },
+ {
+  "id": 114,
+  "predicted_sql": ""
+ },
+ {
+  "id": 115,
+  "predicted_sql": ""
+ },
+ {
+  "id": 116,
+  "predicted_sql": ""
+ },
+ {
+  "id": 117,
+  "predicted_sql": "Finance managers can view revenue data.\nFinance analysts can view revenue data.\nFinance managers can update revenue data.\nFinance analysts can delete revenue data.\nFinance managers can insert revenue data.\nFinance analysts can view revenue data.\nFinance managers can update revenue data.\nFinance managers can delete revenue data."
+ },
+ {
+  "id": 118,
+  "predicted_sql": ""
+ },
+ {
+  "id": 119,
+  "predicted_sql": "Engineering staff can view and update incident issues.\nEngineering staff can insert and update incident issues during business hours (9:00-18:00, Monday-Friday).\nEngineering staff can delete incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can delete incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues.\nEngineering staff can view and update incident issues."
+ },
+ {
+  "id": 120,
+  "predicted_sql": ""
+ },
+ {
+  "id": 121,
+  "predicted_sql": "."
+ },
+ {
+  "id": 122,
+  "predicted_sql": "Finance managers can view all document records.\nFinance managers can update all document records.\nFinance managers can delete all document records.\nFinance managers can view all document records that are not confidential.\nFinance managers can update all document records that are not confidential.\nFinance managers can delete all document records that are not confidential."
+ },
+ {
+  "id": 123,
+  "predicted_sql": ""
+ },
+ {
+  "id": 124,
+  "predicted_sql": ""
+ },
+ {
+  "id": 125,
+  "predicted_sql": ""
+ },
+ {
+  "id": 126,
+  "predicted_sql": ""
+ },
+ {
+  "id": 127,
+  "predicted_sql": ""
+ },
+ {
+  "id": 128,
+  "predicted_sql": ""
+ },
+ {
+  "id": 129,
+  "predicted_sql": ""
+ },
+ {
+  "id": 130,
+  "predicted_sql": ""
+ },
+ {
+  "id": 131,
+  "predicted_sql": ""
+ },
+ {
+  "id": 132,
+  "predicted_sql": ""
+ },
+ {
+  "id": 133,
+  "predicted_sql": ""
+ },
+ {
+  "id": 134,
+  "predicted_sql": ""
+ },
+ {
+  "id": 135,
+  "predicted_sql": ""
+ },
+ {
+  "id": 136,
+  "predicted_sql": "SELECT m.metric_id, m.metric_name, m.current_value, m.target_value, m.unit, m.product_id, m.owner_id, m.last_updated, m.trend, m.alert_threshold, m.created_at, m.metric_category, m.is_anonymized, m.is_public, m.monitoring_type, m.report_type, m.aggregation_level, m.assessment_date, m.data_class, m.data_period, m.data_section, m.includes_security_metrics, m.metric_freshness, m.processor_type, m.review_season_end, m.review_season_start, m.scope, m.subprocessor_manager, m.validation_type, m.is_sensitive, m.store_id, m.account_id, m.cost_center_id, m.metric_owner, m.mitigation_owner, m.portfolio_manager, m.employee_id, m.student_id, m.updated_at, m.status, m.validated_at, m.feature_id, m.team_id, m.tenant_id FROM product.metrics m WHERE m.store_id = 757071;"
+ },
+ {
+  "id": 137,
+  "predicted_sql": ""
+ },
+ {
+  "id": 138,
+  "predicted_sql": ""
+ },
+ {
+  "id": 139,
+  "predicted_sql": ""
+ },
+ {
+  "id": 140,
+  "predicted_sql": ""
+ },
+ {
+  "id": 141,
+  "predicted_sql": ""
+ },
+ {
+  "id": 142,
+  "predicted_sql": ""
+ },
+ {
+  "id": 143,
+  "predicted_sql": ""
+ },
+ {
+  "id": 144,
+  "predicted_sql": ""
+ },
+ {
+  "id": 145,
+  "predicted_sql": ""
+ },
+ {
+  "id": 146,
+  "predicted_sql": ""
+ },
+ {
+  "id": 147,
+  "predicted_sql": "."
+ },
+ {
+  "id": 148,
+  "predicted_sql": ""
+ },
+ {
+  "id": 149,
+  "predicted_sql": ""
+ },
+ {
+  "id": 150,
+  "predicted_sql": ""
+ },
+ {
+  "id": 151,
+  "predicted_sql": ""
+ },
+ {
+  "id": 152,
+  "predicted_sql": ""
+ },
+ {
+  "id": 153,
+  "predicted_sql": ""
+ },
+ {
+  "id": 154,
+  "predicted_sql": ""
+ },
+ {
+  "id": 155,
+  "predicted_sql": ""
+ },
+ {
+  "id": 156,
+  "predicted_sql": ""
+ },
+ {
+  "id": 157,
+  "predicted_sql": ""
+ },
+ {
+  "id": 158,
+  "predicted_sql": ""
+ },
+ {
+  "id": 159,
+  "predicted_sql": ""
+ },
+ {
+  "id": 160,
+  "predicted_sql": ""
+ },
+ {
+  "id": 161,
+  "predicted_sql": ""
+ },
+ {
+  "id": 162,
+  "predicted_sql": ""
+ },
+ {
+  "id": 163,
+  "predicted_sql": ""
+ },
+ {
+  "id": 164,
+  "predicted_sql": ""
+ },
+ {
+  "id": 165,
+  "predicted_sql": ""
+ },
+ {
+  "id": 166,
+  "predicted_sql": ""
+ },
+ {
+  "id": 167,
+  "predicted_sql": ""
+ },
+ {
+  "id": 168,
+  "predicted_sql": ""
+ },
+ {
+  "id": 169,
+  "predicted_sql": ""
+ },
+ {
+  "id": 170,
+  "predicted_sql": ""
+ },
+ {
+  "id": 171,
+  "predicted_sql": ""
+ },
+ {
+  "id": 172,
+  "predicted_sql": ""
+ },
+ {
+  "id": 173,
+  "predicted_sql": ""
+ },
+ {
+  "id": 174,
+  "predicted_sql": ""
+ },
+ {
+  "id": 175,
+  "predicted_sql": ""
+ },
+ {
+  "id": 176,
+  "predicted_sql": ""
+ },
+ {
+  "id": 177,
+  "predicted_sql": ""
+ },
+ {
+  "id": 178,
+  "predicted_sql": ""
+ },
+ {
+  "id": 179,
+  "predicted_sql": ""
+ },
+ {
+  "id": 180,
+  "predicted_sql": ""
+ },
+ {
+  "id": 181,
+  "predicted_sql": "Managers can view invoices pending payment.\nSales representatives can view invoices pending payment.\nEngineers can view invoices pending payment.\nAudit leads can view invoices pending payment.\nFinance managers can view invoices pending payment.\nHR specialists can view invoices pending payment.\nData analysts can view invoices pending payment.\nDept managers can view invoices pending payment.\nDerogation managers can view invoices pending payment.\nDesigners can view invoices pending payment.\nBuild admins can view invoices pending payment.\nOperations managers can view invoices pending payment.\nProcurement officers can view invoices pending payment.\nProduct managers can view invoices pending payment.\nProject managers can view invoices pending payment.\nQA engineers can view invoices pending payment.\nRisk managers can view invoices pending payment.\nSustainability officers can view invoices pending payment.\nTax specialists can view invoices pending payment.\nVP engineering can view invoices pending payment.\nVP sales can view invoices pending payment."
+ },
+ {
+  "id": 182,
+  "predicted_sql": ""
+ },
+ {
+  "id": 183,
+  "predicted_sql": ""
+ },
+ {
+  "id": 184,
+  "predicted_sql": ""
+ },
+ {
+  "id": 185,
+  "predicted_sql": ""
+ },
+ {
+  "id": 186,
+  "predicted_sql": ""
+ },
+ {
+  "id": 187,
+  "predicted_sql": ""
+ },
+ {
+  "id": 188,
+  "predicted_sql": "Operations managers can view all issues.\nOperations managers can view all engineering.issues.\nOperations managers can view all engineering.issues.issue_id.\nOperations managers can view all engineering.issues.title.\nOperations managers can view all engineering.issues.description.\nOperations managers can view all engineering.issues.status.\nOperations managers can view all engineering.issues.priority.\nOperations managers can view all engineering.issues.severity.\nOperations managers can view all engineering.issues.assignee_id.\nOperations managers can view all engineering.issues.reporter_id.\nOperations managers can view all engineering.issues.project_id.\nOperations managers can view all engineering.issues.created_at.\nOperations managers can view all engineering.issues.updated_at.\nOperations managers can view all engineering.issues.due_date.\nOperations managers can view all engineering.issues.labels.\nOperations managers can view all engineering.issues.estimated_hours.\nOperations managers can view all engineering.issues.issue_type.\nOperations managers can view all engineering.issues.project_lead.\nOperations managers can view all engineering.issues.day.\nOperations managers can view all engineering.issues.category.\nOperations managers can view all engineering.issues.employee_id.\nOperations managers can view all engineering.issues.resolution_date.\nOperations managers can view all engineering.issues.assigned_qa.\nOperations managers can view all engineering.issues.cap_manager.\nOperations managers can view all engineering.issues.creation_date.\nOperations managers can view all engineering.issues.discovery_date.\nOperations managers can view all engineering.issues.issue_category.\nOperations managers can view all engineering.issues.last_test_date.\nOperations managers can view all engineering.issues.patch_date.\nOperations managers can view all engineering.issues.playbook_documented.\nOperations managers can view all engineering.issues.playbook_tested.\nOperations managers can view all engineering.issues.pm_id.\nOperations managers"
+ },
+ {
+  "id": 189,
+  "predicted_sql": ""
+ },
+ {
+  "id": 190,
+  "predicted_sql": ""
+ },
+ {
+  "id": 191,
+  "predicted_sql": ""
+ },
+ {
+  "id": 192,
+  "predicted_sql": ""
+ },
+ {
+  "id": 193,
+  "predicted_sql": ""
+ },
+ {
+  "id": 194,
+  "predicted_sql": ""
+ },
+ {
+  "id": 195,
+  "predicted_sql": ""
+ },
+ {
+  "id": 196,
+  "predicted_sql": ""
+ },
+ {
+  "id": 197,
+  "predicted_sql": "."
+ },
+ {
+  "id": 198,
+  "predicted_sql": ""
+ },
+ {
+  "id": 199,
+  "predicted_sql": ""
+ },
+ {
+  "id": 200,
+  "predicted_sql": "."
+ },
+ {
+  "id": 201,
+  "predicted_sql": ""
+ },
+ {
+  "id": 202,
+  "predicted_sql": ""
+ },
+ {
+  "id": 203,
+  "predicted_sql": "Employees can view their own employee records classified as Manager.\nEmployees can view their own employee records classified as Supervisor.\nEmployees can view their own employee records classified as Team Lead.\nEmployees can view their own employee records classified as Director.\nEmployees can view their own employee records classified as Executive.\nEmployees can view their own employee records classified as High Manager.\nEmployees can view their own employee records classified as Lead.\nEmployees can view their own employee records classified as Manager.\nEmployees can view their own employee records classified as Supervisor.\nEmployees can view their own employee records classified as Team Lead.\nEmployees can view their own employee records classified as Director.\nEmployees can view their own employee records classified as Executive.\nEmployees can view their own employee records classified as High Manager.\nEmployees can view their own employee records classified as Lead.\nEmployees can view their own employee records classified as Manager.\nEmployees can view their own employee records classified as Supervisor.\nEmployees can view their own employee records classified as Team Lead.\nEmployees can view their own employee records classified as Director.\nEmployees can view their own employee records classified as Executive.\nEmployees can view their own employee records classified as High Manager.\nEmployees can view their own employee records classified as Lead.\nEmployees can view their own employee records classified as Manager.\nEmployees can view their own employee records classified as Supervisor.\nEmployees can view their own employee records classified as Team Lead.\nEmployees can view their own employee records classified as Director.\nEmployees can view their own employee records classified as Executive.\nEmployees can view their own employee records classified as High Manager.\nEmployees can view their own employee records classified as Lead.\nEmployees can view their own employee records classified as Manager.\nEmployees can view their own employee records classified as Supervisor.\nEmployees can view their own employee records classified as Team Lead.\nEmployees can view their own employee records classified as Director.\nEmployees can view their own employee"
+ },
+ {
+  "id": 204,
+  "predicted_sql": ""
+ },
+ {
+  "id": 205,
+  "predicted_sql": ""
+ },
+ {
+  "id": 206,
+  "predicted_sql": ""
+ },
+ {
+  "id": 207,
+  "predicted_sql": ""
+ },
+ {
+  "id": 208,
+  "predicted_sql": ""
+ },
+ {
+  "id": 209,
+  "predicted_sql": "Employees can view their own performance reviews tracked in performance management during business hours (09:00-18:00, Monday-Friday).\nEmployees can view their own performance review feedback tracked in performance management during business hours (09:00-18:00, Monday-Friday).\nEmployees can view their own performance review comments tracked in performance management during business hours (09:00-18:00, Monday-Friday).\nEmployees can view their own performance review goals tracked in performance management during business hours (09:00-18:00, Monday-Friday).\nEmployees can view their own performance review skills development tracked in performance management during business hours (09:00-18:00, Monday-Friday).\nEmployees can view their own performance review teamwork tracked in performance management during business hours (09:00-18:00, Monday-Friday).\nEmployees can view their own performance review leadership tracked in performance management during business hours (09:00-18:00, Monday-Friday).\nEmployees can view their own performance review overall rating tracked in performance management during business hours (09:00-18:00, Monday-Friday).\nEmployees can view their own performance review next review date tracked in performance management during business hours (09:00-18:00, Monday-Friday).\nEmployees can view their own performance review status tracked in performance management during business hours (09:00-18:00, Monday-Friday).\nEmployees can view their own performance review created at tracked in performance management during business hours (09:00-18:00, Monday-Friday).\nEmployees can view their own performance review updated at tracked in performance management during business hours (09:00-18:00, Monday-Friday).\nEmployees can view their own performance review deleted at tracked in performance management during business hours (09:00-18:00, Monday-Friday).\nEmployees can view their own performance review deleted"
+ },
+ {
+  "id": 210,
+  "predicted_sql": ""
+ },
+ {
+  "id": 211,
+  "predicted_sql": "Budget managers can modify any budget row.\nFinance managers can modify any budget row.\nDepartment managers can modify any budget row.\nAudit leads can modify any budget row.\nBuild admins can modify any budget row.\nCEOs can modify any budget row.\nCFOs can modify any budget row.\nCompliance officers can modify any budget row.\nCOOs can modify any budget row.\nCustomer advocacy managers can modify any budget row.\nData analysts can modify any budget row.\nDept managers can modify any budget row.\nDerogation managers can modify any budget row.\nDesigners can modify any budget row.\nDivision executives can modify any budget row.\nEHS officers can modify any budget row.\nEngineers can modify any budget row.\nEngineering managers can modify any budget row.\nFinance analysts can modify any budget row.\nFinance managers can modify any budget row.\nGuests can modify any budget row.\nHR admins can modify any budget row.\nHR specialists can modify any budget row.\nIAM admins can modify any budget row.\nManagers can modify any budget row.\nManufacturing engineers can modify any budget row.\nOperations managers can modify any budget row.\nProcurement officers can modify any budget row.\nProduct managers can modify any budget row.\nProject managers can modify any budget row.\nQA engineers can modify any budget row.\nRisk managers can modify any budget row.\nSales managers can modify any budget row.\nSales reps can modify any budget row.\nSecops engineers can modify any budget row.\nSecurity admins can modify any budget row.\nSecurity analysts can modify any budget row.\nSREs can modify any budget row.\nSustainability officers can modify any budget row.\nTax specialists can modify any budget row.\nVP engineering can modify any budget row.\nVP sales can modify any budget row."
+ },
+ {
+  "id": 212,
+  "predicted_sql": ""
+ },
+ {
+  "id": 213,
+  "predicted_sql": ""
+ },
+ {
+  "id": 214,
+  "predicted_sql": ""
+ },
+ {
+  "id": 215,
+  "predicted_sql": ""
+ },
+ {
+  "id": 216,
+  "predicted_sql": "."
+ },
+ {
+  "id": 217,
+  "predicted_sql": ""
+ },
+ {
+  "id": 218,
+  "predicted_sql": "Managers can view all commission expense records.\nFinance can view all commission expense records."
+ },
+ {
+  "id": 219,
+  "predicted_sql": ""
+ },
+ {
+  "id": 220,
+  "predicted_sql": ""
+ },
+ {
+  "id": 221,
+  "predicted_sql": ""
+ },
+ {
+  "id": 222,
+  "predicted_sql": ""
+ },
+ {
+  "id": 223,
+  "predicted_sql": ""
+ },
+ {
+  "id": 224,
+  "predicted_sql": ""
+ },
+ {
+  "id": 225,
+  "predicted_sql": ""
+ },
+ {
+  "id": 226,
+  "predicted_sql": ""
+ },
+ {
+  "id": 227,
+  "predicted_sql": ""
+ },
+ {
+  "id": 228,
+  "predicted_sql": ""
+ },
+ {
+  "id": 229,
+  "predicted_sql": ""
+ },
+ {
+  "id": 230,
+  "predicted_sql": ""
+ },
+ {
+  "id": 231,
+  "predicted_sql": "Employees assigned as negotiators can view finalized contracts assigned to them.\nEmployees assigned as negotiators can view contracts in the review stage.\nEmployees assigned as negotiators can view contracts in the approval stage.\nEmployees assigned as negotiators can view contracts in the final approval stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators can view contracts in the final review stage.\nEmployees assigned as negotiators"
+ },
+ {
+  "id": 232,
+  "predicted_sql": ""
+ },
+ {
+  "id": 233,
+  "predicted_sql": ""
+ },
+ {
+  "id": 234,
+  "predicted_sql": ""
+ },
+ {
+  "id": 235,
+  "predicted_sql": "SELECT * FROM product.user_feedback uf WHERE uf.is_verified = TRUE AND uf.tenant_id = 1;"
+ },
+ {
+  "id": 236,
+  "predicted_sql": ""
+ },
+ {
+  "id": 237,
+  "predicted_sql": ""
+ },
+ {
+  "id": 238,
+  "predicted_sql": ""
+ },
+ {
+  "id": 239,
+  "predicted_sql": ""
+ },
+ {
+  "id": 240,
+  "predicted_sql": ""
+ },
+ {
+  "id": 241,
+  "predicted_sql": ""
+ },
+ {
+  "id": 242,
+  "predicted_sql": ""
+ },
+ {
+  "id": 243,
+  "predicted_sql": ""
+ },
+ {
+  "id": 244,
+  "predicted_sql": ""
+ },
+ {
+  "id": 245,
+  "predicted_sql": ""
+ },
+ {
+  "id": 246,
+  "predicted_sql": ""
+ },
+ {
+  "id": 247,
+  "predicted_sql": ""
+ },
+ {
+  "id": 248,
+  "predicted_sql": ""
+ },
+ {
+  "id": 249,
+  "predicted_sql": ""
+ },
+ {
+  "id": 250,
+  "predicted_sql": "."
+ },
+ {
+  "id": 251,
+  "predicted_sql": ""
+ },
+ {
+  "id": 252,
+  "predicted_sql": ""
+ },
+ {
+  "id": 253,
+  "predicted_sql": ""
+ },
+ {
+  "id": 254,
+  "predicted_sql": ""
+ },
+ {
+  "id": 255,
+  "predicted_sql": ""
+ },
+ {
+  "id": 256,
+  "predicted_sql": "."
+ },
+ {
+  "id": 257,
+  "predicted_sql": ""
+ },
+ {
+  "id": 258,
+  "predicted_sql": "Engineers can create risk issues as the assignee.\nEngineers can view risk issues as the assignee.\nEngineers can view risk issues as the reporter.\nEngineers can view risk issues as the owner.\nEngineers can view risk issues as the project lead.\nEngineers can view risk issues as the cap manager.\nEngineers can view risk issues as the nominated engineer.\nEngineers can view risk issues as the derogation manager.\nEngineers can view risk issues as the oncall engineer.\nEngineers can view risk issues as the assignee of a related issue.\nEngineers can view risk issues as the reporter of a related issue.\nEngineers can view risk issues as the owner of a related issue.\nEngineers can view risk issues as the project lead of a related issue.\nEngineers can view risk issues as the cap manager of a related issue.\nEngineers can view risk issues as the nominated engineer of a related issue.\nEngineers can view risk issues as the derogation manager of a related issue.\nEngineers can view risk issues as the oncall engineer of a related issue."
+ },
+ {
+  "id": 259,
+  "predicted_sql": ""
+ },
+ {
+  "id": 260,
+  "predicted_sql": ""
+ },
+ {
+  "id": 261,
+  "predicted_sql": ""
+ },
+ {
+  "id": 262,
+  "predicted_sql": ""
+ },
+ {
+  "id": 263,
+  "predicted_sql": ""
+ },
+ {
+  "id": 264,
+  "predicted_sql": ""
+ },
+ {
+  "id": 265,
+  "predicted_sql": ""
+ },
+ {
+  "id": 266,
+  "predicted_sql": ""
+ },
+ {
+  "id": 267,
+  "predicted_sql": ""
+ },
+ {
+  "id": 268,
+  "predicted_sql": ""
+ },
+ {
+  "id": 269,
+  "predicted_sql": ""
+ },
+ {
+  "id": 270,
+  "predicted_sql": ""
+ },
+ {
+  "id": 271,
+  "predicted_sql": ""
+ },
+ {
+  "id": 272,
+  "predicted_sql": ""
+ },
+ {
+  "id": 273,
+  "predicted_sql": ""
+ },
+ {
+  "id": 274,
+  "predicted_sql": ""
+ },
+ {
+  "id": 275,
+  "predicted_sql": ""
+ },
+ {
+  "id": 276,
+  "predicted_sql": ""
+ },
+ {
+  "id": 277,
+  "predicted_sql": ""
+ },
+ {
+  "id": 278,
+  "predicted_sql": ""
+ },
+ {
+  "id": 279,
+  "predicted_sql": ""
+ },
+ {
+  "id": 280,
+  "predicted_sql": ""
+ },
+ {
+  "id": 281,
+  "predicted_sql": ""
+ },
+ {
+  "id": 282,
+  "predicted_sql": ""
+ },
+ {
+  "id": 283,
+  "predicted_sql": ""
+ },
+ {
+  "id": 284,
+  "predicted_sql": ""
+ },
+ {
+  "id": 285,
+  "predicted_sql": ""
+ },
+ {
+  "id": 286,
+  "predicted_sql": ""
+ },
+ {
+  "id": 287,
+  "predicted_sql": ""
+ },
+ {
+  "id": 288,
+  "predicted_sql": ""
+ },
+ {
+  "id": 289,
+  "predicted_sql": ""
+ },
+ {
+  "id": 290,
+  "predicted_sql": ""
+ },
+ {
+  "id": 291,
+  "predicted_sql": ""
+ },
+ {
+  "id": 292,
+  "predicted_sql": ""
+ },
+ {
+  "id": 293,
+  "predicted_sql": ""
+ },
+ {
+  "id": 294,
+  "predicted_sql": ""
+ },
+ {
+  "id": 295,
+  "predicted_sql": ""
+ },
+ {
+  "id": 296,
+  "predicted_sql": ""
+ },
+ {
+  "id": 297,
+  "predicted_sql": ""
+ },
+ {
+  "id": 298,
+  "predicted_sql": ""
+ },
+ {
+  "id": 299,
+  "predicted_sql": ""
+ },
+ {
+  "id": 300,
+  "predicted_sql": ""
+ },
+ {
+  "id": 301,
+  "predicted_sql": ""
+ },
+ {
+  "id": 302,
+  "predicted_sql": ""
+ },
+ {
+  "id": 303,
+  "predicted_sql": ""
+ },
+ {
+  "id": 304,
+  "predicted_sql": "Employees can view all issues if resolved outside of business hours (9:00-18:00, Monday-Friday) and they are a member of the engineering team.\nEmployees can view all issues if resolved outside of business hours (9:00-18:00, Monday-Friday) and they are a member of the engineering team.\nEmployees can view all issues if resolved outside of business hours (9:00-18:00, Monday-Friday) and they are a member of the engineering team."
+ },
+ {
+  "id": 305,
+  "predicted_sql": ""
+ },
+ {
+  "id": 306,
+  "predicted_sql": ""
+ },
+ {
+  "id": 307,
+  "predicted_sql": ""
+ },
+ {
+  "id": 308,
+  "predicted_sql": ""
+ },
+ {
+  "id": 309,
+  "predicted_sql": ""
+ },
+ {
+  "id": 310,
+  "predicted_sql": ""
+ },
+ {
+  "id": 311,
+  "predicted_sql": ""
+ },
+ {
+  "id": 312,
+  "predicted_sql": ""
+ },
+ {
+  "id": 313,
+  "predicted_sql": ""
+ },
+ {
+  "id": 314,
+  "predicted_sql": ""
+ },
+ {
+  "id": 315,
+  "predicted_sql": ""
+ },
+ {
+  "id": 316,
+  "predicted_sql": ""
+ },
+ {
+  "id": 317,
+  "predicted_sql": ""
+ },
+ {
+  "id": 318,
+  "predicted_sql": ""
+ },
+ {
+  "id": 319,
+  "predicted_sql": ""
+ },
+ {
+  "id": 320,
+  "predicted_sql": ""
+ },
+ {
+  "id": 321,
+  "predicted_sql": ""
+ },
+ {
+  "id": 322,
+  "predicted_sql": ""
+ },
+ {
+  "id": 323,
+  "predicted_sql": ""
+ },
+ {
+  "id": 324,
+  "predicted_sql": ""
+ },
+ {
+  "id": 325,
+  "predicted_sql": ""
+ },
+ {
+  "id": 326,
+  "predicted_sql": ""
+ },
+ {
+  "id": 327,
+  "predicted_sql": ""
+ },
+ {
+  "id": 328,
+  "predicted_sql": ""
+ },
+ {
+  "id": 329,
+  "predicted_sql": ""
+ },
+ {
+  "id": 330,
+  "predicted_sql": ""
+ },
+ {
+  "id": 331,
+  "predicted_sql": ""
+ },
+ {
+  "id": 332,
+  "predicted_sql": ""
+ },
+ {
+  "id": 333,
+  "predicted_sql": ""
+ },
+ {
+  "id": 334,
+  "predicted_sql": ""
+ },
+ {
+  "id": 335,
+  "predicted_sql": ""
+ },
+ {
+  "id": 336,
+  "predicted_sql": ""
+ },
+ {
+  "id": 337,
+  "predicted_sql": ""
+ },
+ {
+  "id": 338,
+  "predicted_sql": ""
+ },
+ {
+  "id": 339,
+  "predicted_sql": ""
+ },
+ {
+  "id": 340,
+  "predicted_sql": ""
+ },
+ {
+  "id": 341,
+  "predicted_sql": ""
+ },
+ {
+  "id": 342,
+  "predicted_sql": ""
+ },
+ {
+  "id": 343,
+  "predicted_sql": ""
+ },
+ {
+  "id": 344,
+  "predicted_sql": "SELECT o.audit_logs.employee_id, o.audit_logs.action, o.audit_logs.table_name, o.audit_logs.record_id, o.audit_logs.logged_at, o.audit_logs.ip_address, o.audit_logs.user_agent, o.audit_logs.session_id, o.audit_logs.record_type, o.audit_logs.created_at, o.audit_logs.log_type, o.audit_logs.archived, o.audit_logs.audit_status, o.audit_logs.confidentiality_level, o.audit_logs.evidence_status, o.audit_logs.incident_id, o.audit_logs.export_size, o.audit_logs.tenant_id, o.audit_logs.updated_at, o.audit_logs.created_by, o.audit_logs.updated_by, o.audit_logs.deleted_at, o.audit_logs.deleted_by, o.audit_logs.row_version FROM o.audit_logs WHERE o.audit_logs.employee_id IN (SELECT employee_id FROM o.team_members WHERE team_id = 18) AND o.audit_logs.action = 'create' AND o.audit_logs.table_name = 'award_vote_audit_log';"
+ },
+ {
+  "id": 345,
+  "predicted_sql": ""
+ },
+ {
+  "id": 346,
+  "predicted_sql": ""
+ },
+ {
+  "id": 347,
+  "predicted_sql": "Engineers can update payroll records during maintenance windows (02:00-06:00, Monday-Friday) and on weekends (Saturday-Sunday).\nManagers can update payroll records during maintenance windows (02:00-06:00, Monday-Friday) and on weekends (Saturday-Sunday).\nHR can update payroll records during maintenance windows (02:00-06:00, Monday-Friday) and on weekends (Saturday-Sunday).\nAudit Leads can update payroll records during maintenance windows (02:00-06:00, Monday-Friday) and on weekends (Saturday-Sunday).\nBuild Admins can update payroll records during maintenance windows (02:00-06:00, Monday-Friday) and on weekends (Saturday-Sunday).\nCEOs can update payroll records during maintenance windows (02:00-06:00, Monday-Friday) and on weekends (Saturday-Sunday).\nCFOs can update payroll records during maintenance windows (02:00-06:00, Monday-Friday) and on weekends (Saturday-Sunday).\nCompliance Officers can update payroll records during maintenance windows (02:00-06:00, Monday-Friday) and on weekends (Saturday-Sunday).\nCOOs can update payroll records during maintenance windows (02:00-06:00, Monday-Friday) and on weekends (Saturday-Sunday).\nCustomer Advocacy Managers can update payroll records during maintenance windows (02:00-06:00, Monday-Friday) and on weekends (Saturday-Sunday).\nData Analysts can update payroll records during maintenance windows (02:00-06:00, Monday-Friday) and on weekends (Saturday-Sunday).\nDept Managers can update payroll records during maintenance windows (02:00-06:00, Monday-Friday) and on weekends ("
+ },
+ {
+  "id": 348,
+  "predicted_sql": ""
+ },
+ {
+  "id": 349,
+  "predicted_sql": ""
+ },
+ {
+  "id": 350,
+  "predicted_sql": "Employees can view and update their own employment reference request issues.\nEmployees can view and update their own employment reference request issues that are assigned to them.\nEmployees can view and update their own employment reference request issues that are assigned to them and have a status of 'open'.\nEmployees can view and update their own employment reference request issues that are assigned to them and have a status of 'open' and a priority of 'high'.\nEmployees can view and update their own employment reference request issues that are assigned to them and have a status of 'open' and a priority of 'high' and a severity of 'critical'.\nEmployees can view and update their own employment reference request issues that are assigned to them and have a status of 'open' and a priority of 'high' and a severity of 'critical' and a category of 'active'.\nEmployees can view and update their own employment reference request issues that are assigned to them and have a status of 'open' and a priority of 'high' and a severity of 'critical' and a category of 'active' and a day of 'Monday'.\nEmployees can view and update their own employment reference request issues that are assigned to them and have a status of 'open' and a priority of 'high' and a severity of 'critical' and a category of 'active' and a day of 'Monday' and a time of 'morning'.\nEmployees can view and update their own employment reference request issues that are assigned to them and have a status of 'open' and a priority of 'high' and a severity of 'critical' and a category of 'active' and a day of 'Monday' and a time of 'morning' and a service_area of 'engineering'.\nEmployees can view and update their own employment reference request issues that are assigned to them and have a status of 'open' and a priority of 'high' and a severity of 'critical' and a category of 'active' and a day of 'Monday' and a time of 'morning' and a service_area of 'engineering' and a projects of 'project1,project2'.\nEmployees can view and update their own employment reference request issues that are assigned to them and have"
+ },
+ {
+  "id": 351,
+  "predicted_sql": ""
+ },
+ {
+  "id": 352,
+  "predicted_sql": ""
+ },
+ {
+  "id": 353,
+  "predicted_sql": ""
+ },
+ {
+  "id": 354,
+  "predicted_sql": ""
+ },
+ {
+  "id": 355,
+  "predicted_sql": ""
+ },
+ {
+  "id": 356,
+  "predicted_sql": ""
+ },
+ {
+  "id": 357,
+  "predicted_sql": ""
+ },
+ {
+  "id": 358,
+  "predicted_sql": ""
+ },
+ {
+  "id": 359,
+  "predicted_sql": ""
+ },
+ {
+  "id": 360,
+  "predicted_sql": ""
+ },
+ {
+  "id": 361,
+  "predicted_sql": ""
+ },
+ {
+  "id": 362,
+  "predicted_sql": ""
+ },
+ {
+  "id": 363,
+  "predicted_sql": ""
+ },
+ {
+  "id": 364,
+  "predicted_sql": ""
+ },
+ {
+  "id": 365,
+  "predicted_sql": ""
+ },
+ {
+  "id": 366,
+  "predicted_sql": ""
+ },
+ {
+  "id": 367,
+  "predicted_sql": ""
+ },
+ {
+  "id": 368,
+  "predicted_sql": ""
+ },
+ {
+  "id": 369,
+  "predicted_sql": ""
+ },
+ {
+  "id": 370,
+  "predicted_sql": ""
+ },
+ {
+  "id": 371,
+  "predicted_sql": ""
+ },
+ {
+  "id": 372,
+  "predicted_sql": ""
+ },
+ {
+  "id": 373,
+  "predicted_sql": ""
+ },
+ {
+  "id": 374,
+  "predicted_sql": "."
+ },
+ {
+  "id": 375,
+  "predicted_sql": ""
+ },
+ {
+  "id": 376,
+  "predicted_sql": "Core engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Critical, or Blocker severity.\nCore engineering roles can update engineering issues with High, Crit"
+ },
+ {
+  "id": 377,
+  "predicted_sql": ".\nEngineers can access all datasets.\nSales managers can access all datasets.\nProduct managers can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analysts can access all datasets.\nData analyst"
+ },
+ {
+  "id": 378,
+  "predicted_sql": ""
+ },
+ {
+  "id": 379,
+  "predicted_sql": ""
+ },
+ {
+  "id": 380,
+  "predicted_sql": ""
+ },
+ {
+  "id": 381,
+  "predicted_sql": "Engineers can access any environment during business hours (9:00-18:00, Monday-Friday) and can access the production environment at any time.\nOperations can access any environment during business hours (9:00-18:00, Monday-Friday) and can access the production environment at any time.\nSecurity can access any environment during business hours (9:00-18:00, Monday-Friday) and can access the production environment at any time."
+ },
+ {
+  "id": 382,
+  "predicted_sql": "SELECT * FROM operations.system_config sc WHERE sc.config_key ilike '%test%' AND sc.tenant_id = 757071;"
+ },
+ {
+  "id": 383,
+  "predicted_sql": ""
+ },
+ {
+  "id": 384,
+  "predicted_sql": ""
+ },
+ {
+  "id": 385,
+  "predicted_sql": ""
+ },
+ {
+  "id": 386,
+  "predicted_sql": ""
+ },
+ {
+  "id": 387,
+  "predicted_sql": ""
+ },
+ {
+  "id": 388,
+  "predicted_sql": ""
+ },
+ {
+  "id": 389,
+  "predicted_sql": ""
+ },
+ {
+  "id": 390,
+  "predicted_sql": ""
+ },
+ {
+  "id": 391,
+  "predicted_sql": ""
+ },
+ {
+  "id": 392,
+  "predicted_sql": "When a disaster recovery backup test record is inserted, the documentation_required field must be set to TRUE.\nWhen a disaster recovery backup test record is inserted, the test_type field must be set to 'DRBT'."
+ },
+ {
+  "id": 393,
+  "predicted_sql": ""
+ },
+ {
+  "id": 394,
+  "predicted_sql": ""
+ },
+ {
+  "id": 395,
+  "predicted_sql": ""
+ },
+ {
+  "id": 396,
+  "predicted_sql": ""
+ },
+ {
+  "id": 397,
+  "predicted_sql": ""
+ },
+ {
+  "id": 398,
+  "predicted_sql": ""
+ },
+ {
+  "id": 399,
+  "predicted_sql": ""
+ },
+ {
+  "id": 400,
+  "predicted_sql": ""
+ },
+ {
+  "id": 401,
+  "predicted_sql": ""
+ },
+ {
+  "id": 402,
+  "predicted_sql": ""
+ },
+ {
+  "id": 403,
+  "predicted_sql": ""
+ },
+ {
+  "id": 404,
+  "predicted_sql": ""
+ },
+ {
+  "id": 405,
+  "predicted_sql": ""
+ },
+ {
+  "id": 406,
+  "predicted_sql": ""
+ },
+ {
+  "id": 407,
+  "predicted_sql": ""
+ },
+ {
+  "id": 408,
+  "predicted_sql": ""
+ },
+ {
+  "id": 409,
+  "predicted_sql": ""
+ },
+ {
+  "id": 410,
+  "predicted_sql": ""
+ },
+ {
+  "id": 411,
+  "predicted_sql": ""
+ },
+ {
+  "id": 412,
+  "predicted_sql": ""
+ },
+ {
+  "id": 413,
+  "predicted_sql": ""
+ },
+ {
+  "id": 414,
+  "predicted_sql": ""
+ },
+ {
+  "id": 415,
+  "predicted_sql": "SELECT * FROM operations.system_config s WHERE s.tenant_id = 757071 AND s.last_modified_at >= (CURRENT_DATE - interval '90 days') AND s.job_role = 'security_admin';"
+ },
+ {
+  "id": 416,
+  "predicted_sql": ""
+ },
+ {
+  "id": 417,
+  "predicted_sql": ""
+ },
+ {
+  "id": 418,
+  "predicted_sql": ""
+ },
+ {
+  "id": 419,
+  "predicted_sql": ""
+ },
+ {
+  "id": 420,
+  "predicted_sql": ""
+ },
+ {
+  "id": 421,
+  "predicted_sql": ""
+ },
+ {
+  "id": 422,
+  "predicted_sql": ""
+ },
+ {
+  "id": 423,
+  "predicted_sql": ""
+ },
+ {
+  "id": 424,
+  "predicted_sql": ""
+ },
+ {
+  "id": 425,
+  "predicted_sql": ""
+ },
+ {
+  "id": 426,
+  "predicted_sql": ""
+ },
+ {
+  "id": 427,
+  "predicted_sql": ""
+ },
+ {
+  "id": 428,
+  "predicted_sql": ""
+ },
+ {
+  "id": 429,
+  "predicted_sql": ""
+ },
+ {
+  "id": 430,
+  "predicted_sql": ""
+ },
+ {
+  "id": 431,
+  "predicted_sql": ""
+ },
+ {
+  "id": 432,
+  "predicted_sql": ""
+ },
+ {
+  "id": 433,
+  "predicted_sql": ""
+ },
+ {
+  "id": 434,
+  "predicted_sql": ""
+ },
+ {
+  "id": 435,
+  "predicted_sql": ""
+ },
+ {
+  "id": 436,
+  "predicted_sql": ""
+ },
+ {
+  "id": 437,
+  "predicted_sql": ""
+ },
+ {
+  "id": 438,
+  "predicted_sql": ""
+ },
+ {
+  "id": 439,
+  "predicted_sql": ""
+ },
+ {
+  "id": 440,
+  "predicted_sql": ""
+ },
+ {
+  "id": 441,
+  "predicted_sql": ""
+ },
+ {
+  "id": 442,
+  "predicted_sql": ""
+ },
+ {
+  "id": 443,
+  "predicted_sql": ""
+ },
+ {
+  "id": 444,
+  "predicted_sql": ""
+ },
+ {
+  "id": 445,
+  "predicted_sql": ""
+ },
+ {
+  "id": 446,
+  "predicted_sql": ""
+ },
+ {
+  "id": 447,
+  "predicted_sql": ""
+ },
+ {
+  "id": 448,
+  "predicted_sql": ""
+ },
+ {
+  "id": 449,
+  "predicted_sql": ""
+ },
+ {
+  "id": 450,
+  "predicted_sql": ""
+ },
+ {
+  "id": 451,
+  "predicted_sql": "SELECT c.customer_id, c.customer_name FROM sales.customers c WHERE c.tenant_id = 757071 AND c.employee_id = 707070;"
+ },
+ {
+  "id": 452,
+  "predicted_sql": "SELECT c.contract_id, c.customer_id, c.sales_rep_id, c.contract_value, c.start_date, c.end_date, c.contract_type, c.security_level, c.department_id, c.approval_required, c.legal_review, c.status, c.contract_status, c.shipment_status, c.dow, c.month, c.year, c.account_manager, c.payment_status, c.payment_verified, c.created_by, c.team_id, c.region_id, c.customer_type, c.expiration_date, c.fulfillment_status, c.is_active, c.security_requirements, c.transaction_type, c.all_approvers_independent, c.assigned_region, c.assigned_territory, c.contact_type, c.order_amount, c.renewal_date, c.return_status, c.review_status, c.sales_rep, c.template_type, c.transaction_criticality, c.update_field, c.vendor_contract, c.version_status, c.account_priority, c.account_status, c.approval_count, c.data_section, c.split_part, c.partner_id, c.negotiator_id, c.processor_id, c.approver_level, c.employee_id, c.pipeline_stage, c.fulfillment_stage, c.approval_level, c.tenant_id FROM sales.contracts c WHERE c.tenant_id = 757071 AND c.employee_id = 707071;"
+ },
+ {
+  "id": 453,
+  "predicted_sql": "SELECT e.expense_id, e.employee_id, e.department_id, e.category, e.amount, e.description, e.expense_date, e.receipt_required, e.approved_by, e.approval_date, e.expense_type, e.status, e.year, e.confidential_until, e.month, e.hour, e.dow, e.approval_status, e.document_type, e.manager_id, e.record_type, e.tax_year, e.approver_id, e.cost_center_id, e.expense_amount, e.integrity_verified, e.transaction_logged, e.approval_sequence, e.integrity_model, e.expenses, e.finance, e.program_type, e.created_at, e.updated_at, e.rejected_at, e.escalated, e.reopened_at, e.bank_account_id, e.tenant_id, e.created_by, e.updated_by, e.deleted_at, e.deleted_by, e.row_version FROM finance.expenses e WHERE e.employee_id = current_setting('app.employee_id', true)::integer AND e.tenant_id = current_setting('app.tenant_id', true)::integer;"
+ },
+ {
+  "id": 454,
+  "predicted_sql": ""
+ },
+ {
+  "id": 455,
+  "predicted_sql": ""
+ },
+ {
+  "id": 456,
+  "predicted_sql": ""
+ },
+ {
+  "id": 457,
+  "predicted_sql": ""
+ },
+ {
+  "id": 458,
+  "predicted_sql": ""
+ },
+ {
+  "id": 459,
+  "predicted_sql": ""
+ },
+ {
+  "id": 460,
+  "predicted_sql": ""
+ },
+ {
+  "id": 461,
+  "predicted_sql": ""
+ },
+ {
+  "id": 462,
+  "predicted_sql": ""
+ },
+ {
+  "id": 523,
+  "predicted_sql": ""
+ },
+ {
+  "id": 524,
+  "predicted_sql": ""
+ },
+ {
+  "id": 525,
+  "predicted_sql": ""
+ },
+ {
+  "id": 526,
+  "predicted_sql": ""
+ },
+ {
+  "id": 527,
+  "predicted_sql": ""
+ },
+ {
+  "id": 528,
+  "predicted_sql": ""
+ },
+ {
+  "id": 529,
+  "predicted_sql": ""
+ },
+ {
+  "id": 530,
+  "predicted_sql": ""
+ },
+ {
+  "id": 531,
+  "predicted_sql": ""
+ },
+ {
+  "id": 532,
+  "predicted_sql": ""
+ },
+ {
+  "id": 533,
+  "predicted_sql": ""
+ },
+ {
+  "id": 534,
+  "predicted_sql": ""
+ },
+ {
+  "id": 535,
+  "predicted_sql": ""
+ },
+ {
+  "id": 536,
+  "predicted_sql": ""
+ },
+ {
+  "id": 537,
+  "predicted_sql": ""
+ },
+ {
+  "id": 538,
+  "predicted_sql": ""
+ },
+ {
+  "id": 539,
+  "predicted_sql": ""
+ },
+ {
+  "id": 540,
+  "predicted_sql": ""
+ },
+ {
+  "id": 541,
+  "predicted_sql": ""
+ },
+ {
+  "id": 542,
+  "predicted_sql": ""
+ },
+ {
+  "id": 543,
+  "predicted_sql": ""
+ },
+ {
+  "id": 544,
+  "predicted_sql": ""
+ },
+ {
+  "id": 545,
+  "predicted_sql": ""
+ },
+ {
+  "id": 546,
+  "predicted_sql": ""
+ },
+ {
+  "id": 547,
+  "predicted_sql": ""
+ },
+ {
+  "id": 548,
+  "predicted_sql": "Finance managers can update pending payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.\nFinance managers can delete pending payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.\nFinance managers can SELECT pending payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.\nFinance managers can SELECT payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.\nFinance managers can DELETE payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.\nFinance managers can SELECT payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.\nFinance managers can SELECT payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.\nFinance managers can SELECT payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.\nFinance managers can SELECT payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.\nFinance managers can SELECT payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.\nFinance managers can SELECT payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.\nFinance managers can SELECT payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.\nFinance managers can SELECT payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant"
+ },
+ {
+  "id": 549,
+  "predicted_sql": "Account managers can update onboarding rows only for customers they manage in the current tenant.\nAccount managers can delete onboarding rows only for customers they manage in the current tenant.\nAccount managers can view onboarding rows only for customers they manage in the current tenant."
+ },
+ {
+  "id": 550,
+  "predicted_sql": ""
+ }
+]

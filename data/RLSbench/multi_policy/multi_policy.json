@@ -1,0 +1,1712 @@
+[
+  {
+    "id": 463,
+    "db_id": "enterprise_rls_db",
+    "question": "Finance managers can read expense rows in their current tenant. Finance managers may update expense rows in their current tenant only when the updated row is integrity verified, transaction logged, and its approval sequence does not exceed their position level. Employees may insert their own submitted expense rows in their current tenant only when the amount is at most 5000 and a receipt is required.",
+    "sql": "CREATE POLICY expenses_463_tenant_isolation ON finance.expenses AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY finance_expenses_manager_read ON finance.expenses AS PERMISSIVE FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager');\nCREATE POLICY finance_expenses_manager_update_integrity ON finance.expenses AS PERMISSIVE FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager') WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.position_level', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager' AND integrity_verified = true AND transaction_logged = true AND approval_sequence <= current_setting('app.position_level', true)::int);\nCREATE POLICY finance_expenses_employee_insert_submitted ON finance.expenses AS PERMISSIVE FOR INSERT WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND employee_id = current_setting('app.employee_id', true)::int AND approval_status = 'Submitted' AND amount <= 5000 AND receipt_required = true);",
+    "evidence": "subject_attrs -> app.job_role, app.tenant_id, app.position_level, app.employee_id, object_attrs -> finance.expenses.tenant_id, finance.expenses.employee_id, finance.expenses.amount, finance.expenses.receipt_required, finance.expenses.approval_status, finance.expenses.integrity_verified, finance.expenses.transaction_logged, finance.expenses.approval_sequence, environment_attrs -> none, operation -> SELECT + UPDATE + INSERT, target -> finance.expenses, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.job_role",
+      "app.tenant_id",
+      "app.position_level",
+      "app.employee_id"
+    ],
+    "o_attributes": [
+      "finance.expenses.tenant_id",
+      "finance.expenses.employee_id",
+      "finance.expenses.amount",
+      "finance.expenses.receipt_required",
+      "finance.expenses.approval_status",
+      "finance.expenses.integrity_verified",
+      "finance.expenses.transaction_logged",
+      "finance.expenses.approval_sequence"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 464,
+    "db_id": "enterprise_rls_db",
+    "question": "Auditors, audit leads and compliance officers can read all audit logs. Only roles other than auditor and audit lead may insert or update audit log rows, and no one may write a row whose audit status is 'Audit Locked'.",
+    "sql": "CREATE POLICY operations_audit_logs_auditor_read ON operations.audit_logs FOR SELECT USING ( current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) IN ( 'auditor', 'audit_lead', 'compliance_officer' ) ); CREATE POLICY operations_audit_logs_audit_no_update ON operations.audit_logs FOR UPDATE USING ( current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) NOT IN ( 'auditor', 'audit_lead' ) ) WITH CHECK ( current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) NOT IN ( 'auditor', 'audit_lead' ) AND audit_status IS DISTINCT FROM 'Audit Locked' ); CREATE POLICY operations_audit_logs_audit_no_insert ON operations.audit_logs FOR INSERT WITH CHECK ( current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) NOT IN ( 'auditor', 'audit_lead' ) AND audit_status IS DISTINCT FROM 'Audit Locked' );",
+    "evidence": "subject_attrs -> app.job_role, object_attrs -> operations.audit_logs.audit_status, environment_attrs -> none, operation -> SELECT + UPDATE + INSERT, target -> operations.audit_logs, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "compliance_invariant",
+    "s_attributes": [
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "operations.audit_logs.audit_status"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 465,
+    "db_id": "enterprise_rls_db",
+    "question": "Engineers can claim currently unassigned open issues in their current tenant only when the estimated hours are below 8, and the updated row must assign the issue to themselves. Project managers can insert open issues they report only for active projects they own in the current tenant.",
+    "sql": "CREATE POLICY issues_465_tenant_isolation ON engineering.issues AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY engineering_issues_engineer_claim ON engineering.issues AS PERMISSIVE FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'engineer' AND assignee_id IS NULL AND status = 'Open' AND estimated_hours < 8) WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'engineer' AND assignee_id = current_setting('app.employee_id', true)::int);\nCREATE POLICY engineering_issues_pm_insert_owned_project ON engineering.issues AS PERMISSIVE FOR INSERT WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'project_manager' AND reporter_id = current_setting('app.employee_id', true)::int AND status = 'Open' AND EXISTS (SELECT 1 FROM engineering.projects p WHERE p.project_id = engineering.issues.project_id AND p.tenant_id = current_setting('app.tenant_id', true)::int AND p.owner_id = current_setting('app.employee_id', true)::int AND p.status = 'Active'));",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> engineering.issues.tenant_id, engineering.issues.assignee_id, engineering.issues.reporter_id, engineering.issues.status, engineering.issues.estimated_hours, engineering.issues.project_id, engineering.projects.project_id, engineering.projects.tenant_id, engineering.projects.owner_id, engineering.projects.status, environment_attrs -> none, operation -> UPDATE + INSERT, target -> engineering.issues, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "engineering.issues.tenant_id",
+      "engineering.issues.assignee_id",
+      "engineering.issues.reporter_id",
+      "engineering.issues.status",
+      "engineering.issues.estimated_hours",
+      "engineering.issues.project_id",
+      "engineering.projects.project_id",
+      "engineering.projects.tenant_id",
+      "engineering.projects.owner_id",
+      "engineering.projects.status"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "UPDATE",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 466,
+    "db_id": "enterprise_rls_db",
+    "question": "Data analysts can read anonymized public product metrics. Product managers can update non-sensitive metrics they own in their current tenant, and the updated row must have metric status 'Validated'. Data analysts may insert metrics that include security metrics in their current tenant only when the metric is anonymized, not sensitive, and starts with metric status 'Draft'.",
+    "sql": "CREATE POLICY product_metrics_public_anonymized_read ON product.metrics FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'data_analyst' AND is_public = true AND is_anonymized = true);\nCREATE POLICY product_metrics_pm_validated_update ON product.metrics FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'product_manager' AND tenant_id = current_setting('app.tenant_id', true)::int AND owner_id = current_setting('app.employee_id', true)::int AND is_sensitive = false) WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'product_manager' AND tenant_id = current_setting('app.tenant_id', true)::int AND owner_id = current_setting('app.employee_id', true)::int AND status = 'Validated');\nCREATE POLICY product_metrics_data_analyst_security_insert ON product.metrics FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'data_analyst' AND tenant_id = current_setting('app.tenant_id', true)::int AND includes_security_metrics = true AND is_anonymized = true AND is_sensitive = false AND status = 'Draft');",
+    "evidence": "subject_attrs -> app.job_role, app.employee_id, app.tenant_id, object_attrs -> product.metrics.is_public, product.metrics.is_anonymized, product.metrics.is_sensitive, product.metrics.owner_id, product.metrics.tenant_id, product.metrics.metric_status, product.metrics.includes_security_metrics, environment_attrs -> none, operation -> SELECT + UPDATE + INSERT, target -> product.metrics, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.job_role",
+      "app.employee_id",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "product.metrics.is_public",
+      "product.metrics.is_anonymized",
+      "product.metrics.is_sensitive",
+      "product.metrics.owner_id",
+      "product.metrics.tenant_id",
+      "product.metrics.metric_status",
+      "product.metrics.includes_security_metrics"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 467,
+    "db_id": "enterprise_rls_db",
+    "question": "Sales managers can read sales contracts in their current region. Account managers may update contracts they manage only when the contract has no outstanding disputes, and the updated row must have verified payment and an approval status of Approved or Rejected. Account managers may insert contracts in their current tenant and region only when legal review and approval are required, and the discount percentage does not exceed the department discount threshold.",
+    "sql": "CREATE POLICY sales_contracts_region_read ON sales.contracts FOR SELECT USING ( current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.region_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'sales_manager' AND region_id = current_setting('app.region_id', true)::int ); CREATE POLICY sales_contracts_account_manager_update ON sales.contracts FOR UPDATE USING ( current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'account_manager' AND account_manager_id = current_setting('app.employee_id', true)::int AND has_outstanding_disputes = false ) WITH CHECK ( current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'account_manager' AND account_manager_id = current_setting('app.employee_id', true)::int AND payment_verified = true AND approval_status IN ('Approved', 'Rejected') ); CREATE POLICY sales_contracts_account_manager_insert ON sales.contracts FOR INSERT WITH CHECK ( current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.region_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'account_manager' AND tenant_id = current_setting('app.tenant_id', true)::int AND region_id = current_setting('app.region_id', true)::int AND legal_review = true AND approval_required = true AND discount_percentage <= department_discount_threshold );",
+    "evidence": "subject_attrs -> app.job_role, app.employee_id, app.tenant_id, app.region_id, object_attrs -> sales.contracts.region_id, sales.contracts.tenant_id, sales.contracts.account_manager_id, sales.contracts.has_outstanding_disputes, sales.contracts.payment_verified, sales.contracts.approval_status, sales.contracts.legal_review, sales.contracts.approval_required, sales.contracts.discount_percentage, sales.contracts.department_discount_threshold, environment_attrs -> none, operation -> SELECT + UPDATE + INSERT, target -> sales.contracts, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "ordinal",
+    "s_attributes": [
+      "app.job_role",
+      "app.employee_id",
+      "app.tenant_id",
+      "app.region_id"
+    ],
+    "o_attributes": [
+      "sales.contracts.region_id",
+      "sales.contracts.tenant_id",
+      "sales.contracts.account_manager_id",
+      "sales.contracts.has_outstanding_disputes",
+      "sales.contracts.payment_verified",
+      "sales.contracts.approval_status",
+      "sales.contracts.legal_review",
+      "sales.contracts.approval_required",
+      "sales.contracts.discount_percentage",
+      "sales.contracts.department_discount_threshold"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 468,
+    "db_id": "enterprise_rls_db",
+    "question": "Application security analysts can read non-archived code repositories in their current tenant. They may insert private, branch-protected repository rows they own only for active projects in their current tenant whose required clearance does not exceed their session clearance level.",
+    "sql": "CREATE POLICY repo_security_analyst_read ON engineering.code_repository FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'security_analyst' AND tenant_id = current_setting('app.tenant_id', true)::int AND repo_status <> 'Archived');\nCREATE POLICY repo_security_analyst_insert ON engineering.code_repository FOR INSERT WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.user_clearance_level', true) IS NOT NULL AND current_setting('app.job_role', true) = 'security_analyst' AND owner_id = current_setting('app.employee_id', true)::int AND visibility = 'private' AND branch_protected = true AND EXISTS (SELECT 1 FROM engineering.projects p WHERE p.project_id = engineering.code_repository.project_id AND p.tenant_id = current_setting('app.tenant_id', true)::int AND p.status = 'Active' AND p.required_clearance <= current_setting('app.user_clearance_level', true)::int));",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.user_clearance_level, app.tenant_id, object_attrs -> engineering.code_repository.owner_id, engineering.code_repository.tenant_id, engineering.code_repository.visibility, engineering.code_repository.branch_protected, engineering.code_repository.repo_status, engineering.code_repository.project_id, engineering.projects.project_id, engineering.projects.tenant_id, engineering.projects.status, engineering.projects.required_clearance, environment_attrs -> none, operation -> SELECT + INSERT, target -> engineering.code_repository, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.user_clearance_level",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "engineering.code_repository.owner_id",
+      "engineering.code_repository.tenant_id",
+      "engineering.code_repository.visibility",
+      "engineering.code_repository.branch_protected",
+      "engineering.code_repository.repo_status",
+      "engineering.code_repository.project_id",
+      "engineering.projects.project_id",
+      "engineering.projects.tenant_id",
+      "engineering.projects.status",
+      "engineering.projects.required_clearance"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 469,
+    "db_id": "enterprise_rls_db",
+    "question": "Project managers can read open pull requests they author in their current tenant. They may insert pull requests they author only with status Open, against the main, develop or release branch.",
+    "sql": "CREATE POLICY pr_manager_read ON engineering.pull_requests FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'project_manager' AND author_id = current_setting('app.employee_id', true)::int AND status = 'Open');\nCREATE POLICY pr_manager_insert ON engineering.pull_requests FOR INSERT WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'project_manager' AND author_id = current_setting('app.employee_id', true)::int AND status = 'Open' AND target_branch IN ('main','develop','release'));",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> engineering.pull_requests.author_id, engineering.pull_requests.status, engineering.pull_requests.target_branch, environment_attrs -> none, operation -> SELECT + INSERT, target -> engineering.pull_requests, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "engineering.pull_requests.author_id",
+      "engineering.pull_requests.status",
+      "engineering.pull_requests.target_branch"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 470,
+    "db_id": "enterprise_rls_db",
+    "question": "DevOps engineers can read queued build rows they triggered in their current tenant. They may insert CI, Nightly or Hotfix builds they triggered.",
+    "sql": "CREATE POLICY eng_builds_devops_read ON engineering.builds FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'devops_engineer' AND triggered_by = current_setting('app.employee_id', true)::int AND tenant_id = current_setting('app.tenant_id', true)::int AND build_status = 'queued');\nCREATE POLICY eng_builds_devops_insert ON engineering.builds FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'devops_engineer' AND triggered_by = current_setting('app.employee_id', true)::int AND build_type IN ('CI','Nightly','Hotfix'));",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> engineering.builds.build_status, engineering.builds.build_type, engineering.builds.triggered_by, engineering.builds.tenant_id, environment_attrs -> none, operation -> SELECT + INSERT, target -> engineering.builds, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "engineering.builds.build_status",
+      "engineering.builds.build_type",
+      "engineering.builds.triggered_by",
+      "engineering.builds.tenant_id"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 471,
+    "db_id": "enterprise_rls_db",
+    "question": "QA engineers can read security tests they own in their current tenant. They may insert security tests they own only when the referenced project is active and the linked issue is open in that same tenant and project.",
+    "sql": "CREATE POLICY eng_tests_qa_read ON engineering.tests FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'qa_engineer' AND owner_id = current_setting('app.employee_id', true)::int AND tenant_id = current_setting('app.tenant_id', true)::int AND test_type = 'Security');\nCREATE POLICY eng_tests_qa_insert ON engineering.tests FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'qa_engineer' AND owner_id = current_setting('app.employee_id', true)::int AND test_type = 'Security' AND EXISTS (SELECT 1 FROM engineering.projects p JOIN engineering.issues i ON i.project_id = p.project_id WHERE p.project_id = engineering.tests.project_id AND i.issue_id = engineering.tests.issue_id AND p.tenant_id = current_setting('app.tenant_id', true)::int AND i.tenant_id = current_setting('app.tenant_id', true)::int AND p.status = 'active' AND i.status = 'open'));",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> engineering.tests.owner_id, engineering.tests.tenant_id, engineering.tests.test_type, engineering.tests.project_id, engineering.tests.issue_id, engineering.projects.project_id, engineering.projects.tenant_id, engineering.projects.status, engineering.issues.issue_id, engineering.issues.project_id, engineering.issues.tenant_id, engineering.issues.status, environment_attrs -> none, operation -> SELECT + INSERT, target -> engineering.tests, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "engineering.tests.owner_id",
+      "engineering.tests.tenant_id",
+      "engineering.tests.test_type",
+      "engineering.tests.project_id",
+      "engineering.tests.issue_id",
+      "engineering.projects.project_id",
+      "engineering.projects.tenant_id",
+      "engineering.projects.status",
+      "engineering.issues.issue_id",
+      "engineering.issues.project_id",
+      "engineering.issues.tenant_id",
+      "engineering.issues.status"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 472,
+    "db_id": "enterprise_rls_db",
+    "question": "Compliance officers can read documents they author in their current tenant and department. They may insert such documents only with a future expiration time.",
+    "sql": "CREATE POLICY documents_472_tenant_isolation ON operations.documents AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY ops_documents_compliance_read ON operations.documents AS PERMISSIVE FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.department_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'compliance_officer' AND author_id = current_setting('app.employee_id', true)::int AND department_id = current_setting('app.department_id', true)::int);\nCREATE POLICY ops_documents_compliance_insert ON operations.documents AS PERMISSIVE FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.department_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'compliance_officer' AND author_id = current_setting('app.employee_id', true)::int AND department_id = current_setting('app.department_id', true)::int AND expires_at > CURRENT_TIMESTAMP);",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.department_id, app.tenant_id, object_attrs -> operations.documents.author_id, operations.documents.tenant_id, operations.documents.department_id, operations.documents.expires_at, environment_attrs -> current_timestamp, operation -> SELECT + INSERT, target -> operations.documents, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.department_id",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "operations.documents.author_id",
+      "operations.documents.tenant_id",
+      "operations.documents.department_id",
+      "operations.documents.expires_at"
+    ],
+    "e_attributes": [
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 473,
+    "db_id": "enterprise_rls_db",
+    "question": "Managers can read attendance rows they approved in their current tenant and department. They may insert attendance rows for employees in their recursive subordinate chain in that same department.",
+    "sql": "CREATE POLICY hr_attendance_manager_read ON hr.attendance FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.department_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'manager' AND approved_by = current_setting('app.employee_id', true)::int AND tenant_id = current_setting('app.tenant_id', true)::int AND department_id = current_setting('app.department_id', true)::int);\nCREATE POLICY hr_attendance_manager_insert ON hr.attendance FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.department_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'manager' AND department_id = current_setting('app.department_id', true)::int AND EXISTS (WITH RECURSIVE subordinate_scope(employee_id) AS (SELECT child.employee_id FROM hr.employees child WHERE child.manager_id = current_setting('app.employee_id', true)::int AND child.department_id = current_setting('app.department_id', true)::int UNION SELECT child.employee_id FROM hr.employees child JOIN subordinate_scope s ON child.manager_id = s.employee_id WHERE child.department_id = current_setting('app.department_id', true)::int) SELECT 1 FROM subordinate_scope s WHERE s.employee_id = hr.attendance.employee_id));",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.department_id, app.tenant_id, object_attrs -> hr.attendance.approved_by, hr.attendance.employee_id, hr.attendance.department_id, hr.attendance.tenant_id, hr.employees.employee_id, hr.employees.manager_id, hr.employees.department_id, environment_attrs -> none, operation -> SELECT + INSERT, target -> hr.attendance, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.department_id",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "hr.attendance.approved_by",
+      "hr.attendance.employee_id",
+      "hr.attendance.department_id",
+      "hr.attendance.tenant_id",
+      "hr.employees.employee_id",
+      "hr.employees.manager_id",
+      "hr.employees.department_id"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 474,
+    "db_id": "enterprise_rls_db",
+    "question": "Employees with a recorded hire date may update their own performance records, and the updated row must remain theirs. Managers can insert submitted performance reviews for their current department.",
+    "sql": "CREATE POLICY hr_performance_self_update ON hr.performance FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.hire_date', true) IS NOT NULL AND employee_id = current_setting('app.employee_id', true)::int) WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.hire_date', true) IS NOT NULL AND employee_id = current_setting('app.employee_id', true)::int);\nCREATE POLICY hr_performance_manager_insert ON hr.performance FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.department_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'manager' AND department_id = current_setting('app.department_id', true)::int AND review_status = 'submitted');",
+    "evidence": "subject_attrs -> app.employee_id, app.hire_date, app.job_role, app.department_id, object_attrs -> hr.performance.employee_id, hr.performance.department_id, hr.performance.review_status, environment_attrs -> none, operation -> UPDATE + INSERT, target -> hr.performance, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.hire_date",
+      "app.job_role",
+      "app.department_id"
+    ],
+    "o_attributes": [
+      "hr.performance.employee_id",
+      "hr.performance.department_id",
+      "hr.performance.review_status"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "UPDATE",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 475,
+    "db_id": "enterprise_rls_db",
+    "question": "Employees may update their own expense records in their current tenant. Finance managers may insert Submitted expense records in their current tenant.",
+    "sql": "CREATE POLICY expenses_475_tenant_isolation ON finance.expenses AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY finance_expenses_self_update ON finance.expenses AS PERMISSIVE FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND employee_id = current_setting('app.employee_id', true)::int) WITH CHECK (true);\nCREATE POLICY finance_expenses_manager_insert ON finance.expenses AS PERMISSIVE FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager' AND approval_status = 'Submitted');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> finance.expenses.employee_id, finance.expenses.tenant_id, finance.expenses.approval_status, environment_attrs -> none, operation -> UPDATE + INSERT, target -> finance.expenses, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "finance.expenses.employee_id",
+      "finance.expenses.tenant_id",
+      "finance.expenses.approval_status"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "UPDATE",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 476,
+    "db_id": "enterprise_rls_db",
+    "question": "Account managers and finance managers can update invoices they manage, but their writes cannot set the payment status to 'Archived'. Finance managers can insert new invoices only with payment status 'Paid'.",
+    "sql": "CREATE POLICY sales_invoices_manager_update ON sales.invoices FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND account_manager = current_setting('app.employee_id', true)::int AND current_setting('app.job_role', true) IN ('account_manager','finance_manager')) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IN ('account_manager','finance_manager') AND payment_status <> 'Archived');\nCREATE POLICY sales_invoices_finance_insert ON sales.invoices FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager' AND payment_status = 'Paid');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, object_attrs -> sales.invoices.account_manager, sales.invoices.payment_status, environment_attrs -> none, operation -> UPDATE + INSERT, target -> sales.invoices, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "sales.invoices.account_manager",
+      "sales.invoices.payment_status"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "UPDATE",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 477,
+    "db_id": "enterprise_rls_db",
+    "question": "Sales representatives can update orders where they are the recorded sales rep, but their writes cannot set the fulfillment status to 'Archived'. Sales managers may insert new orders only with fulfillment status 'Pending'.",
+    "sql": "CREATE POLICY sales_orders_rep_update ON sales.orders FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'sales_rep' AND sales_rep_id = current_setting('app.employee_id', true)::int) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'sales_rep' AND fulfillment_status <> 'Archived');\nCREATE POLICY sales_orders_manager_insert ON sales.orders FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'sales_manager' AND fulfillment_status = 'Pending');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, object_attrs -> sales.orders.sales_rep_id, sales.orders.fulfillment_status, environment_attrs -> none, operation -> UPDATE + INSERT, target -> sales.orders, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "sales.orders.sales_rep_id",
+      "sales.orders.fulfillment_status"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "UPDATE",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 478,
+    "db_id": "enterprise_rls_db",
+    "question": "Product managers with a recorded hire date and data analysts can update metrics they own in their current tenant. Data analysts can insert Live metrics in that tenant.",
+    "sql": "CREATE POLICY metrics_478_tenant_isolation ON product.metrics AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY product_metrics_staff_update ON product.metrics AS PERMISSIVE FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND metric_owner = current_setting('app.employee_id', true)::int AND ((current_setting('app.job_role', true) = 'product_manager' AND current_setting('app.hire_date', true) IS NOT NULL) OR current_setting('app.job_role', true) = 'data_analyst')) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND ((current_setting('app.job_role', true) = 'product_manager' AND current_setting('app.hire_date', true) IS NOT NULL) OR current_setting('app.job_role', true) = 'data_analyst'));\nCREATE POLICY product_metrics_analyst_insert ON product.metrics AS PERMISSIVE FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'data_analyst' AND status = 'Live');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.hire_date, app.tenant_id, object_attrs -> product.metrics.metric_owner, product.metrics.status, product.metrics.tenant_id, environment_attrs -> none, operation -> UPDATE + INSERT, target -> product.metrics, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.hire_date",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "product.metrics.metric_owner",
+      "product.metrics.status",
+      "product.metrics.tenant_id"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "UPDATE",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 479,
+    "db_id": "enterprise_rls_db",
+    "question": "Engineers can read features assigned to them in their current tenant. Product managers can delete Archived features they own in that tenant only after they have been released.",
+    "sql": "CREATE POLICY features_479_tenant_isolation ON product.features AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY product_features_engineer_read ON product.features AS PERMISSIVE FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'engineer' AND assigned_to = current_setting('app.employee_id', true)::int);\nCREATE POLICY product_features_manager_delete ON product.features AS PERMISSIVE FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'product_manager' AND owner_id = current_setting('app.employee_id', true)::int AND status = 'Archived' AND released_at IS NOT NULL);",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> product.features.assigned_to, product.features.owner_id, product.features.status, product.features.released_at, product.features.tenant_id, environment_attrs -> none, operation -> SELECT + DELETE, target -> product.features, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "product.features.assigned_to",
+      "product.features.owner_id",
+      "product.features.status",
+      "product.features.released_at",
+      "product.features.tenant_id"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 480,
+    "db_id": "enterprise_rls_db",
+    "question": "Customer support agents can update unresolved feedback assigned to them in their current tenant. Support operations staff can delete resolved feedback in that tenant only after a resolution time has been recorded.",
+    "sql": "CREATE POLICY user_feedback_480_tenant_isolation ON product.user_feedback AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY product_feedback_agent_update ON product.user_feedback AS PERMISSIVE FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'customer_support' AND assigned_to = current_setting('app.employee_id', true)::int AND resolved = false) WITH CHECK (true);\nCREATE POLICY product_feedback_support_ops_delete ON product.user_feedback AS PERMISSIVE FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'support_ops' AND resolved = true AND resolved_at IS NOT NULL);",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> product.user_feedback.assigned_to, product.user_feedback.resolved, product.user_feedback.resolved_at, product.user_feedback.tenant_id, environment_attrs -> none, operation -> UPDATE + DELETE, target -> product.user_feedback, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "product.user_feedback.assigned_to",
+      "product.user_feedback.resolved",
+      "product.user_feedback.resolved_at",
+      "product.user_feedback.tenant_id"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 481,
+    "db_id": "enterprise_rls_db",
+    "question": "Account managers can read customer communications for accounts they manage in their current tenant. Sales managers can insert phone communication records in that tenant only when the recorded occurrence time is not in the future.",
+    "sql": "CREATE POLICY customer_communications_481_tenant_isolation ON sales.customer_communications AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY sales_customer_communications_manager_read ON sales.customer_communications AS PERMISSIVE FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'account_manager' AND account_manager_id = current_setting('app.employee_id', true)::int);\nCREATE POLICY sales_customer_communications_sales_manager_insert ON sales.customer_communications AS PERMISSIVE FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'sales_manager' AND comm_type = 'phone' AND occurred_at <= CURRENT_TIMESTAMP);",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> sales.customer_communications.account_manager_id, sales.customer_communications.comm_type, sales.customer_communications.occurred_at, sales.customer_communications.tenant_id, environment_attrs -> current_timestamp, operation -> SELECT + INSERT, target -> sales.customer_communications, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "sales.customer_communications.account_manager_id",
+      "sales.customer_communications.comm_type",
+      "sales.customer_communications.occurred_at",
+      "sales.customer_communications.tenant_id"
+    ],
+    "e_attributes": [
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 482,
+    "db_id": "enterprise_rls_db",
+    "question": "Customer support agents with a recorded hire date can insert call recordings attributed to themselves in their current tenant only with recording status 'Recorded'. Call center supervisors can delete Archived recordings in that tenant only after they have been archived for at least 30 days.",
+    "sql": "CREATE POLICY call_recordings_482_tenant_isolation ON support.call_recordings AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY support_recordings_agent_insert ON support.call_recordings AS PERMISSIVE FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.hire_date', true) IS NOT NULL AND current_setting('app.job_role', true) = 'customer_support' AND agent_id = current_setting('app.employee_id', true)::int AND recording_status = 'Recorded');\nCREATE POLICY support_recordings_supervisor_delete ON support.call_recordings AS PERMISSIVE FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'call_center_supervisor' AND recording_status = 'Archived' AND archived_at <= CURRENT_TIMESTAMP - INTERVAL '30 days');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.hire_date, app.tenant_id, object_attrs -> support.call_recordings.agent_id, support.call_recordings.recording_status, support.call_recordings.archived_at, support.call_recordings.tenant_id, environment_attrs -> current_timestamp, operation -> INSERT + DELETE, target -> support.call_recordings, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.hire_date",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "support.call_recordings.agent_id",
+      "support.call_recordings.recording_status",
+      "support.call_recordings.archived_at",
+      "support.call_recordings.tenant_id"
+    ],
+    "e_attributes": [
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "INSERT",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 483,
+    "db_id": "enterprise_rls_db",
+    "question": "HR specialists can read their own current salary history. HR administrators can insert their own final salary history entries only when the effective date is not in the past. HR administrators can delete their own non-current salary history only after its end date has passed.",
+    "sql": "CREATE POLICY hr_salary_history_specialist_read ON hr.salary_history FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'hr_specialist' AND employee_id = current_setting('app.employee_id', true)::int AND is_current = true);\nCREATE POLICY hr_salary_history_admin_insert ON hr.salary_history FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'hr_admin' AND employee_id = current_setting('app.employee_id', true)::int AND status = 'Final' AND effective_date >= CURRENT_DATE);\nCREATE POLICY hr_salary_history_admin_delete ON hr.salary_history FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'hr_admin' AND employee_id = current_setting('app.employee_id', true)::int AND is_current = false AND end_date < CURRENT_DATE);",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, object_attrs -> hr.salary_history.employee_id, hr.salary_history.is_current, hr.salary_history.status, hr.salary_history.effective_date, hr.salary_history.end_date, environment_attrs -> current_date, operation -> SELECT + INSERT + DELETE, target -> hr.salary_history, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "hr.salary_history.employee_id",
+      "hr.salary_history.is_current",
+      "hr.salary_history.status",
+      "hr.salary_history.effective_date",
+      "hr.salary_history.end_date"
+    ],
+    "e_attributes": [
+      "current_date"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "INSERT",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 484,
+    "db_id": "enterprise_rls_db",
+    "question": "Finance analysts can read current recognized revenue records for their department in the current tenant. Finance managers can update unrecognized revenue records in that tenant, and the updated row must be recognized with a nonnegative amount.",
+    "sql": "CREATE POLICY revenue_484_tenant_isolation ON finance.revenue AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY finance_revenue_analyst_read ON finance.revenue AS PERMISSIVE FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.department_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_analyst' AND department_id = current_setting('app.department_id', true)::int AND recognized = true AND is_current = true);\nCREATE POLICY finance_revenue_manager_update ON finance.revenue AS PERMISSIVE FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager' AND recognized = false) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager' AND recognized = true AND amount >= 0);",
+    "evidence": "subject_attrs -> app.job_role, app.department_id, app.tenant_id, object_attrs -> finance.revenue.department_id, finance.revenue.tenant_id, finance.revenue.recognized, finance.revenue.is_current, finance.revenue.amount, environment_attrs -> none, operation -> SELECT + UPDATE, target -> finance.revenue, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.job_role",
+      "app.department_id",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "finance.revenue.department_id",
+      "finance.revenue.tenant_id",
+      "finance.revenue.recognized",
+      "finance.revenue.is_current",
+      "finance.revenue.amount"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE"
+    ]
+  },
+  {
+    "id": 485,
+    "db_id": "enterprise_rls_db",
+    "question": "Compliance officers can read the audit logs in their current tenant that are still pending review. Audit leads work the same tenant's logs from the other side: they can update a log while it is not archived, leaving it closed with a recorded update time, and can create a new one only when it is an open security log.",
+    "sql": "CREATE POLICY audit_logs_485_tenant_isolation ON operations.audit_logs AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY ops_audit_logs_compliance_read ON operations.audit_logs AS PERMISSIVE FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'compliance_officer' AND audit_status = 'Pending Review');\nCREATE POLICY ops_audit_logs_lead_update ON operations.audit_logs AS PERMISSIVE FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'audit_lead' AND archived = false) WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'audit_lead' AND audit_status = 'Closed' AND updated_at IS NOT NULL);\nCREATE POLICY ops_audit_logs_lead_insert ON operations.audit_logs AS PERMISSIVE FOR INSERT WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'audit_lead' AND audit_status = 'Open' AND log_type = 'Security');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> operations.audit_logs.tenant_id, operations.audit_logs.audit_status, operations.audit_logs.archived, operations.audit_logs.log_type, operations.audit_logs.updated_at, environment_attrs -> none, operation -> SELECT + UPDATE + INSERT, target -> operations.audit_logs, [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "operations.audit_logs.tenant_id",
+      "operations.audit_logs.audit_status",
+      "operations.audit_logs.archived",
+      "operations.audit_logs.log_type",
+      "operations.audit_logs.updated_at"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 486,
+    "db_id": "enterprise_rls_db",
+    "question": "DevOps engineers with a recorded hire date can read non-archived system configurations that require access verification in their current tenant. SREs can update configurations that are in maintenance mode in that tenant, and the updated configuration must have encryption and access verification enabled. SREs can delete archived configurations in that tenant only after their effective period has ended.",
+    "sql": "CREATE POLICY system_config_486_tenant_isolation ON operations.system_config AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY ops_system_config_devops_read ON operations.system_config AS PERMISSIVE FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.hire_date', true) IS NOT NULL AND current_setting('app.job_role', true) = 'devops_engineer' AND archived = false AND access_verification_required = true);\nCREATE POLICY ops_system_config_sre_update ON operations.system_config AS PERMISSIVE FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'sre' AND maintenance_mode = true) WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'sre' AND encryption_enabled = true AND access_verification_required = true);\nCREATE POLICY ops_system_config_sre_delete ON operations.system_config AS PERMISSIVE FOR DELETE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'sre' AND archived = true AND effective_until < CURRENT_DATE);",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.hire_date, app.tenant_id, object_attrs -> operations.system_config.tenant_id, operations.system_config.archived, operations.system_config.access_verification_required, operations.system_config.maintenance_mode, operations.system_config.encryption_enabled, operations.system_config.effective_until, environment_attrs -> current_date, operation -> SELECT + UPDATE + DELETE, target -> operations.system_config, [SECURITY_BOUNDARY: employee_id,role] [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.hire_date",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "operations.system_config.tenant_id",
+      "operations.system_config.archived",
+      "operations.system_config.access_verification_required",
+      "operations.system_config.maintenance_mode",
+      "operations.system_config.encryption_enabled",
+      "operations.system_config.effective_until"
+    ],
+    "e_attributes": [
+      "current_date"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 487,
+    "db_id": "enterprise_rls_db",
+    "question": "DevOps engineers can read backup records they initiated. Database administrators can approve backups, and the updated row must record them as the approver. They may delete completed backups only after the configured retention period has elapsed since the backup end time.",
+    "sql": "CREATE POLICY ops_backups_devops_read ON operations.backups FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'devops_engineer' AND initiated_by = current_setting('app.employee_id', true)::int);\nCREATE POLICY ops_backups_dba_restore_approve ON operations.backups FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'dba') WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'dba' AND restore_approved = true);\nCREATE POLICY ops_backups_dba_delete ON operations.backups FOR DELETE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'dba' AND backup_status = 'Completed' AND end_time + retention_days * INTERVAL '1 day' < CURRENT_TIMESTAMP);",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, object_attrs -> operations.backups.initiated_by, operations.backups.restore_approved, operations.backups.backup_status, operations.backups.end_time, operations.backups.retention_days, environment_attrs -> current_timestamp, operation -> SELECT + UPDATE + DELETE, target -> operations.backups, [SECURITY_BOUNDARY: employee_id,role] [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "operations.backups.initiated_by",
+      "operations.backups.restore_approved",
+      "operations.backups.backup_status",
+      "operations.backups.end_time",
+      "operations.backups.retention_days"
+    ],
+    "e_attributes": [
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 488,
+    "db_id": "enterprise_rls_db",
+    "question": "Engineers can read projects when they are listed as team members and their clearance meets the project's required clearance. Project managers can update projects in that tenant that have not passed the security check, and the updated row must pass the security check with at least two approvals.",
+    "sql": "CREATE POLICY eng_projects_team_read ON engineering.projects FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.user_clearance_level', true) IS NOT NULL AND current_setting('app.job_role', true) = 'engineer' AND current_setting('app.employee_id', true)::int = ANY(team_members) AND current_setting('app.user_clearance_level', true)::int >= required_clearance);\nCREATE POLICY eng_projects_pm_security_update ON engineering.projects FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'project_manager' AND tenant_id = current_setting('app.tenant_id', true)::int AND security_check = false) WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'project_manager' AND tenant_id = current_setting('app.tenant_id', true)::int AND security_check = true AND approval_count >= 2);",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, app.user_clearance_level, object_attrs -> engineering.projects.tenant_id, engineering.projects.team_members, engineering.projects.required_clearance, engineering.projects.security_check, engineering.projects.approval_count, environment_attrs -> none, operation -> SELECT + UPDATE, target -> engineering.projects, [SECURITY_BOUNDARY: employee_id,role] [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "ordinal",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id",
+      "app.user_clearance_level"
+    ],
+    "o_attributes": [
+      "engineering.projects.tenant_id",
+      "engineering.projects.team_members",
+      "engineering.projects.required_clearance",
+      "engineering.projects.security_check",
+      "engineering.projects.approval_count"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE"
+    ]
+  },
+  {
+    "id": 489,
+    "db_id": "enterprise_rls_db",
+    "question": "HR specialists can read their own current benefit records while enrollment is open. HR administrators can insert eligible benefit records in that tenant. They may delete non-current benefit records in that tenant after coverage has ended.",
+    "sql": "CREATE POLICY hr_benefits_specialist_read ON hr.benefits FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'hr_specialist' AND employee_id = current_setting('app.employee_id', true)::int AND is_current = true AND enrollment_start <= CURRENT_DATE AND enrollment_end >= CURRENT_DATE);\nCREATE POLICY hr_benefits_admin_insert ON hr.benefits FOR INSERT WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'hr_admin' AND tenant_id = current_setting('app.tenant_id', true)::int AND is_eligible = true);\nCREATE POLICY hr_benefits_admin_delete ON hr.benefits FOR DELETE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'hr_admin' AND tenant_id = current_setting('app.tenant_id', true)::int AND is_current = false AND coverage_end_date < CURRENT_DATE);",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> hr.benefits.employee_id, hr.benefits.tenant_id, hr.benefits.is_current, hr.benefits.enrollment_start, hr.benefits.enrollment_end, hr.benefits.is_eligible, hr.benefits.coverage_end_date, environment_attrs -> current_date, operation -> SELECT + INSERT + DELETE, target -> hr.benefits, [SECURITY_BOUNDARY: employee_id,role] [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "hr.benefits.employee_id",
+      "hr.benefits.tenant_id",
+      "hr.benefits.is_current",
+      "hr.benefits.enrollment_start",
+      "hr.benefits.enrollment_end",
+      "hr.benefits.is_eligible",
+      "hr.benefits.coverage_end_date"
+    ],
+    "e_attributes": [
+      "current_date"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "INSERT",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 490,
+    "db_id": "enterprise_rls_db",
+    "question": "Finance analysts can read tax records they own while the filing deadline has not passed. Tax specialists can update unfiled tax records in that tenant once the due date has arrived, and the updated row must record a filing time. Tax specialists can insert tax records in that tenant only when the filing date is not after the due date.",
+    "sql": "CREATE POLICY finance_tax_records_analyst_read ON finance.tax_records FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.hire_date', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_analyst' AND owner_id = current_setting('app.employee_id', true)::int AND CURRENT_DATE <= due_date);\nCREATE POLICY finance_tax_records_specialist_update ON finance.tax_records FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'tax_specialist' AND tenant_id = current_setting('app.tenant_id', true)::int AND filed_at IS NULL AND due_date <= CURRENT_DATE) WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'tax_specialist' AND tenant_id = current_setting('app.tenant_id', true)::int AND filed_at IS NOT NULL);\nCREATE POLICY finance_tax_records_specialist_insert ON finance.tax_records FOR INSERT WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'tax_specialist' AND tenant_id = current_setting('app.tenant_id', true)::int AND filed_at <= due_date);",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.hire_date, app.tenant_id, object_attrs -> finance.tax_records.owner_id, finance.tax_records.tenant_id, finance.tax_records.due_date, finance.tax_records.filed_at, environment_attrs -> current_date, operation -> SELECT + UPDATE + INSERT, target -> finance.tax_records, [SECURITY_BOUNDARY: employee_id,role] [DEFAULT_DENY: null_session_returns_no_rows]",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.hire_date",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "finance.tax_records.owner_id",
+      "finance.tax_records.tenant_id",
+      "finance.tax_records.due_date",
+      "finance.tax_records.filed_at"
+    ],
+    "e_attributes": [
+      "current_date"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "INSERT"
+    ]
+  },
+  {
+    "id": 491,
+    "db_id": "enterprise_rls_db",
+    "question": "The core engineering roles hold write access to engineering issues: they can update any issue whose severity is High, Critical, or Blocker, and can delete an issue only once it is an archived duplicate assigned to them that has been inactive for more than 90 days.",
+    "sql": "CREATE POLICY engineering_high_severity ON engineering.issues FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IN ('engineer', 'senior_engineer', 'junior_engineer', 'qa_engineer', 'devops_engineer') AND severity IN ('High', 'Critical', 'Blocker')) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IN ('engineer', 'senior_engineer', 'junior_engineer', 'qa_engineer', 'devops_engineer'));\nCREATE POLICY clean_006_archived_duplicate_issue_delete ON engineering.issues FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IN ('engineer','senior_engineer','junior_engineer','qa_engineer','devops_engineer') AND assignee_id = current_setting('app.employee_id', true)::int AND issue_type = 'Duplicate' AND status = 'Archived' AND updated_at < app_now() - INTERVAL '90 days');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, object_attrs -> engineering.issues.severity, engineering.issues.assignee_id, engineering.issues.issue_type, engineering.issues.status, engineering.issues.updated_at, environment_attrs -> current_timestamp, operation -> UPDATE + DELETE, target -> engineering.issues, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 376, 6",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "engineering.issues.severity",
+      "engineering.issues.assignee_id",
+      "engineering.issues.issue_type",
+      "engineering.issues.status",
+      "engineering.issues.updated_at"
+    ],
+    "e_attributes": [
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 492,
+    "db_id": "enterprise_rls_db",
+    "question": "Security administrators run the lifecycle of privileged temporal access records: they can create a temporary access record only after it has been approved and an access duration has been recorded, revoke an active record once a termination date is set, and delete a record that has already expired.",
+    "sql": "CREATE POLICY jit_access_approval ON operations.temporal_access FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'security_admin' AND access_type = 'Privileged' AND approval_status = 'Approved' AND access_duration IS NOT NULL);\nCREATE POLICY access_revocation_termination ON operations.temporal_access FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'security_admin' AND termination_date IS NOT NULL AND active = true) WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'security_admin' AND termination_date IS NOT NULL AND active = false);\nCREATE POLICY delete_expired_privileged_access ON operations.temporal_access FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'security_admin' AND access_type = 'Privileged' AND expiration_time <= app_now());",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, object_attrs -> operations.temporal_access.access_type, operations.temporal_access.approval_status, operations.temporal_access.access_duration, operations.temporal_access.termination_date, operations.temporal_access.active, operations.temporal_access.expiration_time, environment_attrs -> current_timestamp, operation -> INSERT + UPDATE + DELETE, target -> operations.temporal_access, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 404, 353, 405",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "operations.temporal_access.access_type",
+      "operations.temporal_access.approval_status",
+      "operations.temporal_access.access_duration",
+      "operations.temporal_access.termination_date",
+      "operations.temporal_access.active",
+      "operations.temporal_access.expiration_time"
+    ],
+    "e_attributes": [
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "INSERT",
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 493,
+    "db_id": "enterprise_rls_db",
+    "question": "Sales managers can read any contract that falls inside the next 90-day renewal window, but can modify one only within the last 30 days before it expires.",
+    "sql": "CREATE POLICY renewal_window_contracts ON sales.contracts FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND (current_setting('app.job_role', true) = 'sales_manager' AND renewal_date <= app_now()::date + INTERVAL '90 days' AND renewal_date >= app_now()::date));\nCREATE POLICY contract_renewal_modify ON sales.contracts FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'sales_manager' AND expiration_date BETWEEN app_now()::date AND app_now()::date + INTERVAL '30 days' ) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'sales_manager');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, object_attrs -> sales.contracts.renewal_date, sales.contracts.expiration_date, environment_attrs -> current_date, operation -> SELECT + UPDATE, target -> sales.contracts, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 176, 106",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "sales.contracts.renewal_date",
+      "sales.contracts.expiration_date"
+    ],
+    "e_attributes": [
+      "current_date"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE"
+    ]
+  },
+  {
+    "id": 494,
+    "db_id": "enterprise_rls_db",
+    "question": "Access to system configuration is gated by the clock as much as by role: employees can read configuration rows during business hours (09:00-18:00, Monday-Friday), operations managers can add disaster recovery configuration in that same window, and administrators can change an existing row only inside the 02:00-06:00 maintenance window.",
+    "sql": "CREATE POLICY business_hours_config ON operations.system_config FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND (app_now()::time BETWEEN '09:00'::time AND '18:00'::time AND EXTRACT(DOW FROM app_now()::date) BETWEEN 1 AND 5));\nCREATE POLICY bc_disaster_recovery ON operations.system_config FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'operations_manager' AND config_type = 'Disaster Recovery' AND app_now()::time BETWEEN '09:00'::time AND '18:00'::time AND EXTRACT(DOW FROM app_now()::date) BETWEEN 1 AND 5 );\nCREATE POLICY sysadmin_config_maintenance ON operations.system_config FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'admin' AND app_now()::time BETWEEN '02:00'::time AND '06:00'::time ) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'admin' AND app_now()::time BETWEEN '02:00'::time AND '06:00'::time );",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, object_attrs -> operations.system_config.config_type, environment_attrs -> current_date, current_time, operation -> SELECT + INSERT + UPDATE, target -> operations.system_config, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 8, 110, 140",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "temporal",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "operations.system_config.config_type"
+    ],
+    "e_attributes": [
+      "current_date",
+      "current_time"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "INSERT",
+      "UPDATE"
+    ]
+  },
+  {
+    "id": 495,
+    "db_id": "enterprise_rls_db",
+    "question": "Security analysts can read the security event log and resolve any event that is still unresolved inside their own tenant, but removal is kept away from them: a compliance officer is the one who deletes an event, and only once its retention window has elapsed.",
+    "sql": "CREATE POLICY security_analyst_logs ON operations.security_events FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND (current_setting('app.job_role', true) = 'security_analyst'));\nCREATE POLICY operations_event_tenant_update ON operations.security_events FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'security_analyst' AND tenant_id = current_setting('app.tenant_id', true)::int AND resolved = false) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'security_analyst' AND tenant_id = current_setting('app.tenant_id', true)::int AND resolved = true);\nCREATE POLICY retention_delete ON operations.security_events FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'compliance_officer' AND immutable_after_days IS NOT NULL AND created_at < app_now()::date - (immutable_after_days * INTERVAL '1 day'));",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> operations.security_events.tenant_id, operations.security_events.resolved, operations.security_events.immutable_after_days, operations.security_events.created_at, environment_attrs -> current_date, operation -> SELECT + UPDATE + DELETE, target -> operations.security_events, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 61, 434, 162",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "operations.security_events.tenant_id",
+      "operations.security_events.resolved",
+      "operations.security_events.immutable_after_days",
+      "operations.security_events.created_at"
+    ],
+    "e_attributes": [
+      "current_date"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 496,
+    "db_id": "enterprise_rls_db",
+    "question": "HR staff can read every employee record, but only HR specialists can update one, and never their own. Deletion is held back from HR entirely: a compliance officer can purge an employee record only when it is inactive, its retention date has passed, and the employee has a recorded separation date.",
+    "sql": "CREATE POLICY hr_employee_records ON hr.employees FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) IN ('hr_specialist', 'hr_admin'));\nCREATE POLICY hr_update_others ON hr.employees FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'hr_specialist' AND employee_id IS DISTINCT FROM current_setting('app.employee_id', true)::int) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'hr_specialist' AND employee_id IS DISTINCT FROM current_setting('app.employee_id', true)::int);\nCREATE POLICY retention_purge_data ON hr.employees FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'compliance_officer' AND retention_date <= app_now()::date AND separation_date IS NOT NULL AND record_status = 'Inactive' );",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, object_attrs -> hr.employees.employee_id, hr.employees.retention_date, hr.employees.separation_date, hr.employees.record_status, environment_attrs -> current_date, operation -> SELECT + UPDATE + DELETE, target -> hr.employees, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 65, 4, 254",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "hr.employees.employee_id",
+      "hr.employees.retention_date",
+      "hr.employees.separation_date",
+      "hr.employees.record_status"
+    ],
+    "e_attributes": [
+      "current_date"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 497,
+    "db_id": "enterprise_rls_db",
+    "question": "Everything a product manager does to metrics stays inside their current tenant: they can read the portfolio-level metrics for portfolios they manage, update metrics that are still active, and delete archived metrics owned by employees anywhere in their recursive reporting chain once those metrics are more than a year old.",
+    "sql": "CREATE POLICY metrics_497_tenant_isolation ON product.metrics AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY portfolio_mgr_metrics ON product.metrics AS PERMISSIVE FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'product_manager' AND portfolio_manager = current_setting('app.employee_id', true)::int AND aggregation_level = 'Portfolio');\nCREATE POLICY product_metric_tenant_update ON product.metrics AS PERMISSIVE FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'product_manager' AND status = 'Active') WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'product_manager');\nCREATE POLICY clean_535_product_metrics_owner_delete ON product.metrics AS PERMISSIVE FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'product_manager' AND EXISTS (WITH RECURSIVE subordinate_scope(employee_id) AS (SELECT child.employee_id FROM hr.employees child WHERE child.manager_id = current_setting('app.employee_id', true)::int AND child.tenant_id = current_setting('app.tenant_id', true)::int UNION SELECT child.employee_id FROM hr.employees child JOIN subordinate_scope parent_scope ON child.manager_id = parent_scope.employee_id WHERE child.tenant_id = current_setting('app.tenant_id', true)::int) SELECT 1 FROM subordinate_scope WHERE subordinate_scope.employee_id = product.metrics.metric_owner AND subordinate_scope.employee_id <> current_setting('app.employee_id', true)::int) AND status = 'Archived' AND updated_at < app_now() - INTERVAL '1 year');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> product.metrics.portfolio_manager, product.metrics.tenant_id, product.metrics.aggregation_level, product.metrics.status, product.metrics.metric_owner, product.metrics.updated_at, hr.employees.employee_id, hr.employees.manager_id, hr.employees.tenant_id, environment_attrs -> current_timestamp, operation -> SELECT + UPDATE + DELETE, target -> product.metrics, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 300, 439, 535",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "product.metrics.portfolio_manager",
+      "product.metrics.tenant_id",
+      "product.metrics.aggregation_level",
+      "product.metrics.status",
+      "product.metrics.metric_owner",
+      "product.metrics.updated_at",
+      "hr.employees.employee_id",
+      "hr.employees.manager_id",
+      "hr.employees.tenant_id"
+    ],
+    "e_attributes": [
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 498,
+    "db_id": "enterprise_rls_db",
+    "question": "Compliance officers own the documentation side of engineering projects: they can read every privacy-critical document, create accountability-document project records under their own name, and modify the transfer impact assessment projects they own, though only during the 02:00-06:00 maintenance window.",
+    "sql": "CREATE POLICY dpo_access_critical ON engineering.projects FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'compliance_officer' AND document_security_level = 'Privacy Critical' );\nCREATE POLICY accountability_docs ON engineering.projects FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'compliance_officer' AND doc_category = 'Accountability' AND owner_id = current_setting('app.employee_id', true)::int);\nCREATE POLICY tia_owner_modify ON engineering.projects FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'compliance_officer' AND owner_id = current_setting('app.employee_id', true)::int AND project_type = 'TIA' AND app_now()::time BETWEEN '02:00'::time AND '06:00'::time ) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'compliance_officer' AND owner_id = current_setting('app.employee_id', true)::int AND project_type = 'TIA' AND app_now()::time BETWEEN '02:00'::time AND '06:00'::time );",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, object_attrs -> engineering.projects.document_security_level, engineering.projects.doc_category, engineering.projects.owner_id, engineering.projects.project_type, environment_attrs -> current_time, operation -> SELECT + INSERT + UPDATE, target -> engineering.projects, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 282, 279, 267",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "engineering.projects.document_security_level",
+      "engineering.projects.doc_category",
+      "engineering.projects.owner_id",
+      "engineering.projects.project_type"
+    ],
+    "e_attributes": [
+      "current_time"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "INSERT",
+      "UPDATE"
+    ]
+  },
+  {
+    "id": 499,
+    "db_id": "enterprise_rls_db",
+    "question": "Data analysts handle product analytics end to end within their current tenant: they can read anonymized customer analytics from the last 90 days, insert new analytics rows for that tenant, and delete archived rows owned by employees in their recursive reporting chain once those rows are more than a year old.",
+    "sql": "CREATE POLICY customer_data_analyst_anon ON product.analytics FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND (current_setting('app.job_role', true) = 'data_analyst' AND is_anonymized = true AND analytics_type = 'Customer' AND created_at::date >= app_now()::date - INTERVAL '90 days'));\nCREATE POLICY product_analytics_tenant_insert ON product.analytics FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'data_analyst' AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY clean_536_product_analytics_owner_delete ON product.analytics FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'data_analyst' AND tenant_id = current_setting('app.tenant_id', true)::int AND EXISTS (WITH RECURSIVE subordinate_scope(employee_id) AS (SELECT child.employee_id FROM hr.employees child WHERE child.manager_id = current_setting('app.employee_id', true)::int AND child.tenant_id = current_setting('app.tenant_id', true)::int UNION SELECT child.employee_id FROM hr.employees child JOIN subordinate_scope parent_scope ON child.manager_id = parent_scope.employee_id WHERE child.tenant_id = current_setting('app.tenant_id', true)::int) SELECT 1 FROM subordinate_scope WHERE subordinate_scope.employee_id = product.analytics.owner_id AND subordinate_scope.employee_id <> current_setting('app.employee_id', true)::int) AND status = 'Archived' AND calculated_at < app_now() - INTERVAL '1 year');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> product.analytics.is_anonymized, product.analytics.analytics_type, product.analytics.created_at, product.analytics.tenant_id, product.analytics.owner_id, product.analytics.status, product.analytics.calculated_at, hr.employees.employee_id, hr.employees.manager_id, hr.employees.tenant_id, environment_attrs -> current_date, current_timestamp, operation -> SELECT + INSERT + DELETE, target -> product.analytics, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 192, 440, 536",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "product.analytics.is_anonymized",
+      "product.analytics.analytics_type",
+      "product.analytics.created_at",
+      "product.analytics.tenant_id",
+      "product.analytics.owner_id",
+      "product.analytics.status",
+      "product.analytics.calculated_at",
+      "hr.employees.employee_id",
+      "hr.employees.manager_id",
+      "hr.employees.tenant_id"
+    ],
+    "e_attributes": [
+      "current_date",
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "INSERT",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 500,
+    "db_id": "enterprise_rls_db",
+    "question": "Auditors, working weekdays between 09:00 and 18:00, can read archived evidence audit logs and delete them once they are more than seven years old; compliance officers do the review step in between, moving logs in their current tenant from pending review to reviewed.",
+    "sql": "CREATE POLICY forensic_evidence ON operations.audit_logs FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'auditor' AND record_type = 'Evidence' AND archived = true AND app_now()::time BETWEEN '09:00'::time AND '18:00'::time AND EXTRACT(DOW FROM app_now()::date) BETWEEN 1 AND 5 );\nCREATE POLICY upd_433_audit_pending_to_reviewed ON operations.audit_logs FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'compliance_officer' AND tenant_id = current_setting('app.tenant_id', true)::int AND audit_status = 'Pending') WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'compliance_officer' AND tenant_id = current_setting('app.tenant_id', true)::int AND audit_status = 'Reviewed');\nCREATE POLICY clean_034_auditor_archived_log_delete ON operations.audit_logs FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'auditor' AND archived = true AND logged_at < app_now() - INTERVAL '7 years' AND app_now()::time BETWEEN '09:00'::time AND '18:00'::time AND EXTRACT(DOW FROM app_now()::date) BETWEEN 1 AND 5);",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> operations.audit_logs.record_type, operations.audit_logs.archived, operations.audit_logs.audit_status, operations.audit_logs.tenant_id, operations.audit_logs.logged_at, environment_attrs -> current_date, current_time, current_timestamp, operation -> SELECT + UPDATE + DELETE, target -> operations.audit_logs, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 286, 433, 34",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "operations.audit_logs.record_type",
+      "operations.audit_logs.archived",
+      "operations.audit_logs.audit_status",
+      "operations.audit_logs.tenant_id",
+      "operations.audit_logs.logged_at"
+    ],
+    "e_attributes": [
+      "current_date",
+      "current_time",
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 501,
+    "db_id": "enterprise_rls_db",
+    "question": "An expense record is created by the employee it belongs to and capped at three times that employee's currently effective monthly allowance, approved by the department manager while it is still pending and under $5000 and only inside the 02:00-06:00 maintenance window, and readable by the department's finance manager during business hours (09:00-18:00, Monday-Friday).",
+    "sql": "CREATE POLICY cost_center_expenses ON finance.expenses FOR SELECT USING (current_setting('app.department_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager' AND department_id = current_setting('app.department_id', true)::int AND app_now()::time BETWEEN '09:00'::time AND '18:00'::time AND EXTRACT(DOW FROM app_now()::date) BETWEEN 1 AND 5);\nCREATE POLICY expense_creation_threshold ON finance.expenses FOR INSERT WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND employee_id = current_setting('app.employee_id', true)::int AND EXISTS (SELECT 1 FROM hr.employee_allowances ea WHERE ea.employee_id = current_setting('app.employee_id', true)::int AND ea.monthly_allowance IS NOT NULL AND (ea.effective_from IS NULL OR ea.effective_from <= app_now()::date) AND (ea.effective_to IS NULL OR ea.effective_to >= app_now()::date) AND amount <= ea.monthly_allowance * 3));\nCREATE POLICY dept_expense_approval_threshold ON finance.expenses FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'dept_manager' AND current_setting('app.department_id', true) IS NOT NULL AND current_setting('app.department_id', true)::int = finance.expenses.department_id AND expense_amount < 5000 AND approval_status = 'Pending' AND app_now()::time BETWEEN '02:00'::time AND '06:00'::time) WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.job_role', true) = 'dept_manager' AND current_setting('app.department_id', true) IS NOT NULL AND current_setting('app.department_id', true)::int = finance.expenses.department_id AND expense_amount < 5000 AND approval_status = 'Approved' AND approved_by = current_setting('app.employee_id', true)::int AND app_now()::time BETWEEN '02:00'::time AND '06:00'::time);",
+    "evidence": "subject_attrs -> app.department_id, app.employee_id, app.job_role, object_attrs -> finance.expenses.department_id, finance.expenses.employee_id, finance.expenses.amount, hr.employee_allowances.employee_id, hr.employee_allowances.monthly_allowance, hr.employee_allowances.effective_from, hr.employee_allowances.effective_to, finance.expenses.expense_amount, finance.expenses.approval_status, finance.expenses.approved_by, environment_attrs -> current_date, current_time, operation -> SELECT + INSERT + UPDATE, target -> finance.expenses, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 168, 87, 363",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.department_id",
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "finance.expenses.department_id",
+      "finance.expenses.employee_id",
+      "finance.expenses.amount",
+      "hr.employee_allowances.employee_id",
+      "hr.employee_allowances.monthly_allowance",
+      "hr.employee_allowances.effective_from",
+      "hr.employee_allowances.effective_to",
+      "finance.expenses.expense_amount",
+      "finance.expenses.approval_status",
+      "finance.expenses.approved_by"
+    ],
+    "e_attributes": [
+      "current_date",
+      "current_time"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "INSERT",
+      "UPDATE"
+    ]
+  },
+  {
+    "id": 502,
+    "db_id": "enterprise_rls_db",
+    "question": "All payroll access is confined to the current tenant. Within it, department managers can read the exportable payroll records for their own department, while finance managers can create pending payroll rows for employees inside their department hierarchy, with the payroll row's department matching that employee's department, and can update current payroll rows so long as the row stays current.",
+    "sql": "CREATE POLICY payroll_502_tenant_isolation ON hr.payroll AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY dept_admin_export_payroll ON hr.payroll AS PERMISSIVE FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.department_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'dept_manager' AND department_id = current_setting('app.department_id', true)::int AND can_export = true);\nCREATE POLICY clean_548_payroll_insert_exists ON hr.payroll AS PERMISSIVE FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.department_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager' AND approval_status = 'Pending' AND EXISTS (SELECT 1 FROM hr.employees e WHERE e.employee_id = hr.payroll.employee_id AND e.tenant_id = current_setting('app.tenant_id', true)::int AND hr.payroll.department_id = e.department_id AND (e.department_id = current_setting('app.department_id', true)::int OR EXISTS (WITH RECURSIVE department_scope(department_id) AS (SELECT child.department_id FROM hr.departments child WHERE child.parent_department_id = current_setting('app.department_id', true)::int AND child.tenant_id = current_setting('app.tenant_id', true)::int UNION SELECT child.department_id FROM hr.departments child JOIN department_scope parent_scope ON child.parent_department_id = parent_scope.department_id WHERE child.tenant_id = current_setting('app.tenant_id', true)::int) SELECT 1 FROM department_scope WHERE department_scope.department_id = e.department_id))));\nCREATE POLICY hr_payroll_tenant_update ON hr.payroll AS PERMISSIVE FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager' AND is_current = true) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager' AND is_current = true);",
+    "evidence": "subject_attrs -> app.department_id, app.employee_id, app.job_role, app.tenant_id, object_attrs -> hr.payroll.department_id, hr.payroll.tenant_id, hr.payroll.can_export, hr.payroll.employee_id, hr.payroll.approval_status, hr.employees.employee_id, hr.employees.department_id, hr.employees.tenant_id, hr.departments.department_id, hr.departments.parent_department_id, hr.departments.tenant_id, hr.payroll.is_current, environment_attrs -> none, operation -> SELECT + INSERT + UPDATE, target -> hr.payroll, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 210, 548, 426",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.department_id",
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "hr.payroll.department_id",
+      "hr.payroll.tenant_id",
+      "hr.payroll.can_export",
+      "hr.payroll.employee_id",
+      "hr.payroll.approval_status",
+      "hr.employees.employee_id",
+      "hr.employees.department_id",
+      "hr.employees.tenant_id",
+      "hr.departments.department_id",
+      "hr.departments.parent_department_id",
+      "hr.departments.tenant_id",
+      "hr.payroll.is_current"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "INSERT",
+      "UPDATE"
+    ]
+  },
+  {
+    "id": 503,
+    "db_id": "enterprise_rls_db",
+    "question": "Document permissions follow authorship and project membership: an employee can read project documents from the last 90 days when they either own the project or are listed on its team, edit a document they authored while it is still a draft less than 30 days old, and delete a contract document they authored once it has expired.",
+    "sql": "CREATE POLICY view_project_docs ON operations.documents FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND EXISTS (SELECT 1 FROM engineering.projects p WHERE p.project_id = operations.documents.project_id AND (p.owner_id = current_setting('app.employee_id', true)::int OR current_setting('app.employee_id', true)::int = ANY(p.team_members))) AND created_at::date >= app_now()::date - INTERVAL '90 days');\nCREATE POLICY draft_edit_lifecycle ON operations.documents FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND author_id = current_setting('app.employee_id', true)::int AND document_status = 'draft' AND created_at >= app_now() - INTERVAL '30 days' ) WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND author_id = current_setting('app.employee_id', true)::int);\nCREATE POLICY clean_059_expired_draft_contract_doc_delete ON operations.documents FOR DELETE USING (current_setting('app.employee_id', true) IS NOT NULL AND author_id = current_setting('app.employee_id', true)::int AND document_type = 'Contract' AND expires_at < app_now());",
+    "evidence": "subject_attrs -> app.employee_id, object_attrs -> operations.documents.project_id, engineering.projects.project_id, engineering.projects.owner_id, engineering.projects.team_members, operations.documents.created_at, operations.documents.author_id, operations.documents.document_status, operations.documents.document_type, operations.documents.expires_at, environment_attrs -> current_date, current_timestamp, operation -> SELECT + UPDATE + DELETE, target -> operations.documents, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 171, 36, 59",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id"
+    ],
+    "o_attributes": [
+      "operations.documents.project_id",
+      "engineering.projects.project_id",
+      "engineering.projects.owner_id",
+      "engineering.projects.team_members",
+      "operations.documents.created_at",
+      "operations.documents.author_id",
+      "operations.documents.document_status",
+      "operations.documents.document_type",
+      "operations.documents.expires_at"
+    ],
+    "e_attributes": [
+      "current_date",
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 504,
+    "db_id": "enterprise_rls_db",
+    "question": "Code repository rows are guarded by clearance for reading and by ownership for writing: reading a restricted IP artifact takes clearance level 4 or higher, repository owners register repository metadata under their own name inside the current tenant, and senior engineers can delete a repository they own only after it has sat archived for at least 90 days.",
+    "sql": "CREATE POLICY secret_clearance_ip ON engineering.code_repository FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.user_clearance_level', true) IS NOT NULL AND current_setting('app.user_clearance_level', true)::int >= 4 AND artifact_type = 'Restricted IP');\nCREATE POLICY engineering_repo_tenant_insert ON engineering.code_repository FOR INSERT WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int AND owner_id = current_setting('app.employee_id', true)::int);\nCREATE POLICY clean_010_archived_repo_delete ON engineering.code_repository FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'senior_engineer' AND owner_id = current_setting('app.employee_id', true)::int AND repo_status = 'Archived' AND archived_at < app_now() - INTERVAL '90 days');",
+    "evidence": "subject_attrs -> app.employee_id, app.user_clearance_level, app.tenant_id, app.job_role, object_attrs -> engineering.code_repository.artifact_type, engineering.code_repository.tenant_id, engineering.code_repository.owner_id, engineering.code_repository.repo_status, engineering.code_repository.archived_at, environment_attrs -> current_timestamp, operation -> SELECT + INSERT + DELETE, target -> engineering.code_repository, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 369, 431, 10",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.user_clearance_level",
+      "app.tenant_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "engineering.code_repository.artifact_type",
+      "engineering.code_repository.tenant_id",
+      "engineering.code_repository.owner_id",
+      "engineering.code_repository.repo_status",
+      "engineering.code_repository.archived_at"
+    ],
+    "e_attributes": [
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "INSERT",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 505,
+    "db_id": "enterprise_rls_db",
+    "question": "Customer support employees can escalate the feedback assigned to them inside the current tenant while it is still open, and can delete a piece of feedback only when it is a duplicate that has already been resolved and was submitted within the last seven days.",
+    "sql": "CREATE POLICY upd_442_feedback_open_to_escalated ON product.user_feedback FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'customer_support' AND tenant_id = current_setting('app.tenant_id', true)::int AND assigned_to = current_setting('app.employee_id', true)::int AND feedback_status = 'Open') WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'customer_support' AND tenant_id = current_setting('app.tenant_id', true)::int AND assigned_to = current_setting('app.employee_id', true)::int AND feedback_status = 'Escalated');\nCREATE POLICY clean_041_duplicate_feedback_delete ON product.user_feedback FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'customer_support' AND feedback_status = 'Duplicate' AND resolved = true AND submitted_at >= app_now() - INTERVAL '7 days');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> product.user_feedback.assigned_to, product.user_feedback.feedback_status, product.user_feedback.tenant_id, product.user_feedback.resolved, product.user_feedback.submitted_at, environment_attrs -> current_timestamp, operation -> UPDATE + DELETE, target -> product.user_feedback, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 442, 41",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "product.user_feedback.assigned_to",
+      "product.user_feedback.feedback_status",
+      "product.user_feedback.tenant_id",
+      "product.user_feedback.resolved",
+      "product.user_feedback.submitted_at"
+    ],
+    "e_attributes": [
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 506,
+    "db_id": "enterprise_rls_db",
+    "question": "Benefit records are maintained only by HR: HR specialists can create benefit enrollment rows for the active current tenant, and HR administrators can update the pension records.",
+    "sql": "CREATE POLICY hr_benefits_tenant_insert ON hr.benefits FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'hr_specialist' AND tenant_id = current_setting('app.tenant_id', true)::int AND EXISTS (SELECT 1 FROM auth.tenants t WHERE t.tenant_id = hr.benefits.tenant_id AND t.status = 'Active'));\nCREATE POLICY pension_mgmt ON hr.benefits FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'hr_admin' AND benefit_type = 'Pension' ) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'hr_admin' AND benefit_type = 'Pension' );",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> hr.benefits.tenant_id, auth.tenants.tenant_id, auth.tenants.status, hr.benefits.benefit_type, environment_attrs -> none, operation -> INSERT + UPDATE, target -> hr.benefits, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 423, 313",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "hr.benefits.tenant_id",
+      "auth.tenants.tenant_id",
+      "auth.tenants.status",
+      "hr.benefits.benefit_type"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "INSERT",
+      "UPDATE"
+    ]
+  },
+  {
+    "id": 507,
+    "db_id": "enterprise_rls_db",
+    "question": "Employees manage their own attendance entries: they can log their own clock-in and clock-out times, and can delete their own pending correction requests inside the current tenant on weekdays between 09:00 and 18:00, as long as the request is less than 30 days old.",
+    "sql": "CREATE POLICY insert_own_attendance ON hr.attendance FOR INSERT WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND (employee_id = current_setting('app.employee_id', true)::int));\nCREATE POLICY clean_011_attendance_correction_delete ON hr.attendance FOR DELETE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND employee_id = current_setting('app.employee_id', true)::int AND tenant_id = current_setting('app.tenant_id', true)::int AND approval_status = 'Pending' AND request_type = 'Correction' AND work_date >= app_now()::date - 30 AND app_now()::time BETWEEN '09:00'::time AND '18:00'::time AND EXTRACT(DOW FROM app_now()::date) BETWEEN 1 AND 5);",
+    "evidence": "subject_attrs -> app.employee_id, app.tenant_id, object_attrs -> hr.attendance.employee_id, hr.attendance.tenant_id, hr.attendance.approval_status, hr.attendance.request_type, hr.attendance.work_date, environment_attrs -> current_date, current_time, operation -> INSERT + DELETE, target -> hr.attendance, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 30, 11",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "hr.attendance.employee_id",
+      "hr.attendance.tenant_id",
+      "hr.attendance.approval_status",
+      "hr.attendance.request_type",
+      "hr.attendance.work_date"
+    ],
+    "e_attributes": [
+      "current_date",
+      "current_time"
+    ],
+    "action_attributes": [
+      "INSERT",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 508,
+    "db_id": "enterprise_rls_db",
+    "question": "Budget visibility runs down the department tree - a budget owner can read the budgets they own for their own department and every department beneath it - while changing one takes rank: a finance manager at position level 7 or higher can approve a pending increase request for their own department only when the requested increase stays within 10% of the remaining budget, and only a CFO can delete a closed department budget, only when its cycle is inactive, and only on the last day of the quarter.",
+    "sql": "CREATE POLICY cost_center_budget_hierarchy ON finance.budget FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.department_id', true) IS NOT NULL AND budget_owner = current_setting('app.employee_id', true)::int AND department_id IN (WITH RECURSIVE dept_scope AS (SELECT current_setting('app.department_id', true)::int AS department_id UNION SELECT d.department_id FROM hr.departments d JOIN dept_scope parent ON d.parent_department_id = parent.department_id) SELECT department_id FROM dept_scope));\nCREATE POLICY budget_increase_combined ON finance.budget FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager' AND current_setting('app.position_level', true) IS NOT NULL AND current_setting('app.position_level', true)::int >= 7 AND current_setting('app.department_id', true) IS NOT NULL AND department_id = current_setting('app.department_id', true)::int AND increase_amount <= remaining_amount * 0.10 AND status = 'Pending') WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager' AND current_setting('app.position_level', true) IS NOT NULL AND current_setting('app.position_level', true)::int >= 7 AND current_setting('app.department_id', true) IS NOT NULL AND department_id = current_setting('app.department_id', true)::int AND status = 'Approved' AND approved_by = current_setting('app.employee_id', true)::int);\nCREATE POLICY clean_021_cfo_closed_budget_delete ON finance.budget FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'cfo' AND department_id IS NOT NULL AND status = 'Closed' AND budget_cycle_active = false AND app_now()::date = (date_trunc('quarter', app_now()::date) + INTERVAL '3 months' - INTERVAL '1 day')::date);",
+    "evidence": "subject_attrs -> app.employee_id, app.department_id, app.job_role, app.position_level, object_attrs -> finance.budget.budget_owner, finance.budget.department_id, hr.departments.department_id, hr.departments.parent_department_id, finance.budget.increase_amount, finance.budget.remaining_amount, finance.budget.status, finance.budget.approved_by, finance.budget.budget_cycle_active, environment_attrs -> current_date, operation -> SELECT + UPDATE + DELETE, target -> finance.budget, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 82, 149, 21",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.department_id",
+      "app.job_role",
+      "app.position_level"
+    ],
+    "o_attributes": [
+      "finance.budget.budget_owner",
+      "finance.budget.department_id",
+      "hr.departments.department_id",
+      "hr.departments.parent_department_id",
+      "finance.budget.increase_amount",
+      "finance.budget.remaining_amount",
+      "finance.budget.status",
+      "finance.budget.approved_by",
+      "finance.budget.budget_cycle_active"
+    ],
+    "e_attributes": [
+      "current_date"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 509,
+    "db_id": "enterprise_rls_db",
+    "question": "Product feature rows are exposed and edited according to visibility: authenticated internal employees can read features marked public or internal; a guest user can add a feature row only when it is public, marked publicly visible, and created on a weekday between 09:00 and 18:00; and product managers can update active features inside the current tenant.",
+    "sql": "CREATE POLICY internal_data_access ON product.features FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND visibility IN ('Public', 'Internal'));\nCREATE POLICY clean_084_guest_public_feature_insert ON product.features FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.user_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'guest' AND is_public = true AND visibility = 'Public' AND created_at::time BETWEEN '09:00'::time AND '18:00'::time AND EXTRACT(DOW FROM created_at) BETWEEN 1 AND 5);\nCREATE POLICY upd_438_product_feature_active ON product.features FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'product_manager' AND tenant_id = current_setting('app.tenant_id', true)::int AND status = 'Active') WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'product_manager' AND tenant_id = current_setting('app.tenant_id', true)::int);",
+    "evidence": "subject_attrs -> app.employee_id, app.user_id, app.job_role, app.tenant_id, object_attrs -> product.features.visibility, product.features.is_public, product.features.created_at, product.features.status, product.features.tenant_id, environment_attrs -> none, operation -> SELECT + INSERT + UPDATE, target -> product.features, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 79, 84, 438",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.user_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "product.features.visibility",
+      "product.features.is_public",
+      "product.features.created_at",
+      "product.features.status",
+      "product.features.tenant_id"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "INSERT",
+      "UPDATE"
+    ]
+  },
+  {
+    "id": 510,
+    "db_id": "enterprise_rls_db",
+    "question": "Sales managers can read the customers in their assigned region that have been contacted within the last 90 days, and can delete an inactive customer only on a weekday between 09:00 and 18:00, and only when that customer has gone more than three years without contact and holds no active contract.",
+    "sql": "CREATE POLICY regional_customers ON sales.customers FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.region_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'sales_manager' AND region_id = current_setting('app.region_id', true)::int AND last_contact_date >= app_now()::date - INTERVAL '90 days');\nCREATE POLICY clean_068_inactive_customer_delete ON sales.customers FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'sales_manager' AND is_active = false AND last_contact_date < app_now()::date - INTERVAL '3 years' AND app_now()::time BETWEEN '09:00'::time AND '18:00'::time AND EXTRACT(DOW FROM app_now()::date) BETWEEN 1 AND 5 AND NOT EXISTS (SELECT 1 FROM sales.contracts c WHERE c.customer_id = sales.customers.customer_id AND c.status = 'Active'));",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.region_id, object_attrs -> sales.customers.region_id, sales.customers.is_active, sales.customers.last_contact_date, sales.customers.customer_id, sales.contracts.customer_id, sales.contracts.status, environment_attrs -> current_date, current_time, operation -> SELECT + DELETE, target -> sales.customers, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 7, 68",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "nested",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.region_id"
+    ],
+    "o_attributes": [
+      "sales.customers.region_id",
+      "sales.customers.is_active",
+      "sales.customers.last_contact_date",
+      "sales.customers.customer_id",
+      "sales.contracts.customer_id",
+      "sales.contracts.status"
+    ],
+    "e_attributes": [
+      "current_date",
+      "current_time"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 511,
+    "db_id": "enterprise_rls_db",
+    "question": "QA engineers can read the test results for the products they own, and can approve the release QA records assigned to them except where they are also the assigned developer.",
+    "sql": "CREATE POLICY qa_engineer_product_tests ON engineering.tests FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'qa_engineer' AND product_owner = current_setting('app.employee_id', true)::int);\nCREATE POLICY qa_signoff_sod ON engineering.tests FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'qa_engineer' AND qa_reviewer = current_setting('app.employee_id', true)::int AND assigned_developer IS DISTINCT FROM current_setting('app.employee_id', true)::int AND release_id IS NOT NULL) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'qa_engineer' AND qa_reviewer = current_setting('app.employee_id', true)::int AND assigned_developer IS DISTINCT FROM current_setting('app.employee_id', true)::int AND approval_status = 'Approved');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, object_attrs -> engineering.tests.product_owner, engineering.tests.qa_reviewer, engineering.tests.assigned_developer, engineering.tests.release_id, engineering.tests.approval_status, environment_attrs -> none, operation -> SELECT + UPDATE, target -> engineering.tests, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 60, 73",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "engineering.tests.product_owner",
+      "engineering.tests.qa_reviewer",
+      "engineering.tests.assigned_developer",
+      "engineering.tests.release_id",
+      "engineering.tests.approval_status"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE"
+    ]
+  },
+  {
+    "id": 512,
+    "db_id": "enterprise_rls_db",
+    "question": "Procurement officers run the order pipeline: they can read orders that are pending fulfillment, raise new orders in that same pending state for their current tenant, and approve or reject a pending purchase order only when its amount stays within 10000 times their position level.",
+    "sql": "CREATE POLICY fulfillment_pending_orders ON sales.orders FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND (current_setting('app.job_role', true) = 'procurement_officer' AND fulfillment_status = 'Pending'));\nCREATE POLICY shipping_pending ON sales.orders FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'procurement_officer' AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int AND fulfillment_status = 'Pending');\nCREATE POLICY procurement_authority_threshold ON sales.orders FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'procurement_officer' AND current_setting('app.position_level', true) IS NOT NULL AND fulfillment_status = 'Pending' AND total_amount <= current_setting('app.position_level', true)::numeric * 10000) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'procurement_officer' AND current_setting('app.position_level', true) IS NOT NULL AND fulfillment_status IN ('Approved', 'Rejected') AND total_amount <= current_setting('app.position_level', true)::numeric * 10000);",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, app.position_level, object_attrs -> sales.orders.fulfillment_status, sales.orders.tenant_id, sales.orders.total_amount, environment_attrs -> none, operation -> SELECT + INSERT + UPDATE, target -> sales.orders, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 170, 74, 39",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id",
+      "app.position_level"
+    ],
+    "o_attributes": [
+      "sales.orders.fulfillment_status",
+      "sales.orders.tenant_id",
+      "sales.orders.total_amount"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "INSERT",
+      "UPDATE"
+    ]
+  },
+  {
+    "id": 513,
+    "db_id": "enterprise_rls_db",
+    "question": "Accountants can read the invoices that are pending payment and update the payment status on verified invoices, though only inside the 02:00-06:00 maintenance window. Deleting an invoice is reserved for finance managers, and only while it is still a draft in their current tenant.",
+    "sql": "CREATE POLICY ap_pending_invoices ON sales.invoices FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND (current_setting('app.job_role', true) = 'accountant' AND payment_status = 'Pending'));\nCREATE POLICY billing_update_payment ON sales.invoices FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND (current_setting('app.job_role', true) = 'accountant' AND payment_verified = true AND app_now()::time BETWEEN '02:00'::time AND '06:00'::time)) WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND (current_setting('app.job_role', true) = 'accountant' AND payment_verified = true AND app_now()::time BETWEEN '02:00'::time AND '06:00'::time));\nCREATE POLICY sales_invoice_tenant_delete ON sales.invoices FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager' AND tenant_id = current_setting('app.tenant_id', true)::int AND status = 'Draft');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> sales.invoices.payment_status, sales.invoices.payment_verified, sales.invoices.tenant_id, sales.invoices.status, environment_attrs -> current_time, operation -> SELECT + UPDATE + DELETE, target -> sales.invoices, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 181, 234, 446",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "sales.invoices.payment_status",
+      "sales.invoices.payment_verified",
+      "sales.invoices.tenant_id",
+      "sales.invoices.status"
+    ],
+    "e_attributes": [
+      "current_time"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 514,
+    "db_id": "enterprise_rls_db",
+    "question": "Finance analysts can read quarterly revenue records whose report period is on or before today and can add new revenue rows only for the active current tenant, so nothing is booked forward and nothing crosses tenants. Removing a record is a finance manager's call, limited to voided reports marked as corrections and only after the revenue row has been closed.",
+    "sql": "CREATE POLICY revenue_quarterly_history ON finance.revenue FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND (current_setting('app.job_role', true) = 'finance_analyst' AND data_period = 'Quarterly' AND report_period::date <= app_now()::date));\nCREATE POLICY finance_revenue_tenant_insert ON finance.revenue FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_analyst' AND tenant_id = current_setting('app.tenant_id', true)::int AND EXISTS (SELECT 1 FROM auth.tenants t WHERE t.tenant_id = finance.revenue.tenant_id AND t.status = 'active'));\nCREATE POLICY clean_005_voided_revenue_delete ON finance.revenue FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'finance_manager' AND status = 'Voided' AND report_status = 'Correction' AND closed_at IS NOT NULL);",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> finance.revenue.data_period, finance.revenue.report_period, finance.revenue.tenant_id, auth.tenants.tenant_id, auth.tenants.status, finance.revenue.status, finance.revenue.report_status, finance.revenue.closed_at, environment_attrs -> current_date, operation -> SELECT + INSERT + DELETE, target -> finance.revenue, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 217, 427, 5",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "finance.revenue.data_period",
+      "finance.revenue.report_period",
+      "finance.revenue.tenant_id",
+      "auth.tenants.tenant_id",
+      "auth.tenants.status",
+      "finance.revenue.status",
+      "finance.revenue.report_status",
+      "finance.revenue.closed_at"
+    ],
+    "e_attributes": [
+      "current_date"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "INSERT",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 515,
+    "db_id": "enterprise_rls_db",
+    "question": "Tax specialists can read only the current year's tax records, and the only rows they can delete are drafts inside their current tenant.",
+    "sql": "CREATE POLICY current_year_tax ON finance.tax_records FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND (current_setting('app.job_role', true) = 'tax_specialist' AND tax_year = EXTRACT(YEAR FROM app_now()::date)::int));\nCREATE POLICY finance_tax_tenant_delete ON finance.tax_records FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'tax_specialist' AND tenant_id = current_setting('app.tenant_id', true)::int AND status = 'Draft');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> finance.tax_records.tax_year, finance.tax_records.tenant_id, finance.tax_records.status, environment_attrs -> current_date, operation -> SELECT + DELETE, target -> finance.tax_records, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 216, 428",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "finance.tax_records.tax_year",
+      "finance.tax_records.tenant_id",
+      "finance.tax_records.status"
+    ],
+    "e_attributes": [
+      "current_date"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 516,
+    "db_id": "enterprise_rls_db",
+    "question": "Department managers can read every performance review in their department, but editing belongs to the assigned reviewer, who can change a review only while it is in draft status and must leave it in draft.",
+    "sql": "CREATE POLICY dept_mgr_performance ON hr.performance FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.department_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'dept_manager' AND department_id = current_setting('app.department_id', true)::int);\nCREATE POLICY peer_review_draft ON hr.performance FOR UPDATE USING (current_setting('app.employee_id', true) IS NOT NULL AND (reviewer_id = current_setting('app.employee_id', true)::int AND review_status = 'Draft')) WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND (reviewer_id = current_setting('app.employee_id', true)::int AND review_status = 'Draft'));",
+    "evidence": "subject_attrs -> app.department_id, app.employee_id, app.job_role, object_attrs -> hr.performance.department_id, hr.performance.reviewer_id, hr.performance.review_status, environment_attrs -> none, operation -> SELECT + UPDATE, target -> hr.performance, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 12, 208",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.department_id",
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "hr.performance.department_id",
+      "hr.performance.reviewer_id",
+      "hr.performance.review_status"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE"
+    ]
+  },
+  {
+    "id": 517,
+    "db_id": "enterprise_rls_db",
+    "question": "Call center supervisors own their team's recordings inside the current tenant: they can read the recordings belonging to their team, move a recording from recorded to reviewed, and delete archived recordings belonging to agents anywhere in their recursive reporting chain once those recordings are more than two years old.",
+    "sql": "CREATE POLICY call_recordings_517_tenant_isolation ON support.call_recordings AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY call_center_supervisor ON support.call_recordings AS PERMISSIVE FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.team_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'call_center_supervisor' AND team_id = current_setting('app.team_id', true)::int);\nCREATE POLICY support_recording_tenant_update ON support.call_recordings AS PERMISSIVE FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'call_center_supervisor' AND recording_status = 'Recorded') WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'call_center_supervisor' AND recording_status = 'Reviewed');\nCREATE POLICY clean_531_support_recordings_mgr_delete ON support.call_recordings AS PERMISSIVE FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'call_center_supervisor' AND EXISTS (WITH RECURSIVE subordinate_scope(employee_id) AS (SELECT child.employee_id FROM hr.employees child WHERE child.manager_id = current_setting('app.employee_id', true)::int AND child.tenant_id = current_setting('app.tenant_id', true)::int UNION SELECT child.employee_id FROM hr.employees child JOIN subordinate_scope parent_scope ON child.manager_id = parent_scope.employee_id WHERE child.tenant_id = current_setting('app.tenant_id', true)::int) SELECT 1 FROM subordinate_scope WHERE subordinate_scope.employee_id = support.call_recordings.agent_id AND subordinate_scope.employee_id <> current_setting('app.employee_id', true)::int) AND status = 'Archived' AND archived_at < app_now() - INTERVAL '2 years');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.team_id, app.tenant_id, object_attrs -> support.call_recordings.team_id, support.call_recordings.tenant_id, support.call_recordings.recording_status, support.call_recordings.agent_id, support.call_recordings.status, support.call_recordings.archived_at, hr.employees.employee_id, hr.employees.manager_id, hr.employees.tenant_id, environment_attrs -> current_timestamp, operation -> SELECT + UPDATE + DELETE, target -> support.call_recordings, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 189, 450, 531",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.team_id",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "support.call_recordings.team_id",
+      "support.call_recordings.tenant_id",
+      "support.call_recordings.recording_status",
+      "support.call_recordings.agent_id",
+      "support.call_recordings.status",
+      "support.call_recordings.archived_at",
+      "hr.employees.employee_id",
+      "hr.employees.manager_id",
+      "hr.employees.tenant_id"
+    ],
+    "e_attributes": [
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 518,
+    "db_id": "enterprise_rls_db",
+    "question": "Backup records are read by clearance and written by role: a user at security clearance level 4 or higher can read backup rows during business hours (09:00-18:00, Monday-Friday), build administrators restore approved backups only inside the 02:00-06:00 maintenance window and must leave the row with a restored timestamp and a backup status of Restored, and security administrators delete a backup record once its retention period has expired.",
+    "sql": "CREATE POLICY high_level_backups ON operations.backups FOR SELECT USING (current_setting('app.user_id', true) IS NOT NULL AND current_setting('app.user_clearance_level', true) IS NOT NULL AND (current_setting('app.user_clearance_level', true)::int >= 4 AND app_now()::time BETWEEN '09:00'::time AND '18:00'::time AND EXTRACT(DOW FROM app_now()::date) BETWEEN 1 AND 5));\nCREATE POLICY backup_restoration ON operations.backups FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'build_admin' AND restore_approved = true AND app_now()::time BETWEEN '02:00'::time AND '06:00'::time) WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'build_admin' AND restore_approved = true AND restored_at IS NOT NULL AND backup_status = 'Restored' AND app_now()::time BETWEEN '02:00'::time AND '06:00'::time);\nCREATE POLICY backup_retention_policy ON operations.backups FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'security_admin' AND created_at + (retention_days * INTERVAL '1 day') <= app_now());",
+    "evidence": "subject_attrs -> app.user_id, app.user_clearance_level, app.employee_id, app.job_role, object_attrs -> operations.backups.restore_approved, operations.backups.restored_at, operations.backups.backup_status, operations.backups.created_at, operations.backups.retention_days, environment_attrs -> current_date, current_time, current_timestamp, operation -> SELECT + UPDATE + DELETE, target -> operations.backups, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 20, 88, 391",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.user_id",
+      "app.user_clearance_level",
+      "app.employee_id",
+      "app.job_role"
+    ],
+    "o_attributes": [
+      "operations.backups.restore_approved",
+      "operations.backups.restored_at",
+      "operations.backups.backup_status",
+      "operations.backups.created_at",
+      "operations.backups.retention_days"
+    ],
+    "e_attributes": [
+      "current_date",
+      "current_time",
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 519,
+    "db_id": "enterprise_rls_db",
+    "question": "Strategic roadmap material is gated by seniority on both sides: reading a strategic plan row takes clearance level 5 or higher, and adding a strategic roadmap item to the current tenant takes position level 7 or higher. Roadmap owners can delete only their own items, and only after those items have been deferred, within their tenant.",
+    "sql": "CREATE POLICY topsecret_strategic_plans ON product.roadmap FOR SELECT USING (current_setting('app.user_clearance_level', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.user_clearance_level', true)::int >= 5 AND item_type = 'strategic_plan' );\nCREATE POLICY executive_strategic ON product.roadmap FOR INSERT WITH CHECK (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.position_level', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.position_level', true)::int >= 7 AND tenant_id = current_setting('app.tenant_id', true)::int AND item_type = 'strategic');\nCREATE POLICY product_roadmap_tenant_delete ON product.roadmap FOR DELETE USING (current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int AND status = 'Deferred' AND owner_id = current_setting('app.employee_id', true)::int);",
+    "evidence": "subject_attrs -> app.employee_id, app.user_clearance_level, app.position_level, app.tenant_id, object_attrs -> product.roadmap.item_type, product.roadmap.tenant_id, product.roadmap.status, product.roadmap.owner_id, environment_attrs -> none, operation -> SELECT + INSERT + DELETE, target -> product.roadmap, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 370, 80, 441",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.user_clearance_level",
+      "app.position_level",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "product.roadmap.item_type",
+      "product.roadmap.tenant_id",
+      "product.roadmap.status",
+      "product.roadmap.owner_id"
+    ],
+    "e_attributes": [],
+    "action_attributes": [
+      "SELECT",
+      "INSERT",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 520,
+    "db_id": "enterprise_rls_db",
+    "question": "DevOps engineers can write build rows only within the recursive project trees rooted at projects they own inside the current tenant: there they can queue a new build for a planned or hotfix release, and can delete a failed build once it is more than 90 days old.",
+    "sql": "CREATE POLICY builds_520_tenant_isolation ON engineering.builds AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY clean_550_build_insert_release_exists ON engineering.builds AS PERMISSIVE FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'devops_engineer' AND build_status = 'Queued' AND EXISTS (SELECT 1 FROM engineering.releases r JOIN engineering.projects p ON p.project_id = r.project_id WHERE r.release_id = engineering.builds.release_id AND r.tenant_id = current_setting('app.tenant_id', true)::int AND p.tenant_id = current_setting('app.tenant_id', true)::int AND r.release_status IN ('Planned','Hotfix') AND EXISTS (WITH RECURSIVE project_scope(project_id) AS (SELECT root.project_id FROM engineering.projects root WHERE root.owner_id = current_setting('app.employee_id', true)::int AND root.tenant_id = current_setting('app.tenant_id', true)::int UNION SELECT child.project_id FROM engineering.projects child JOIN project_scope parent_scope ON child.parent_project_id = parent_scope.project_id WHERE child.tenant_id = current_setting('app.tenant_id', true)::int) SELECT 1 FROM project_scope WHERE project_scope.project_id = p.project_id)));\nCREATE POLICY clean_527_engineering_builds_project_delete ON engineering.builds AS PERMISSIVE FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'devops_engineer' AND EXISTS (WITH RECURSIVE rls_scope(node_id) AS (SELECT root.project_id FROM engineering.projects root WHERE root.owner_id = current_setting('app.employee_id', true)::int AND root.tenant_id = current_setting('app.tenant_id', true)::int UNION SELECT child.project_id FROM engineering.projects child JOIN rls_scope parent_scope ON child.parent_project_id = parent_scope.node_id WHERE child.tenant_id = current_setting('app.tenant_id', true)::int) SELECT 1 FROM rls_scope WHERE rls_scope.node_id = engineering.builds.project_id) AND build_status = 'Failed' AND end_time < app_now() - INTERVAL '90 days');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> engineering.builds.release_id, engineering.builds.tenant_id, engineering.builds.build_status, engineering.releases.release_id, engineering.releases.project_id, engineering.releases.tenant_id, engineering.releases.release_status, engineering.projects.project_id, engineering.projects.parent_project_id, engineering.projects.owner_id, engineering.projects.tenant_id, engineering.builds.project_id, engineering.builds.end_time, environment_attrs -> current_timestamp, operation -> INSERT + DELETE, target -> engineering.builds, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 550, 527",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "hierarchy_recursive",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "engineering.builds.release_id",
+      "engineering.builds.tenant_id",
+      "engineering.builds.build_status",
+      "engineering.releases.release_id",
+      "engineering.releases.project_id",
+      "engineering.releases.tenant_id",
+      "engineering.releases.release_status",
+      "engineering.projects.project_id",
+      "engineering.projects.parent_project_id",
+      "engineering.projects.owner_id",
+      "engineering.projects.tenant_id",
+      "engineering.builds.project_id",
+      "engineering.builds.end_time"
+    ],
+    "e_attributes": [
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "INSERT",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 521,
+    "db_id": "enterprise_rls_db",
+    "question": "Account managers run customer onboarding inside the current tenant: they can open a record in the Not Started state for a customer they manage, update the in-progress records assigned to them, and delete an abandoned record for a customer anywhere in their recursive customer hierarchy once it is more than a year old.",
+    "sql": "CREATE POLICY customer_onboarding_521_tenant_isolation ON sales.customer_onboarding AS RESTRICTIVE FOR ALL USING (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int) WITH CHECK (current_setting('app.tenant_id', true) IS NOT NULL AND tenant_id = current_setting('app.tenant_id', true)::int);\nCREATE POLICY clean_549_onboarding_insert_exists ON sales.customer_onboarding AS PERMISSIVE FOR INSERT WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'account_manager' AND progress_status = 'Not Started' AND EXISTS (SELECT 1 FROM sales.customers c WHERE c.customer_id = sales.customer_onboarding.customer_id AND c.tenant_id = current_setting('app.tenant_id', true)::int AND c.account_manager_id = current_setting('app.employee_id', true)::int));\nCREATE POLICY sales_onboarding_tenant_update ON sales.customer_onboarding AS PERMISSIVE FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'account_manager' AND onboarding_manager = current_setting('app.employee_id', true)::int AND progress_status = 'In Progress') WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'account_manager' AND onboarding_manager = current_setting('app.employee_id', true)::int);\nCREATE POLICY clean_530_customer_onboarding_hierarchy_delete_a ON sales.customer_onboarding AS PERMISSIVE FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.customer_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'account_manager' AND customer_id = current_setting('app.customer_id', true)::int AND status = 'Abandoned' AND updated_at < app_now() - INTERVAL '1 year');\nCREATE POLICY clean_530_customer_onboarding_hierarchy_delete_b ON sales.customer_onboarding AS PERMISSIVE FOR DELETE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.customer_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'account_manager' AND EXISTS (WITH RECURSIVE customer_scope(customer_id) AS (SELECT child.customer_id FROM sales.customers child WHERE child.parent_customer_id = current_setting('app.customer_id', true)::int AND child.tenant_id = current_setting('app.tenant_id', true)::int UNION SELECT child.customer_id FROM sales.customers child JOIN customer_scope parent_scope ON child.parent_customer_id = parent_scope.customer_id WHERE child.tenant_id = current_setting('app.tenant_id', true)::int) SELECT 1 FROM customer_scope WHERE customer_scope.customer_id = sales.customer_onboarding.customer_id) AND status = 'Abandoned' AND updated_at < app_now() - INTERVAL '1 year');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, app.customer_id, object_attrs -> sales.customer_onboarding.customer_id, sales.customer_onboarding.tenant_id, sales.customer_onboarding.progress_status, sales.customers.customer_id, sales.customers.tenant_id, sales.customers.account_manager_id, sales.customer_onboarding.onboarding_manager, sales.customer_onboarding.status, sales.customer_onboarding.updated_at, sales.customers.parent_customer_id, environment_attrs -> current_timestamp, operation -> INSERT + UPDATE + DELETE, target -> sales.customer_onboarding, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 549, 448, 530",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id",
+      "app.customer_id"
+    ],
+    "o_attributes": [
+      "sales.customer_onboarding.customer_id",
+      "sales.customer_onboarding.tenant_id",
+      "sales.customer_onboarding.progress_status",
+      "sales.customers.customer_id",
+      "sales.customers.tenant_id",
+      "sales.customers.account_manager_id",
+      "sales.customer_onboarding.onboarding_manager",
+      "sales.customer_onboarding.status",
+      "sales.customer_onboarding.updated_at",
+      "sales.customers.parent_customer_id"
+    ],
+    "e_attributes": [
+      "current_timestamp"
+    ],
+    "action_attributes": [
+      "INSERT",
+      "UPDATE",
+      "DELETE"
+    ]
+  },
+  {
+    "id": 522,
+    "db_id": "enterprise_rls_db",
+    "question": "Account managers can read the communication history for the accounts they manage during business hours (09:00-18:00, Monday-Friday), and can close a pending communication record for one of those accounts inside the current tenant.",
+    "sql": "CREATE POLICY customer_account_manager_comms ON sales.customer_communications FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'account_manager' AND account_manager_id = current_setting('app.employee_id', true)::int AND app_now()::time BETWEEN '09:00'::time AND '18:00'::time AND EXTRACT(DOW FROM app_now()::date) BETWEEN 1 AND 5);\nCREATE POLICY upd_447_customer_communication_close ON sales.customer_communications FOR UPDATE USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'account_manager' AND tenant_id = current_setting('app.tenant_id', true)::int AND account_manager_id = current_setting('app.employee_id', true)::int AND status = 'Pending') WITH CHECK (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.tenant_id', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'account_manager' AND tenant_id = current_setting('app.tenant_id', true)::int AND account_manager_id = current_setting('app.employee_id', true)::int AND status = 'Closed');",
+    "evidence": "subject_attrs -> app.employee_id, app.job_role, app.tenant_id, object_attrs -> sales.customer_communications.account_manager_id, sales.customer_communications.status, sales.customer_communications.tenant_id, environment_attrs -> current_date, current_time, operation -> SELECT + UPDATE, target -> sales.customer_communications, [DEFAULT_DENY: null_session_returns_no_rows], composed_from -> single_policy ids 164, 447",
+    "difficulty": "extra_hard",
+    "attribute_pattern": "combined",
+    "s_attributes": [
+      "app.employee_id",
+      "app.job_role",
+      "app.tenant_id"
+    ],
+    "o_attributes": [
+      "sales.customer_communications.account_manager_id",
+      "sales.customer_communications.status",
+      "sales.customer_communications.tenant_id"
+    ],
+    "e_attributes": [
+      "current_date",
+      "current_time"
+    ],
+    "action_attributes": [
+      "SELECT",
+      "UPDATE"
+    ]
+  }
+]

@@ -1,0 +1,171 @@
+You are generating PostgreSQL Row-Level Security policies.
+
+Generate exactly one PostgreSQL CREATE POLICY statement.
+Output SQL only. Do not explain.
+
+Rules:
+
+Use only the provided schema context. Do not invent tables, columns, functions, or session variables. Literal values come from the natural-language policy, not the schema.
+Read session variables with current_setting('app.<variable>', true) (e.g. current_setting('app.employee_id', true)).
+Use only the session variables listed in the runtime context.
+Use app.employee_id for internal employee identity, including employees, managers, engineers, HR, finance, auditors, assignees, approvers, authors, owners, and hierarchy relations.
+Use app.user_id for application account identity, including auth.users, access grants, temporal access records, API access, login accounts, and security events triggered by application accounts.
+Use app.customer_id for customer portal identity.
+Add fail-closed IS NOT NULL guards for required session variables.
+USING decides which existing rows are visible (SELECT, UPDATE, DELETE); WITH CHECK decides which new or updated rows are admissible (INSERT, UPDATE).
+This is a SELECT policy. Use USING clause only.
+Put old-row preconditions in USING, new-row postconditions in WITH CHECK, and security invariants in both.
+Use EXISTS or NOT EXISTS when the policy requires related supporting rows or absence of blocking rows.
+Use WITH RECURSIVE for direct/indirect hierarchy requirements unless an allowed helper function is explicitly provided.
+Preserve the exact column names shown in the schema context and the literal values stated in the policy.
+
+Schema:
+CREATE TABLE hr.employees (
+    employee_id integer NOT NULL,
+    first_name text,
+    last_name text,
+    email text,
+    department_id integer,
+    department_name text,
+    position_level integer,
+    security_clearance integer,
+    manager_id integer,
+    hire_date date,
+    region_id integer,
+    employment_type text,
+    is_active boolean DEFAULT true,
+    skills_array text[] DEFAULT '{}'::text[],
+    certifications_array text[] DEFAULT '{}'::text[],
+    project_access text[],
+    data_type text,
+    conflicting_role character varying(50) DEFAULT 'active'::character varying,
+    job_role character varying(50) DEFAULT 'active'::character varying,
+    leave_status character varying(50) DEFAULT 'active'::character varying,
+    dow integer,
+    team_id integer,
+    is_team_lead boolean DEFAULT false,
+    access_control_type text,
+    account_type text,
+    approval_status text,
+    last_review_date timestamp without time zone,
+    record_type text,
+    status text,
+    approver_confirmed boolean DEFAULT false,
+    confidential boolean DEFAULT false,
+    disabled_date timestamp without time zone,
+    entitlement_review_overdue boolean DEFAULT false,
+    evaluation_status text,
+    exception_required boolean DEFAULT false,
+    export_date timestamp without time zone,
+    file_type text,
+    group_membership_new text,
+    group_type text,
+    has_lowercase boolean DEFAULT false,
+    has_numbers boolean DEFAULT false,
+    has_special_chars boolean DEFAULT false,
+    has_uppercase boolean DEFAULT false,
+    hr_partner integer,
+    is_sensitive boolean DEFAULT false,
+    justification_documented boolean DEFAULT false,
+    last_entitlement_review timestamp without time zone,
+    last_login_date timestamp without time zone,
+    max_admin_members integer,
+    membership_count integer,
+    nda_signature_date timestamp without time zone,
+    nda_signed boolean DEFAULT false,
+    posting_type text,
+    record_status text,
+    regular_account_required boolean DEFAULT false,
+    request_date timestamp without time zone,
+    retention_date timestamp without time zone,
+    retention_period_elapsed boolean DEFAULT false,
+    separation_date timestamp without time zone,
+    tenant_id integer DEFAULT 1 NOT NULL,
+    user_clearance_level text,
+    user_integrity_level text,
+    account_last_used_date timestamp without time zone,
+    account_status text,
+    data_section text,
+    program_type text,
+    review_status text,
+    password_length integer,
+    request_type text,
+    role_type text,
+    "current_role" text,
+    office_location character varying(50),
+    role character varying(50),
+    phone_number text,
+    address text,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone,
+    approval_level integer,
+    mentor_id integer,
+    created_by integer,
+    updated_by integer,
+    deleted_at timestamp without time zone,
+    deleted_by integer,
+    row_version integer DEFAULT 1 NOT NULL,
+    organization_id integer DEFAULT 1,
+    business_unit_id integer DEFAULT 1,
+    employee_number text,
+    CONSTRAINT employees_security_clearance_check CHECK (((security_clearance >= 1) AND (security_clearance <= 7)))
+);
+
+Example 1:
+Scope: table=hr.employees, operation=SELECT
+Anchors: runtime=app.employee_id; row=hr.employees.employee_id, hr.employees.data_section; environment=(none)
+Requirement: Employees can view their own employee records classified as Emergency Contact.
+SQL:
+CREATE POLICY own_emergency_contact ON hr.employees FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND (employee_id = current_setting('app.employee_id', true)::int AND data_section = 'Emergency Contact'));
+
+Example 2:
+Scope: table=hr.employees, operation=SELECT
+Anchors: runtime=app.employee_id; row=hr.employees.employee_id, hr.employees.retention_date, hr.employees.status; environment=(none)
+Requirement: A user can view employees records where they are the employee id.
+SQL:
+CREATE POLICY own_employees_select ON hr.employees FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND employee_id = current_setting('app.employee_id', true)::int AND retention_date IS NOT NULL AND status = 'suspended');
+
+Example 3:
+Scope: table=hr.employees, operation=SELECT
+Anchors: runtime=app.employee_id; row=hr.employees.employee_id, hr.employees.data_section; environment=(none)
+Requirement: Employees can access their own personal data export records for download.
+SQL:
+CREATE POLICY personal_data_export ON hr.employees FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND employee_id = current_setting('app.employee_id', true)::int AND data_section = 'Export');
+
+Example 4:
+Scope: table=hr.employees, operation=SELECT
+Anchors: runtime=app.employee_id, app.job_role; row=(none); environment=(none)
+Requirement: project manager employees are allowed to see employees.
+SQL:
+CREATE POLICY rbac_employees_select ON hr.employees FOR SELECT USING (current_setting('app.job_role', true) IS NOT NULL AND current_setting('app.employee_id', true) IS NOT NULL AND current_setting('app.job_role', true) = 'project_manager');
+
+Example 5:
+Scope: table=hr.employees, operation=SELECT
+Anchors: runtime=app.employee_id; row=hr.employees.is_active; environment=(none)
+Requirement: Any authenticated employee can view records of active employees.
+SQL:
+CREATE POLICY view_active_directory ON hr.employees FOR SELECT USING (current_setting('app.employee_id', true) IS NOT NULL AND (is_active = true));
+
+Predicted scope and anchors (use as guidance):
+Scope: table=hr.employees, operation=SELECT
+Anchors: runtime=app.employee_id; row=hr.employees.employee_id; environment=(none)
+
+Requirement:
+Employees can always view their own personnel record.
+
+Runtime context (read with current_setting('app.<name>', true)):
+  app.employee_id (int): Acting employee id (internal identity)
+  app.user_id (int): Application account id (auth.users, access grants, security events)
+  app.customer_id (int): Customer portal identity
+  app.job_role (text): Acting employee job role (values in job_role_vocab.json)
+  app.department_id (int): Department of the acting employee
+  app.team_id (int): Team of the acting employee
+  app.region_id (int): Sales region of the acting employee
+  app.user_clearance_level (int): Security clearance level of the acting user
+  app.position_level (int): Position level of the acting employee
+  app.tenant_id (int): Tenant scope (multi-tenant database)
+  app.hire_date (date): Hire date of the acting employee (multi-policy bundles only)
+Allowed app.job_role values:
+  account_manager, accountant, admin, audit_lead, auditor, build_admin, call_center_supervisor, ceo, cfo, compliance_officer, coo, customer_advocacy_manager, customer_support, data_analyst, dept_manager, derogation_manager, designer, devops_engineer, director, division_executive, ehs_officer, engineer, engineering_manager, finance_analyst, finance_manager, guest, hr_admin, hr_specialist, iam_admin, junior_engineer, manager, manufacturing_engineer, operations_manager, procurement_officer, product_director, product_manager, project_manager, qa_engineer, regional_director, risk_manager, sales_manager, sales_rep, secops_engineer, security_admin, security_analyst, senior_engineer, sre, staff_augmentation_coordinator, support_ops, sustainability_officer, tax_specialist, vp_engineering, vp_sales, workplace_coordinator
+
+SQL:

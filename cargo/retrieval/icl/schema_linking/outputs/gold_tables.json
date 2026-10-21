@@ -1,0 +1,4501 @@
+{
+  "1": {
+    "question": "Any authenticated employee can view records of active employees.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "2": {
+    "question": "Employees can always view their own personnel record.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "3": {
+    "question": "Employees can delete only their own draft payroll correction rows during weekday business hours (09:00-18:00), and only before the pay period closes.",
+    "target": "hr.payroll",
+    "gold_tables": [
+      "hr.payroll"
+    ],
+    "split": "test"
+  },
+  "4": {
+    "question": "HR specialists can update employee records, but they cannot modify their own employee record.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "5": {
+    "question": "Finance managers can delete only voided reports marked as correction after the revenue row has been closed.",
+    "target": "finance.revenue",
+    "gold_tables": [
+      "finance.revenue"
+    ],
+    "split": "dev"
+  },
+  "6": {
+    "question": "Core engineers can delete only archived duplicate issues assigned to them after the issue has been inactive for more than 90 days.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "dev"
+  },
+  "7": {
+    "question": "Sales managers can view customers in their assigned region contacted within the last 90 days.",
+    "target": "sales.customers",
+    "gold_tables": [
+      "hr.employees",
+      "sales.customers"
+    ],
+    "split": "train"
+  },
+  "8": {
+    "question": "Employees can only view system configuration during business hours (09:00-18:00, Monday-Friday).",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "9": {
+    "question": "Department managers can view salary information for employees in their reporting chain.",
+    "target": "hr.payroll",
+    "gold_tables": [
+      "hr.employees",
+      "hr.payroll"
+    ],
+    "split": "dev"
+  },
+  "10": {
+    "question": "Senior engineers can delete only archived repositories they own after the repository has been archived for at least 90 days.",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository"
+    ],
+    "split": "train"
+  },
+  "11": {
+    "question": "Employees can delete only their own pending attendance correction requests inside the current tenant from the last 30 days during weekday business hours (09:00-18:00).",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance"
+    ],
+    "split": "train"
+  },
+  "12": {
+    "question": "Department managers can view all employee performance reviews in their department.",
+    "target": "hr.performance",
+    "gold_tables": [
+      "hr.performance"
+    ],
+    "split": "train"
+  },
+  "13": {
+    "question": "Department managers can view all performance reviews for employees in departments they manage and all descendant departments in the hierarchy.",
+    "target": "hr.performance",
+    "gold_tables": [
+      "hr.departments",
+      "hr.performance"
+    ],
+    "split": "train"
+  },
+  "14": {
+    "question": "Product managers can view all user feedback.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "product.user_feedback"
+    ],
+    "split": "train"
+  },
+  "15": {
+    "question": "Employees can only modify their own employee record on business days.(Monday-Friday).",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "dev"
+  },
+  "16": {
+    "question": "Auditors can delete rejected expense records only if the expense has a recorded approver other than themselves, they did not submit it themselves, and the record has been retained for at least seven years.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "17": {
+    "question": "QA engineers can view all test records.",
+    "target": "engineering.tests",
+    "gold_tables": [
+      "engineering.tests"
+    ],
+    "split": "train"
+  },
+  "18": {
+    "question": "Tax specialists can view all tax records.",
+    "target": "finance.tax_records",
+    "gold_tables": [
+      "finance.tax_records"
+    ],
+    "split": "test"
+  },
+  "19": {
+    "question": "Senior engineers can only delete test artifacts that are marked as failed, not linked to any active release, and older than 14 days.",
+    "target": "engineering.tests",
+    "gold_tables": [
+      "engineering.releases",
+      "engineering.tests"
+    ],
+    "split": "train"
+  },
+  "20": {
+    "question": "Security level 4 or higher users can access backup records at any time during business hours (09:00-18:00, Monday-Friday).",
+    "target": "operations.backups",
+    "gold_tables": [
+      "operations.backups"
+    ],
+    "split": "train"
+  },
+  "21": {
+    "question": "CFOs can delete closed department budget records only when the budget cycle is inactive and today is the last day of the quarter.",
+    "target": "finance.budget",
+    "gold_tables": [
+      "finance.budget"
+    ],
+    "split": "train"
+  },
+  "22": {
+    "question": "Junior engineers can delete only their own archived public repositories classified as sandbox during weekday business hours (09:00-18:00).",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository"
+    ],
+    "split": "test"
+  },
+  "23": {
+    "question": "Sales representatives can only view leads whose contract value does not exceed 10000 times their position level.",
+    "target": "sales.customers",
+    "gold_tables": [
+      "hr.employees",
+      "sales.customers"
+    ],
+    "split": "train"
+  },
+  "24": {
+    "question": "HR specialists can view all employee benefits records.",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits"
+    ],
+    "split": "train"
+  },
+  "25": {
+    "question": "Data analysts can view all product analytics data",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "26": {
+    "question": "Accountants can mark approved expense records as journal-posted only when those expenses were neither submitted nor approved by the current accountant.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "27": {
+    "question": "Team leads can view attendance records of their team members",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance"
+    ],
+    "split": "train"
+  },
+  "28": {
+    "question": "Team leads can approve or reject pending leave requests for employees in their team or any sub-teams they supervise.",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance",
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "29": {
+    "question": "Build administrators can view all build records",
+    "target": "engineering.builds",
+    "gold_tables": [
+      "engineering.builds"
+    ],
+    "split": "train"
+  },
+  "30": {
+    "question": "Employees should be able to log their own clock-in/out times.",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance"
+    ],
+    "split": "train"
+  },
+  "31": {
+    "question": "Sales representatives can only view contracts where the contract value does not exceed the average deal size of their department.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "dev"
+  },
+  "32": {
+    "question": "Product directors can modify all product features only during maintenance windows (02:00-06:00).",
+    "target": "product.features",
+    "gold_tables": [
+      "product.features"
+    ],
+    "split": "dev"
+  },
+  "33": {
+    "question": "Employees are allowed to remove or discard only their own orders, and only when those orders are in draft status.",
+    "target": "sales.orders",
+    "gold_tables": [
+      "sales.orders"
+    ],
+    "split": "train"
+  },
+  "34": {
+    "question": "Auditors can delete audit logs only when the logs are archived and older than seven years, and only during weekday business hours.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "35": {
+    "question": "Pay grade 7 or higher employees can view product metrics during business hours (09:00-18:00, Monday-Friday).",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "dev"
+  },
+  "36": {
+    "question": "Employees can only edit documents they authored when the document status is draft and the document was created within the last 30 days.",
+    "target": "operations.documents",
+    "gold_tables": [
+      "operations.documents"
+    ],
+    "split": "dev"
+  },
+  "37": {
+    "question": "Regional directors can view all orders in their assigned region during business hours.",
+    "target": "sales.orders",
+    "gold_tables": [
+      "sales.orders"
+    ],
+    "split": "train"
+  },
+  "38": {
+    "question": "Employees with the admin role can modify system configuration only during the maintenance window from 02:00 to 06:00.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "39": {
+    "question": "Procurement officers can approve or reject pending purchase orders only if the order amount does not exceed 10000 times their position level.",
+    "target": "sales.orders",
+    "gold_tables": [
+      "sales.orders"
+    ],
+    "split": "train"
+  },
+  "40": {
+    "question": "VPs of Engineering can delete archived engineering projects in their current tenant during weekday business hours (9:00-18:00) only when the project has no open or in-progress issues in the same tenant.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.issues",
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "41": {
+    "question": "Customer support can delete only duplicate feedback that has already been resolved and was submitted within the last seven days.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "product.user_feedback"
+    ],
+    "split": "train"
+  },
+  "42": {
+    "question": "Senior engineers assigned as reviewers can update pull requests they review, but not pull requests they authored themselves.",
+    "target": "engineering.pull_requests",
+    "gold_tables": [
+      "engineering.pull_requests"
+    ],
+    "split": "test"
+  },
+  "43": {
+    "question": "Compliance officers can view all tax records in all departments",
+    "target": "finance.tax_records",
+    "gold_tables": [
+      "finance.tax_records"
+    ],
+    "split": "test"
+  },
+  "44": {
+    "question": "Project managers can view issues for which they are the assigned project manager during business hours (9:00-18:00, Monday-Friday).",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "45": {
+    "question": "Regional directors can view sales contracts in their current tenant for their region and all sub-regions.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts",
+      "sales.regions"
+    ],
+    "split": "train"
+  },
+  "46": {
+    "question": "Employees with position level 7 or higher and clearance level 4 or higher can view budget data classified at confidentiality level 3 or below.",
+    "target": "finance.budget",
+    "gold_tables": [
+      "finance.budget"
+    ],
+    "split": "train"
+  },
+  "47": {
+    "question": "Sales representatives can delete abandoned sales pipeline opportunity records in the prospecting or qualification stage, or abandoned proposal-stage opportunity records that have not been updated for more than 180 days.",
+    "target": "sales.sales_pipeline",
+    "gold_tables": [
+      "sales.sales_pipeline"
+    ],
+    "split": "train"
+  },
+  "48": {
+    "question": "DevOps engineers can delete only backup records whose backup status is failed and whose verification status is failed, after the backup attempt is older than 24 hours.",
+    "target": "operations.backups",
+    "gold_tables": [
+      "operations.backups"
+    ],
+    "split": "train"
+  },
+  "49": {
+    "question": "CEOs can perform all row-level operations on employee rows in their current tenant; inserted or updated employee rows must also remain in their current tenant and pass the CEO-only policy check.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "50": {
+    "question": "Employees can only view planned product roadmaps",
+    "target": "product.roadmap",
+    "gold_tables": [
+      "product.roadmap"
+    ],
+    "split": "test"
+  },
+  "51": {
+    "question": "Team leads can view team member performance reviews",
+    "target": "hr.performance",
+    "gold_tables": [
+      "hr.performance"
+    ],
+    "split": "test"
+  },
+  "52": {
+    "question": "Sales managers and compliance officers can terminate contracts only if they are past their renewal window, not pending approval, and have no pending payments.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts",
+      "sales.invoices"
+    ],
+    "split": "test"
+  },
+  "53": {
+    "question": "Employees can view their own tax documents",
+    "target": "finance.tax_records",
+    "gold_tables": [
+      "finance.tax_records"
+    ],
+    "split": "test"
+  },
+  "54": {
+    "question": "Build administrators can view all system configuration.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "55": {
+    "question": "Engineers can assign currently unassigned low-estimate issues to themselves in their current tenant, where have estimated hours below 8.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "56": {
+    "question": "Department managers can view their department's expenses",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "57": {
+    "question": "Region director can view their region's sales data during business hours (9:00-18:00, Monday-Friday).",
+    "target": "finance.revenue",
+    "gold_tables": [
+      "finance.revenue",
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "58": {
+    "question": "Procurement officers can approve pending expense records, but not records they submitted themselves.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "59": {
+    "question": "Employees can delete only expired contract documents they authored.",
+    "target": "operations.documents",
+    "gold_tables": [
+      "operations.documents"
+    ],
+    "split": "train"
+  },
+  "60": {
+    "question": "QA engineers can view test results for products they own.",
+    "target": "engineering.tests",
+    "gold_tables": [
+      "engineering.tests"
+    ],
+    "split": "train"
+  },
+  "61": {
+    "question": "Security analysts can view security event logs",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "62": {
+    "question": "Audit leads can delete audit logs only when the logs are archived, sealed, and older than seven years during weekday business hours.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "63": {
+    "question": "Compliance officers can delete expired documents with Compliance document type in their current tenant only after the expiration timestamp has passed.",
+    "target": "operations.documents",
+    "gold_tables": [
+      "operations.documents"
+    ],
+    "split": "dev"
+  },
+  "64": {
+    "question": "Risk managers can delete archived risk assessment analytics only when the analytic row was calculated more than one year ago.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "65": {
+    "question": "HR staff can view all employee records.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "test"
+  },
+  "66": {
+    "question": "Accountants, finance analysts, finance managers, and tax specialists can delete voided balance sheet correction rows in their current tenant only when the entry date is before the current date.",
+    "target": "finance.balance_sheet",
+    "gold_tables": [
+      "finance.balance_sheet"
+    ],
+    "split": "train"
+  },
+  "67": {
+    "question": "Project managers can view all issues in their current tenant for projects they own or any sub-projects in the project hierarchy.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues",
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "68": {
+    "question": "Sales managers can delete inactive customer rows during weekday business hours (9:00-18:00) only when the customer has not been contacted for more than three years and has no active contract.",
+    "target": "sales.customers",
+    "gold_tables": [
+      "sales.contracts",
+      "sales.customers"
+    ],
+    "split": "dev"
+  },
+  "69": {
+    "question": "Security analysts can archive security events only if they are resolved, older than 90 days, and have been reviewed by a supervisor.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "test"
+  },
+  "70": {
+    "question": "Employees can view their attendance records",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance"
+    ],
+    "split": "train"
+  },
+  "71": {
+    "question": "Sales managers can approve pending sales contract discount requests in their current tenant only when approval is required and the discount percentage exceeds the department standard threshold.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "72": {
+    "question": "Customers can delete only their own draft orders in their current tenant during weekday business hours (9:00-18:00) before the order has been fulfilled.",
+    "target": "sales.orders",
+    "gold_tables": [
+      "sales.orders"
+    ],
+    "split": "train"
+  },
+  "73": {
+    "question": "Quality assurance engineers can approve release QA test records assigned to them, but not records where they are the assigned developer.",
+    "target": "engineering.tests",
+    "gold_tables": [
+      "engineering.tests"
+    ],
+    "split": "train"
+  },
+  "74": {
+    "question": "Procurement officers can insert order records with pending fulfillment status in their current tenant.",
+    "target": "sales.orders",
+    "gold_tables": [
+      "sales.orders"
+    ],
+    "split": "train"
+  },
+  "75": {
+    "question": "Procurement officers can view inventory repository artifacts in their current tenant from the last 90 days.",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository"
+    ],
+    "split": "train"
+  },
+  "76": {
+    "question": "Procurement officers can insert contracts marked as vendor contracts in their current tenant.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "77": {
+    "question": "Operations managers can insert operational metrics in their current tenant.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "78": {
+    "question": "Public users can view only verified public product analytics from the last 90 days.",
+    "target": "product.features",
+    "gold_tables": [
+      "product.features"
+    ],
+    "split": "train"
+  },
+  "79": {
+    "question": "Authenticated internal users can view product features with public or internal visibility.",
+    "target": "product.features",
+    "gold_tables": [
+      "product.features"
+    ],
+    "split": "train"
+  },
+  "80": {
+    "question": "Employees with position level 7 or higher can insert strategic roadmap item rows in their current tenant.",
+    "target": "product.roadmap",
+    "gold_tables": [
+      "product.roadmap"
+    ],
+    "split": "train"
+  },
+  "81": {
+    "question": "Employees can insert temporal access request records for documents for themselves in their current tenant.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "82": {
+    "question": "Budget owners can view budget details they own for their department and all subordinate departments.",
+    "target": "finance.budget",
+    "gold_tables": [
+      "finance.budget",
+      "hr.departments"
+    ],
+    "split": "train"
+  },
+  "83": {
+    "question": "Employees can update engineering project records only when the project is not frozen, and updated rows is frozen.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "84": {
+    "question": "Guest user can insert new product feature rows only when the new feature is public, visible as public, and created time falls during weekday business hours (9:00-18:00).",
+    "target": "product.features",
+    "gold_tables": [
+      "product.features"
+    ],
+    "split": "train"
+  },
+  "85": {
+    "question": "Employees can reopen their own expense reports only if the reports were rejected within the last 7 days and have not been escalated.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "86": {
+    "question": "Build administrators can insert archived audit logs.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "87": {
+    "question": "Users can create their own new expense reports only when the new expense amount does not exceed three times their currently effective monthly allowance.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses",
+      "hr.employee_allowances"
+    ],
+    "split": "train"
+  },
+  "88": {
+    "question": "Build administrators can restore approved backups only during maintenance windows (02:00-06:00), and updated rows must record a restored timestamp with backup status Restored.",
+    "target": "operations.backups",
+    "gold_tables": [
+      "operations.backups"
+    ],
+    "split": "train"
+  },
+  "89": {
+    "question": "Finance managers can update budget allocation records for departments other than their own.",
+    "target": "finance.budget",
+    "gold_tables": [
+      "finance.budget"
+    ],
+    "split": "train"
+  },
+  "90": {
+    "question": "Employees can only access sales contracts in their assigned regions.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "hr.employees",
+      "sales.contracts"
+    ],
+    "split": "dev"
+  },
+  "91": {
+    "question": "Employees can access budget data for their assigned departments during business hours (9:00-18:00, Monday-Friday).",
+    "target": "finance.budget",
+    "gold_tables": [
+      "finance.budget"
+    ],
+    "split": "dev"
+  },
+  "92": {
+    "question": "Employees can only access sales contracts in their current tenant from the last 90 days.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "hr.employees",
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "93": {
+    "question": "HR specialists can delete attendance records that are erroneous and have been flagged for removal.",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance"
+    ],
+    "split": "train"
+  },
+  "94": {
+    "question": "Employees can only view data created after their hire date",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository",
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "95": {
+    "question": "Employees can insert their own expense records only if the confidentiality period has expired or the confidentiality date is not set.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "96": {
+    "question": "Division executives can access all employee data within their division and all departments under their division.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.departments",
+      "hr.employees"
+    ],
+    "split": "test"
+  },
+  "97": {
+    "question": "Build administrators can modify staging code repository records only during maintenance windows (02:00-06:00).",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository"
+    ],
+    "split": "train"
+  },
+  "98": {
+    "question": "Changes to records are only allowed by employees during working hours (9:00-17:00, Monday-Friday).",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "99": {
+    "question": "Employees can access API access records tied to their own application account only if their employee API request count in the current hour is below 100 times their position level.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.audit_logs",
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "100": {
+    "question": "Users can only view engineering project records assigned to their department's office location during business hours (9:00-18:00, Monday-Friday).",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects",
+      "hr.departments",
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "101": {
+    "question": "Product managers can deprecate product features only if they have zero active users in the last 180 days and no active dependent features.",
+    "target": "product.features",
+    "gold_tables": [
+      "product.feature_dependencies",
+      "product.feature_usage",
+      "product.features"
+    ],
+    "split": "train"
+  },
+  "102": {
+    "question": "Product directors can insert technology roadmap item rows during business hours (9:00-18:00, Monday-Friday).",
+    "target": "product.roadmap",
+    "gold_tables": [
+      "product.roadmap"
+    ],
+    "split": "train"
+  },
+  "103": {
+    "question": "Procurement officers can insert supplier contracts whose created timestamp is within the last 90 days.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "test"
+  },
+  "104": {
+    "question": "Security analysts can clear security alerts, but not alerts triggered by their own application account.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "105": {
+    "question": "Environmental health and safety officers can insert incident reports during business hours (9:00-18:00, Monday-Friday).",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "106": {
+    "question": "Sales managers can modify contracts within 30 days before expiry.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "test"
+  },
+  "107": {
+    "question": "Sustainability officers can insert sustainability analytics data.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "108": {
+    "question": "Team leads can view innovation category experimental engineering projects during business hours (09:00-18:00, Monday-Friday).",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects",
+      "hr.employees"
+    ],
+    "split": "dev"
+  },
+  "109": {
+    "question": "Customer advocacy managers can view feature request records and announcement feedback records.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "product.user_feedback"
+    ],
+    "split": "test"
+  },
+  "110": {
+    "question": "Operations managers can insert disaster recovery configuration during business hours (9:00-18:00, Monday-Friday).",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "111": {
+    "question": "Managers can view attendance records for employees in their direct and indirect reporting chain.",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance",
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "112": {
+    "question": "Auditors can insert high or critical severity security events during business hours (9:00-18:00, Monday-Friday).",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "dev"
+  },
+  "113": {
+    "question": "Finance managers can update budget records only when the remaining amount stays above 10% of the allocated amount.",
+    "target": "finance.budget",
+    "gold_tables": [
+      "finance.budget"
+    ],
+    "split": "dev"
+  },
+  "114": {
+    "question": "DevOps engineers can modify temporal access API routing configuration records.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "115": {
+    "question": "Data analysts can insert anonymized usage analytics data.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "test"
+  },
+  "116": {
+    "question": "HR specialists can deactivate user accounts only if they have been inactive for 90 days, have no open tasks, and are not system accounts.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "engineering.issues",
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "117": {
+    "question": "Finance analysts can insert competitive revenue data during business hours (9:00-18:00, Monday-Friday).",
+    "target": "finance.revenue",
+    "gold_tables": [
+      "finance.revenue"
+    ],
+    "split": "test"
+  },
+  "118": {
+    "question": "Account managers can apply discounts to invoices, but not invoices for accounts they personally manage.",
+    "target": "sales.invoices",
+    "gold_tables": [
+      "sales.invoices"
+    ],
+    "split": "train"
+  },
+  "119": {
+    "question": "Customer support staff can insert incident issues during business hours (9:00-18:00, Monday-Friday).",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "120": {
+    "question": "Compliance officers can insert software license inventory in system configuration.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "dev"
+  },
+  "121": {
+    "question": "Employees can view benefits they are eligible for during open enrollment",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits"
+    ],
+    "split": "train"
+  },
+  "122": {
+    "question": "Finance managers can insert merger or acquisition document records during business hours (9:00-18:00, Monday-Friday).",
+    "target": "operations.documents",
+    "gold_tables": [
+      "operations.documents"
+    ],
+    "split": "train"
+  },
+  "123": {
+    "question": "Environmental health and safety officers can perform all row-level operations on safety event records during business hours (9:00-18:00, Monday-Friday).",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "dev"
+  },
+  "124": {
+    "question": "Procurement officers can modify vendor customer records only during maintenance windows (02:00-06:00).",
+    "target": "sales.customers",
+    "gold_tables": [
+      "sales.customers"
+    ],
+    "split": "train"
+  },
+  "125": {
+    "question": "Employees can submit their own overtime requests only if the requested overtime is at or below 10 hours.",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance"
+    ],
+    "split": "dev"
+  },
+  "126": {
+    "question": "Senior engineers can perform all row-level operations on schema design in the code repository.",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository"
+    ],
+    "split": "test"
+  },
+  "127": {
+    "question": "Administrators can only modify configuration entries that are not archived, not locked, and have been reviewed within the last 90 days.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "128": {
+    "question": "Finance managers can perform all row-level operations on grant-related budget records during business hours (09:00-18:00, Monday-Friday).",
+    "target": "finance.budget",
+    "gold_tables": [
+      "finance.budget"
+    ],
+    "split": "train"
+  },
+  "129": {
+    "question": "Compliance officers can access documents with document type Patent Application.",
+    "target": "operations.documents",
+    "gold_tables": [
+      "operations.documents"
+    ],
+    "split": "train"
+  },
+  "130": {
+    "question": "Compliance officers can perform all row-level operations on data handling configuration records during business hours (9:00-18:00, Monday-Friday).",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "131": {
+    "question": "Product managers can perform all row-level operations on analytics rows with mentions analytics and brand category in their current tenant; inserted or updated rows must remain mentions analytics rows in the brand category.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "132": {
+    "question": "Auditors can perform all row-level operations on audit evidence while the audit is in progress.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "133": {
+    "question": "Compliance officers can mark policy exceptions as approved, but not exceptions they requested.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "test"
+  },
+  "134": {
+    "question": "Customer support staff can update submitted user feedback to an open moderation state only during maintenance windows (02:00-06:00).",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "product.user_feedback"
+    ],
+    "split": "train"
+  },
+  "135": {
+    "question": "Finance analysts can perform all row-level operations on historical revenue records dated before today.",
+    "target": "finance.revenue",
+    "gold_tables": [
+      "finance.revenue"
+    ],
+    "split": "train"
+  },
+  "136": {
+    "question": "Data analysts can view store-specific performance metrics.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "137": {
+    "question": "Employees can record their own data export audit log entries only when the export size does not exceed their currently effective monthly allowance.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "hr.employee_allowances",
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "138": {
+    "question": "Compliance officers can archive superseded documents that were created more than 2 years ago.",
+    "target": "operations.documents",
+    "gold_tables": [
+      "operations.documents"
+    ],
+    "split": "train"
+  },
+  "139": {
+    "question": "Sales managers can access customer records with assigned territory metadata.",
+    "target": "sales.customers",
+    "gold_tables": [
+      "sales.customers"
+    ],
+    "split": "train"
+  },
+  "140": {
+    "question": "Administrators can modify system configuration only during maintenance windows (02:00-06:00).",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "141": {
+    "question": "Data analysts can view engineering requirement issues categorized as Functional.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "dev"
+  },
+  "142": {
+    "question": "DevOps engineers can view performance-category baseline product metrics.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "143": {
+    "question": "Product managers can modify translated content only during maintenance windows (14:00-16:00).",
+    "target": "product.features",
+    "gold_tables": [
+      "product.features"
+    ],
+    "split": "train"
+  },
+  "144": {
+    "question": "Compliance officers can perform all row-level operations on accessibility documents with compliance record type in their current tenant, and inserted or updated rows must remain accessibility compliance document records.",
+    "target": "operations.documents",
+    "gold_tables": [
+      "operations.documents"
+    ],
+    "split": "train"
+  },
+  "145": {
+    "question": "DevOps engineers can perform all row-level operations on integration specification artifacts in the code repository during business hours (9:00-18:00, Monday-Friday).",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository"
+    ],
+    "split": "train"
+  },
+  "146": {
+    "question": "Data analysts can perform all row-level operations on Raw Events analytics data in their current tenant during business hours (9:00-18:00, Monday-Friday).",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "test"
+  },
+  "147": {
+    "question": "Product managers can perform all row-level operations on feature adoption metrics",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "148": {
+    "question": "DevOps engineers can view infrastructure designs in code repository.",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository"
+    ],
+    "split": "train"
+  },
+  "149": {
+    "question": "Finance managers with position level 7 or higher can approve pending budget increase requests for their department when the requested increase does not exceed 10% of the remaining budget.",
+    "target": "finance.budget",
+    "gold_tables": [
+      "finance.budget"
+    ],
+    "split": "dev"
+  },
+  "150": {
+    "question": "Workplace experience coordinators can update temporal access records for event schedules.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "151": {
+    "question": "Build administrators can view release note artifacts in the code repository.",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository"
+    ],
+    "split": "train"
+  },
+  "152": {
+    "question": "Product managers can modify endpoint project resources.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "153": {
+    "question": "Staff augmentation coordinators can view contractor employee records in their current tenant.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "154": {
+    "question": "Manufacturing engineers can view production schedule configuration records in temporal access settings.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "dev"
+  },
+  "155": {
+    "question": "Quality engineers can view defect issues in their current tenant from the last 90 days.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "156": {
+    "question": "Operations managers can access workflow metrics.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "dev"
+  },
+  "157": {
+    "question": "Product managers can modify brand guidelines feature records only during maintenance windows (12:00-16:00).",
+    "target": "product.features",
+    "gold_tables": [
+      "product.features"
+    ],
+    "split": "train"
+  },
+  "158": {
+    "question": "Procurement officers can view supplier customer records.",
+    "target": "sales.customers",
+    "gold_tables": [
+      "sales.customers"
+    ],
+    "split": "dev"
+  },
+  "159": {
+    "question": "Operations managers can perform all row-level operations on resource utilization metrics. ",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "dev"
+  },
+  "160": {
+    "question": "Project managers can view portfolio project records for projects they coordinate.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "161": {
+    "question": "Directors can approve contract renewals in their current tenant only when the renewal term exceeds the original term by more than 50% and the contract has outstanding customer disputes.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "162": {
+    "question": "Compliance officers can remove security event records after their retention window has elapsed.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "163": {
+    "question": "Managers can view time clock records for attendance rows they supervise.",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance"
+    ],
+    "split": "train"
+  },
+  "164": {
+    "question": "Account managers can view customer communication history for accounts they manage during business hours (9:00-18:00, Monday-Friday).",
+    "target": "sales.customer_communications",
+    "gold_tables": [
+      "sales.customer_communications"
+    ],
+    "split": "dev"
+  },
+  "165": {
+    "question": "Data analysts can view current and past finance revenue forecasts.",
+    "target": "finance.revenue",
+    "gold_tables": [
+      "finance.revenue"
+    ],
+    "split": "train"
+  },
+  "166": {
+    "question": "Product managers can view campaign performance data for campaigns they manage.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "dev"
+  },
+  "167": {
+    "question": "Security analysts on team 11 can access active security event records.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "168": {
+    "question": "Finance managers can view expenses for their department during business hours (9:00-18:00, Monday-Friday).",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "test"
+  },
+  "169": {
+    "question": "Sales managers can view active subscription contracts.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "170": {
+    "question": "Procurement officers can view orders pending fulfillment.",
+    "target": "sales.orders",
+    "gold_tables": [
+      "sales.orders"
+    ],
+    "split": "train"
+  },
+  "171": {
+    "question": "Employees who either own a project or are listed as a team member can view project documents from the last 90 days.",
+    "target": "operations.documents",
+    "gold_tables": [
+      "engineering.projects",
+      "operations.documents"
+    ],
+    "split": "train"
+  },
+  "172": {
+    "question": "Compliance officers can only view contracts awaiting legal review during business hours (9:00-18:00, Monday-Friday).",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "dev"
+  },
+  "173": {
+    "question": "Operations managers can approve production system configuration changes in their current tenant outside maintenance windows (02:00-06:00) only when the change risk level is High or Critical, the configuration is not locked, not archived, and has been reviewed within the last 90 days.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "dev"
+  },
+  "174": {
+    "question": "Tax consultants can view tax planning documents during business hours (9:00-18:00, Monday-Friday).",
+    "target": "finance.tax_records",
+    "gold_tables": [
+      "finance.tax_records"
+    ],
+    "split": "train"
+  },
+  "175": {
+    "question": "Sales managers can view SLA metrics they own during business hours (9:00-18:00, Monday-Friday).",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "176": {
+    "question": "Sales managers can access contracts within the next 90-day renewal window..",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "177": {
+    "question": "HR specialists can modify training completion benefits records.",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits"
+    ],
+    "split": "train"
+  },
+  "178": {
+    "question": "Accountants can access payroll records in their current tenant during business hours (9:00-18:00, Monday-Friday).",
+    "target": "hr.payroll",
+    "gold_tables": [
+      "hr.payroll"
+    ],
+    "split": "train"
+  },
+  "179": {
+    "question": "Compliance officers can view compliance violation security events.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "180": {
+    "question": "Sales contracts are readable only when the contract partner matches the current application user.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "181": {
+    "question": "Accountants can view invoices pending payment.",
+    "target": "sales.invoices",
+    "gold_tables": [
+      "sales.invoices"
+    ],
+    "split": "train"
+  },
+  "182": {
+    "question": "Accountants can view invoices that are past due and not yet paid.",
+    "target": "sales.invoices",
+    "gold_tables": [
+      "sales.invoices"
+    ],
+    "split": "train"
+  },
+  "183": {
+    "question": "Sales managers can view customer onboarding progress they managed during business hours (9:00-18:00, Monday-Friday).",
+    "target": "sales.customer_onboarding",
+    "gold_tables": [
+      "sales.customer_onboarding"
+    ],
+    "split": "train"
+  },
+  "184": {
+    "question": "Assigned users can modify non-closed user feedback records assigned to them.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "product.user_feedback"
+    ],
+    "split": "train"
+  },
+  "185": {
+    "question": "Employees data is granted only if the employees has appropriate clearance AND the status is not under legal hold AND access is within the user's geographic jurisdiction.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "test"
+  },
+  "186": {
+    "question": "HR specialists can enroll benefits for eligible employees during enrollment windows.",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits"
+    ],
+    "split": "train"
+  },
+  "187": {
+    "question": "Sales managers can view customer issue feedback records where they are the escalation owner in their current tenant.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "product.user_feedback"
+    ],
+    "split": "train"
+  },
+  "188": {
+    "question": "Operations managers can view work order issues during business hours (9:00-18:00, Monday-Friday).",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "189": {
+    "question": "Call center supervisors can view call recordings for their team in their current tenant.",
+    "target": "support.call_recordings",
+    "gold_tables": [
+      "support.call_recordings"
+    ],
+    "split": "train"
+  },
+  "190": {
+    "question": "Procurement officers can approve pending return approval contracts only during maintenance windows (02:00-06:00).",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "191": {
+    "question": "Procurement officers can view in-transit shipment sales order.",
+    "target": "sales.orders",
+    "gold_tables": [
+      "sales.orders"
+    ],
+    "split": "test"
+  },
+  "192": {
+    "question": "Data analysts can access anonymized customer analytics from the last 90 days.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "193": {
+    "question": "Data analysts can view market analysis reports during business hours (9:00-18:00, Monday-Friday).",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "test"
+  },
+  "194": {
+    "question": "Compliance trainers mark compliance training benefits as completed only during maintenance windows (02:00-06:00).",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits"
+    ],
+    "split": "dev"
+  },
+  "195": {
+    "question": "Procurement officers can update vendor contract performance rating records.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "196": {
+    "question": "Department managers can view asset depreciation configuration records.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "197": {
+    "question": "Security analysts can view engineering vulnerability reports",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "198": {
+    "question": "Employees on team 12 can access feedback announcement records.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "product.user_feedback"
+    ],
+    "split": "dev"
+  },
+  "199": {
+    "question": "Employees can view company policy configurations that were effective on or before their hire date and either have no expiry or whose expiry is on or after their hire date.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "hr.employees",
+      "operations.system_config"
+    ],
+    "split": "test"
+  },
+  "200": {
+    "question": "Employees on leave can view benefits continuation information",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits",
+      "hr.employees"
+    ],
+    "split": "test"
+  },
+  "201": {
+    "question": "Department managers can only view salary information for their direct reports from the last 90 days.",
+    "target": "hr.payroll",
+    "gold_tables": [
+      "hr.employees",
+      "hr.payroll"
+    ],
+    "split": "train"
+  },
+  "202": {
+    "question": "Employees can view their own retention bonus benefits if they have been employed for at least 2 years.",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits"
+    ],
+    "split": "train"
+  },
+  "203": {
+    "question": "Employees can view their own employee records classified as Emergency Contact.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "204": {
+    "question": "Managers can approve pending time off records from employees they supervise.",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance"
+    ],
+    "split": "dev"
+  },
+  "205": {
+    "question": "Employees can view payroll records classified as salary band information for their role from the last 90 days.",
+    "target": "hr.payroll",
+    "gold_tables": [
+      "hr.payroll"
+    ],
+    "split": "test"
+  },
+  "206": {
+    "question": "Employees can update their own payroll information marked as Direct Deposit only during maintenance windows (02:00-06:00)..",
+    "target": "hr.payroll",
+    "gold_tables": [
+      "hr.payroll"
+    ],
+    "split": "train"
+  },
+  "207": {
+    "question": "Managers can modify assignment attendance records they supervise only during maintenance windows (02:00-06:00).",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance"
+    ],
+    "split": "train"
+  },
+  "208": {
+    "question": "Reviewers can modify performance reviews in draft status.",
+    "target": "hr.performance",
+    "gold_tables": [
+      "hr.performance"
+    ],
+    "split": "train"
+  },
+  "209": {
+    "question": "Employees can view their own career development plan records tracked in performance management during business hours (09:00-18:00, Monday-Friday).",
+    "target": "hr.performance",
+    "gold_tables": [
+      "hr.performance"
+    ],
+    "split": "train"
+  },
+  "210": {
+    "question": "Department managers can view exportable payroll records for their own department in their current tenant.",
+    "target": "hr.payroll",
+    "gold_tables": [
+      "hr.payroll"
+    ],
+    "split": "test"
+  },
+  "211": {
+    "question": "Budget owners can modify their own current fiscal-year budget rows.",
+    "target": "finance.budget",
+    "gold_tables": [
+      "finance.budget"
+    ],
+    "split": "test"
+  },
+  "212": {
+    "question": "Finance analysts can view budget reports in product metrics during business hours (09:00-18:00, Monday-Friday).",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "test"
+  },
+  "213": {
+    "question": "Finance managers can approve pending budget requests assigned to them during an active budget cycle.",
+    "target": "finance.budget",
+    "gold_tables": [
+      "finance.budget"
+    ],
+    "split": "test"
+  },
+  "214": {
+    "question": "Data analysts can view expense records from the last 12 months.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "215": {
+    "question": "Expense approvers can approve pending expenses assigned to them withn their position level, but cannot approve expenses they submitted themselves.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "216": {
+    "question": "Tax specialists can view only current year tax records",
+    "target": "finance.tax_records",
+    "gold_tables": [
+      "finance.tax_records"
+    ],
+    "split": "dev"
+  },
+  "217": {
+    "question": "Finance analysts can view quarterly revenue records with the report period on or before the current date.",
+    "target": "finance.revenue",
+    "gold_tables": [
+      "finance.revenue"
+    ],
+    "split": "train"
+  },
+  "218": {
+    "question": "Employees can view their own commission expense records.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "219": {
+    "question": "Sales managers can view commission expense records for employees they manage from the last 90 days based on expense date.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "220": {
+    "question": "Senior engineers can view code review issues for projects they lead.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "test"
+  },
+  "221": {
+    "question": "Code reviewers can approve pull requests from their assigned repositories only during maintenance windows (02:00-06:00).",
+    "target": "engineering.pull_requests",
+    "gold_tables": [
+      "engineering.code_repository",
+      "engineering.pull_requests"
+    ],
+    "split": "test"
+  },
+  "222": {
+    "question": "Engineers can only view test results assigned to them.",
+    "target": "engineering.tests",
+    "gold_tables": [
+      "engineering.tests"
+    ],
+    "split": "train"
+  },
+  "223": {
+    "question": "DevOps engineers can deploy approved code changes only during maintenance windows (02:00-06:00).",
+    "target": "engineering.tests",
+    "gold_tables": [
+      "engineering.tests"
+    ],
+    "split": "train"
+  },
+  "224": {
+    "question": "QA engineers can view bug issues assigned to them during business hours (09:00-18:00, Monday-Friday).",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "dev"
+  },
+  "225": {
+    "question": "Assigned technical writers can update user documentation records for their engineering projects.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "226": {
+    "question": "Product owners can view feature records for their products that are classified as Feature Request feedback.",
+    "target": "product.features",
+    "gold_tables": [
+      "product.features"
+    ],
+    "split": "train"
+  },
+  "227": {
+    "question": "Assigned designers can modify draft product feature records only during maintenance windows (02:00-06:00).",
+    "target": "product.features",
+    "gold_tables": [
+      "product.features"
+    ],
+    "split": "train"
+  },
+  "228": {
+    "question": "Customers can view account balance data in their own sales contract records within their current tenant during business hours (9:00-18:00, Monday-Friday).",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "229": {
+    "question": "Sales representatives can view pipeline-stage contract assigned to them.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "230": {
+    "question": "Account managers can update primary contact contract assigned to them.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "dev"
+  },
+  "231": {
+    "question": "Employees assigned as negotiators can view draft contract assigned to them.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "232": {
+    "question": "Employees assigned as processors can modify delivered fulfillment-stage contract records only during maintenance windows (02:00-06:00).",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "233": {
+    "question": "Customers can only view their own invoice during business hours (9:00-18:00, Monday-Friday).",
+    "target": "sales.invoices",
+    "gold_tables": [
+      "sales.invoices"
+    ],
+    "split": "train"
+  },
+  "234": {
+    "question": "Accountants can update payment status for verified invoices only during maintenance windows (02:00-06:00).",
+    "target": "sales.invoices",
+    "gold_tables": [
+      "sales.invoices"
+    ],
+    "split": "dev"
+  },
+  "235": {
+    "question": "Data analysts can view only verified customer feedback records.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "product.user_feedback"
+    ],
+    "split": "test"
+  },
+  "236": {
+    "question": "Product managers assigned as feature leads can set the pending priority status of features they lead to High.",
+    "target": "product.features",
+    "gold_tables": [
+      "product.features"
+    ],
+    "split": "train"
+  },
+  "237": {
+    "question": "Data analysts can view public analytics Dashboard data only.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "238": {
+    "question": "Metrics owners can update KPI metric only during maintenance windows (02:00-06:00).",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "239": {
+    "question": "Engineers can view performance metrics during review season.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "test"
+  },
+  "240": {
+    "question": "Operations leads can view system metrics in real-time during business hours (9:00-18:00, Monday-Friday).",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "dev"
+  },
+  "241": {
+    "question": "DevOps engineers can access audit logs linked to incidents.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "dev"
+  },
+  "242": {
+    "question": "On-call DevOps engineers can access active Critical or Blocker incident issues assigned to them.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "243": {
+    "question": "DevOps engineers can create post mortem document records.",
+    "target": "operations.documents",
+    "gold_tables": [
+      "operations.documents"
+    ],
+    "split": "train"
+  },
+  "244": {
+    "question": "DevOps engineers can create published incident status updates in security events when the update is linked to an incident.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "245": {
+    "question": "Runbook owners can update their own Runbook engineering project records only during maintenance windows (02:00-06:00).",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "246": {
+    "question": "DevOps engineers can update alert threshold system configuration records only during off-hours (before 08:00 or after 18:59).",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "test"
+  },
+  "247": {
+    "question": "Employees in team 13 can access distributed trace analytics data.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "248": {
+    "question": "Junior engineers can create chaos experiment issue records during maintenance windows (00:00-04:00).",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "249": {
+    "question": "Administrators can update non-production database access records where the permitted operation is Maintenance.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "250": {
+    "question": "Security administrators can audit all access logs",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "251": {
+    "question": "Compliance officers can view DSAR documents during business hours (9:00-18:00, Monday-Friday).",
+    "target": "operations.documents",
+    "gold_tables": [
+      "operations.documents"
+    ],
+    "split": "test"
+  },
+  "252": {
+    "question": "Data analysts can view active data processing contracts assigned to them as processor.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "253": {
+    "question": "Compliance officers can modify DPIA documents assigned to them as assessor.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "dev"
+  },
+  "254": {
+    "question": "Compliance officers can purge inactive employee records only when the retention date has passed and the employee has a separation date.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "255": {
+    "question": "Compliance officers can view consent-related analytics data.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "256": {
+    "question": "Auditors can access compliance audit records",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "dev"
+  },
+  "257": {
+    "question": "Auditors can view control effectiveness metrics updated within the last 90 days.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "258": {
+    "question": "Risk managers can create risk issues as the reporter.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "test"
+  },
+  "259": {
+    "question": "Risk managers can track mitigation progress metrics they own.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "dev"
+  },
+  "260": {
+    "question": "Compliance officers can modify policy review workflow records only during maintenance windows (02:00-06:00).",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "dev"
+  },
+  "261": {
+    "question": "Employees can access their own personal data export records for download.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "test"
+  },
+  "262": {
+    "question": "Employees can request data deletion for their own employee record when the request date is within the last 30 days.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "263": {
+    "question": "Compliance officers on compliance team 6 can access all Data Processing inventory records in temporal access for export.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "264": {
+    "question": "Procurement officers can view vendor customer records where they are assigned as the vendor compliance officer.",
+    "target": "sales.customers",
+    "gold_tables": [
+      "sales.customers"
+    ],
+    "split": "test"
+  },
+  "265": {
+    "question": "Compliance officers can track data processing contracts assigned to them as processor during business hours (09:00-18:00, Monday-Friday).",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "test"
+  },
+  "266": {
+    "question": "Compliance officers can view regulatory records for their assigned region/country during business hours (09:00-18:00, Monday-Friday).",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "267": {
+    "question": "Compliance officers can modify TIA projects they own only during maintenance windows (02:00-06:00).",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "test"
+  },
+  "268": {
+    "question": "Compliance officers can modify SCC template contracts only during maintenance windows (02:00-06:00).",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "269": {
+    "question": "Compliance officers can publish BCR project records.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "test"
+  },
+  "270": {
+    "question": "Derogation managers can view derogation request issues assigned to them.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "271": {
+    "question": "Compliance officers can approve cross border transfers that require review during maintenance windows (02:00-06:00), and the approval must be documented.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "test"
+  },
+  "272": {
+    "question": "Compliance officers can update adequacy Projects.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "273": {
+    "question": "Auditors can review audit logs about data collection practices.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "274": {
+    "question": "Compliance officers can view product analytics records categorized as Purpose.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "test"
+  },
+  "275": {
+    "question": "Compliance officers can modify temporal access records where configuration type is Deletion Schedule only during maintenance windows (02:00-06:00).",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "276": {
+    "question": "Auditors can view encryption configuration records.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "277": {
+    "question": "Compliance officers can modify pseudonym key records in temporal access.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "test"
+  },
+  "278": {
+    "question": "Compliance officers can view anonymized analytics records where validation type is Effectiveness during business hours (09:00-18:00, Monday-Friday).",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "279": {
+    "question": "Compliance officers can create engineering project records they own for accountability documents.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "280": {
+    "question": "Compliance officers can modify privacy default setting records only during maintenance windows (02:00-06:00).",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "281": {
+    "question": "Compliance officers can update open or in-progress rights request issues.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "282": {
+    "question": "Compliance officers can access all privacy critical documents in engineering projects.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "283": {
+    "question": "Members of legal review team 2 can view legal hold audit log records.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "test"
+  },
+  "284": {
+    "question": "Members of records management team 15 can update temporal access records for retention schedules.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "285": {
+    "question": "Auditors can view audit log litigation hold records.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "286": {
+    "question": "Auditors can access archived evidence audit logs during business hours (9:00-18:00, Monday-Friday).",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "287": {
+    "question": "Auditors can view evidence movement audit log records from the last 90 days.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "288": {
+    "question": "Auditors can create engineering issue records for investigation findings.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "289": {
+    "question": "Compliance officers can update open or in-progress violation issues and set their status to Closed.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "290": {
+    "question": "HR administrators can impose disciplinary actions only when approval is documented.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "291": {
+    "question": "Compliance officers can update security event records that are data breach events with breach notification reports in their current tenant.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "292": {
+    "question": "Compliance officers can create regulatory filing records in security events.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "293": {
+    "question": "Employees can track closed or resolved corrective action issues when they are the CAP manager.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "294": {
+    "question": "Risk managers can update preventive action issues.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "295": {
+    "question": "Compliance officers can create management review documents.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "296": {
+    "question": "Team members can view improvement metrics updated within the last 90 days.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "297": {
+    "question": "Compliance officers can update draft quality-related project documents so that their status remains Draft or becomes Planning.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "dev"
+  },
+  "298": {
+    "question": "Operations managers can modify active baseline temporal access records only during maintenance windows (02:00-06:00).",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "dev"
+  },
+  "299": {
+    "question": "Project coordinators can modify project status reports only during maintenance windows (02:00-06:00).",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "300": {
+    "question": "Product managers can view portfolio-level metrics for portfolios they manage in their current tenant.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "301": {
+    "question": "Employees can create accommodation request issues.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "302": {
+    "question": "Workplace coordinators can view accommodation issues to track their status.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "303": {
+    "question": "HR specialists can view employee relations files assigned to them.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "test"
+  },
+  "304": {
+    "question": "Employees can view their own corrective action issues if resolved during business hours (9:00-18:00, Monday-Friday).",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "305": {
+    "question": "HR administrators can update ethics violation security events only during maintenance windows (02:00-06:00).",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "306": {
+    "question": "HR administrators can view protected audit log records.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "307": {
+    "question": "HR specialists can update employee grievance issues.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "308": {
+    "question": "HR specialists can view mediation-case audit log records.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "309": {
+    "question": "HR specialists can access employee bargaining data.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "310": {
+    "question": "HR specialists can access employee representation data during business hours (9:00-18:00, Monday-Friday).",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "dev"
+  },
+  "311": {
+    "question": "Tax specialists can access withholding tax records during business hours (9:00-18:00, Monday-Friday).",
+    "target": "finance.tax_records",
+    "gold_tables": [
+      "finance.tax_records"
+    ],
+    "split": "dev"
+  },
+  "312": {
+    "question": "HR specialists can enroll employees by creating health benefit records for an employee.",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits"
+    ],
+    "split": "test"
+  },
+  "313": {
+    "question": "HR administrators can update pension benefit records.",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits"
+    ],
+    "split": "train"
+  },
+  "314": {
+    "question": "Accountants can insert their own insurance expense records in their current tenant.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "315": {
+    "question": "HR specialists can update benefit records for the EAP program.",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits"
+    ],
+    "split": "train"
+  },
+  "316": {
+    "question": "HR specialists can access employee benefit records for succession planning support.",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits"
+    ],
+    "split": "train"
+  },
+  "317": {
+    "question": "HR specialists can view recruitment issues for candidate applications.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "318": {
+    "question": "HR specialists can view candidate application issues.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "319": {
+    "question": "HR specialists can create interview schedule issues they report.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "dev"
+  },
+  "320": {
+    "question": "HR specialists can access candidate application feedback for their department.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "product.user_feedback"
+    ],
+    "split": "train"
+  },
+  "321": {
+    "question": "HR specialists can approve pending job offer contracts that require approval, marking them as no longer requiring approval.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "322": {
+    "question": "HR specialists can update employee onboarding checklists issues only during maintenance windows (02:00-06:00).",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "323": {
+    "question": "Employees can access their own onboarding completion metric records during business hours (9:00-18:00, Monday-Friday).",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "test"
+  },
+  "324": {
+    "question": "HR specialists can manage all mentorship benefit program records.",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits"
+    ],
+    "split": "dev"
+  },
+  "325": {
+    "question": "Mentors can provide feedback assigned to themselves for employees they mentor.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "hr.employees",
+      "product.user_feedback"
+    ],
+    "split": "train"
+  },
+  "326": {
+    "question": "HR specialists can view course enrollment issues.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "dev"
+  },
+  "327": {
+    "question": "Employees can view Learning Path project records where the type matches their job role.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "test"
+  },
+  "328": {
+    "question": "Employees assigned to pending course enrollment issues can grade them.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "329": {
+    "question": "Employees can view their own grade metrics during business hours (09:00-18:00, Monday-Friday).",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "330": {
+    "question": "HR administrators can update employee records that have certification data.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "331": {
+    "question": "Employees can create skill assessment request issues for themselves.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "332": {
+    "question": "HR specialists can update skill assessment issues only during maintenance windows (02:00-06:00).",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "333": {
+    "question": "Assigned users can create Skill Assessment issue records assigned to themselves.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "dev"
+  },
+  "334": {
+    "question": "Employees can access their own assessment result metrics after 48 hours.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "335": {
+    "question": "Career coaches can modify career development plans assigned to them only during maintenance windows (02:00-06:00).",
+    "target": "hr.performance",
+    "gold_tables": [
+      "hr.performance"
+    ],
+    "split": "train"
+  },
+  "336": {
+    "question": "HR specialists can modify temporal access records for competency frameworks only during maintenance windows (02:00-06:00).",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "337": {
+    "question": "Security administrators can update temporal access records for role definitions.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "338": {
+    "question": "HR specialists can update employee records with pending evaluation status and keep the evaluation status Pending or Completed.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "dev"
+  },
+  "339": {
+    "question": "Finance analysts can view salary benchmark data during business hours (9:00-18:00, Monday-Friday).",
+    "target": "finance.payroll",
+    "gold_tables": [
+      "finance.payroll"
+    ],
+    "split": "train"
+  },
+  "340": {
+    "question": "HR administrators can manage incentive benefit programs.",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits"
+    ],
+    "split": "train"
+  },
+  "341": {
+    "question": "Employees can view their own approved bonus expense records.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "342": {
+    "question": "HR specialists can publish award nomination issues.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "343": {
+    "question": "Employees can create award nomination issue records for other employees.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "344": {
+    "question": "Award selection committee members in team 18 can create award vote audit log records.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "345": {
+    "question": "Members of communications team 12 can create award winner announcement feedback records.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "product.user_feedback"
+    ],
+    "split": "train"
+  },
+  "346": {
+    "question": "Authenticated employees can view temporal access records for company holiday calendars.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "test"
+  },
+  "347": {
+    "question": "Accountants can update payroll records during maintenance windows (02:00-06:00, Monday-Friday).",
+    "target": "hr.payroll",
+    "gold_tables": [
+      "hr.payroll"
+    ],
+    "split": "train"
+  },
+  "348": {
+    "question": "Employees can view their own exportable payroll records for past pay periods during business hours (09:00-18:00, Monday-Friday).",
+    "target": "hr.payroll",
+    "gold_tables": [
+      "hr.payroll"
+    ],
+    "split": "dev"
+  },
+  "349": {
+    "question": "HR administrators can create open HR request issues for contract reviews assigned to themselves.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "350": {
+    "question": "Employees can create employment reference request issues for themselves.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "351": {
+    "question": "HR specialists can complete pending exit interview issues.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "test"
+  },
+  "352": {
+    "question": "Employees with a recorded separation date can submit their own exit feedback records.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "hr.employees",
+      "product.user_feedback"
+    ],
+    "split": "dev"
+  },
+  "353": {
+    "question": "Security administrators can revoke active temporal access records with a recorded termination date.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "test"
+  },
+  "354": {
+    "question": "Operations managers can view asset return documents during business hours (09:00-18:00, Monday-Friday).",
+    "target": "operations.documents",
+    "gold_tables": [
+      "operations.documents"
+    ],
+    "split": "train"
+  },
+  "355": {
+    "question": "Compliance officers can remove separated employee records once retention obligations have been met.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "356": {
+    "question": "Terminated employees can access their own current payroll record for one year after termination.",
+    "target": "hr.payroll",
+    "gold_tables": [
+      "hr.payroll"
+    ],
+    "split": "test"
+  },
+  "357": {
+    "question": "Data analysts can access archived employee records.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "test"
+  },
+  "358": {
+    "question": "Compliance officers can view compliance log records during business hours (09:00-18:00, Monday-Friday).",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "359": {
+    "question": "Compliance officers can grant policy exceptions themselves when the temporary access window has valid start and end times and the end time is in the future.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "360": {
+    "question": "Compliance officers can view access records for policy exceptions with recorded expiration dates.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "361": {
+    "question": "Finance managers can update high-value contract records within their approval level.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "362": {
+    "question": "Finance managers can approve unapproved budget records over $500k by marking themselves as approver and setting the approval date to the current timestamp.",
+    "target": "finance.budget",
+    "gold_tables": [
+      "finance.budget"
+    ],
+    "split": "train"
+  },
+  "363": {
+    "question": "Department managers can approve pending expenses under $5000 in their department only during maintenance windows (02:00-06:00).",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "364": {
+    "question": "Executives in VP Sales, CFO, COO, or VP Engineering roles can approve pending expenses between $5001 and $25000 only during maintenance windows (02:00-06:00).",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "365": {
+    "question": "C-suite and division executives can approve pending expenses over $25000.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "366": {
+    "question": "Regional directors can sign pending contracts for their region.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "367": {
+    "question": "Procurement officers can sign pending supplier contracts over $1M.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "dev"
+  },
+  "368": {
+    "question": "Employees can access confidential documents when their clearance level meets the document's required clearance.",
+    "target": "operations.documents",
+    "gold_tables": [
+      "operations.documents"
+    ],
+    "split": "train"
+  },
+  "369": {
+    "question": "Employees with clearance level 4 or higher can view restricted IP artifacts in the code repository.",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository"
+    ],
+    "split": "dev"
+  },
+  "370": {
+    "question": "Employees with clearance level 5 or higher can view strategic plan roadmap item rows.",
+    "target": "product.roadmap",
+    "gold_tables": [
+      "product.roadmap"
+    ],
+    "split": "train"
+  },
+  "371": {
+    "question": "Level 7 or higher data analysts and finance analysts can view variance reports in metrics.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "dev"
+  },
+  "372": {
+    "question": "Employees with pay grade 5 or 6 can view internal analytics reports.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "373": {
+    "question": "Employees below level 5 can view only public product analytics reports.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "374": {
+    "question": "Teams with team IDs 1 through 5 can access priority customer accounts",
+    "target": "sales.customers",
+    "gold_tables": [
+      "sales.customers"
+    ],
+    "split": "test"
+  },
+  "375": {
+    "question": "Customer support staff can update minor and medium severity issues only during business hours (09:00-18:00, Monday-Friday).",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "376": {
+    "question": "Core engineering roles can update engineering issues with High, Critical, or Blocker severity.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "dev"
+  },
+  "377": {
+    "question": "Data analysts can access all non-sensitive datasets",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "378": {
+    "question": "Compliance officers can access all analytics data including sensitive ones during business hours (9:00-18:00, Monday-Friday).",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "379": {
+    "question": "Data analysts can view read-only production access records during business hours (9:00-18:00, Monday-Friday).",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "380": {
+    "question": "Employees with the engineer role can update staging system configuration records during maintenance windows (02:00-06:00).",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "381": {
+    "question": "Administrators can access any environment during business hours (9:00-18:00, Monday-Friday).",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "382": {
+    "question": "QA engineers can view test configuration records.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "383": {
+    "question": "Core Security employees iew test and staging system configuration records during business hours (09:00-18:00, Monday-Friday).",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "dev"
+  },
+  "384": {
+    "question": "DevOps engineers can update approved production system configuration records during maintenance windows (02:00-06:00).",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "385": {
+    "question": "Operations managers can access backup configurations.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "386": {
+    "question": "Compliance officers can audit access logs for their departments during business hours (9:00-18:00, Monday-Friday).",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "387": {
+    "question": "Security administrators can insert access event records for high-sensitivity data.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "388": {
+    "question": "Security administrators can delete audit logs logged within the last 30 days.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "389": {
+    "question": "Security administrators and DevOps engineers can update critical production system configuration records only during maintenance windows (02:00-06:00) when enhanced approval has been recorded.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "390": {
+    "question": "Security administrators or DevOps engineers can update infrastructure system configuration records, but during peak hours (09:00-18:00) enhanced approval is required; outside peak hours no additional approval is needed.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "test"
+  },
+  "391": {
+    "question": "Security administrators can delete backup records only after their retention period has expired.",
+    "target": "operations.backups",
+    "gold_tables": [
+      "operations.backups"
+    ],
+    "split": "dev"
+  },
+  "392": {
+    "question": "When documentation is required, operations managers can insert disaster recovery backup test records.",
+    "target": "operations.backups",
+    "gold_tables": [
+      "operations.backups"
+    ],
+    "split": "test"
+  },
+  "393": {
+    "question": "Build administrators can update approved security patch records only if the patch was deployed within 7 days of release.",
+    "target": "engineering.tests",
+    "gold_tables": [
+      "engineering.tests"
+    ],
+    "split": "test"
+  },
+  "394": {
+    "question": "Security analysts can update critical vulnerability records only when they are patched within 24 hours of creation.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "395": {
+    "question": "Auditors and compliance officers can view access request issues that were resolved within 2 calendar days.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "test"
+  },
+  "396": {
+    "question": "Security administrators and compliance officers can view high-sensitivity temporal access records only when encryption is enabled both in transit and at rest.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "397": {
+    "question": "Security admins can view database connection records using TLS 1.2 during business hours (9:00-18:00, Monday-Friday).",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "398": {
+    "question": "Security administrators can rotate gateway-managed API credentials only after the standard 90-day rotation interval has elapsed.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "test"
+  },
+  "399": {
+    "question": "Security administrators can review password policy records that require passwords of at least 12 characters and remember at least 5 previous passwords.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "400": {
+    "question": "Security administrators and auditors can view level 3 or higher privileged account records through multi-factor authentication.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "401": {
+    "question": "Security administrators can review access session records where a 30-minute inactivity timeout is enforced.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "402": {
+    "question": "Security administrators can update sensitive access operation records only when step-up verification was recorded within the last 5 minutes.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "test"
+  },
+  "403": {
+    "question": "Security administrators can insert privilege escalation event records only with required and documented approval.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "dev"
+  },
+  "404": {
+    "question": "Security administrators can create temporary privileged access records only after approval and when an access duration is provided.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "dev"
+  },
+  "405": {
+    "question": "Security administrators can delete expired privileged access records.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "406": {
+    "question": "Security administrators can view vault-stored secret items only when encryption is enabled.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "407": {
+    "question": "Security administrators can update secret system configuration records when the secret has not been rotated for at least 30 days.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "408": {
+    "question": "Security administrators can create hotfix code commit records only with a valid GPG signature.",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository"
+    ],
+    "split": "train"
+  },
+  "409": {
+    "question": "Project owners or assigned reviewers can update project merge status, but a merge cannot be approved until it has at least two approvals.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "test"
+  },
+  "410": {
+    "question": "Security administrators can update project code review records only when the updated review includes a security check.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "411": {
+    "question": "Security administrators can create test results for package dependency changes only after the dependency scan has passed.",
+    "target": "engineering.tests",
+    "gold_tables": [
+      "engineering.tests"
+    ],
+    "split": "dev"
+  },
+  "412": {
+    "question": "Security administrators can update container image test records only the updated record shows a passed vulnerability scan and approved deployment.",
+    "target": "engineering.tests",
+    "gold_tables": [
+      "engineering.tests"
+    ],
+    "split": "train"
+  },
+  "413": {
+    "question": "Security administrators can peer review infrastructure artifacts in the code repository only during maintenance windows (02:00-06:00), and the updated row must be marked as reviewed.",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository"
+    ],
+    "split": "dev"
+  },
+  "414": {
+    "question": "Security administrators can update network ACL configuration records only when the updated record is documented and approved.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "415": {
+    "question": "Security administrators can view firewall configuration records reviewed within the last 90 days.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "416": {
+    "question": "Security administrators and compliance officers can view VPN access records that meet the approved-device compliance requirement.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "417": {
+    "question": "Security administrators can create remote session security event records only when logging and monitoring are both enabled.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "418": {
+    "question": "Security administrators can view data-transfer access records that use TLS 1.3 encrypted channels.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "419": {
+    "question": "Security administrators can update database replication access records only when SSL is enabled and the TLS version is at least 1.2.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "420": {
+    "question": "Audit leads can view centralized, tamper protected security event records with immutability configured during business hours (09:00-18:00, Monday-Friday).",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "dev"
+  },
+  "421": {
+    "question": "HR administrators can update active employee rows only inside the current tenant.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "test"
+  },
+  "422": {
+    "question": "Managers may update attendance records only inside the current tenant and for rows in their department.",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance"
+    ],
+    "split": "test"
+  },
+  "423": {
+    "question": "HR specialists may create benefit enrollment rows only for the active current tenant.",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "auth.tenants",
+      "hr.benefits"
+    ],
+    "split": "test"
+  },
+  "424": {
+    "question": "HR administrators may delete pending payroll approval rows only within their tenant.",
+    "target": "hr.payroll",
+    "gold_tables": [
+      "hr.payroll"
+    ],
+    "split": "dev"
+  },
+  "425": {
+    "question": "Employees can update their own draft expense rows only inside the current tenant, and updated rows must remain owned by that employee in that tenant.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "426": {
+    "question": "Finance managers may update current payroll rows only within their tenant, and updated rows must remain current in that tenant.",
+    "target": "finance.payroll",
+    "gold_tables": [
+      "finance.payroll"
+    ],
+    "split": "train"
+  },
+  "427": {
+    "question": "Finance analysts may insert revenue records only for the active current tenant.",
+    "target": "finance.revenue",
+    "gold_tables": [
+      "auth.tenants",
+      "finance.revenue"
+    ],
+    "split": "train"
+  },
+  "428": {
+    "question": "Tax specialists may delete draft tax records only inside the current tenant.",
+    "target": "finance.tax_records",
+    "gold_tables": [
+      "finance.tax_records"
+    ],
+    "split": "test"
+  },
+  "429": {
+    "question": "Project owners can update draft engineering projects only in the current tenant, and updated project rows must remain draft projects owned by the same requester in that tenant.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "430": {
+    "question": "Project managers may update issue rows whose current status is open or in-progress only within the current tenant, and updated rows must remain within that tenant.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "train"
+  },
+  "431": {
+    "question": "Repository owners may create repository metadata only for themselves inside the current tenant.",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository"
+    ],
+    "split": "train"
+  },
+  "432": {
+    "question": "DevOps engineers may delete failed build rows only within their tenant.",
+    "target": "engineering.builds",
+    "gold_tables": [
+      "engineering.builds"
+    ],
+    "split": "train"
+  },
+  "433": {
+    "question": "Compliance officers can review tenant audit logs from pending review to reviewed in their current tenant.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "434": {
+    "question": "Security analysts can resolve unresolved security events only inside their tenant.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "dev"
+  },
+  "435": {
+    "question": "Operations managers may create documents only for the active current tenant.",
+    "target": "operations.documents",
+    "gold_tables": [
+      "auth.tenants",
+      "operations.documents"
+    ],
+    "split": "train"
+  },
+  "436": {
+    "question": "SREs may manage low-risk system configuration rows only within their tenant.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "437": {
+    "question": "IAM administrators may revoke expired access grant rows inside the current tenant only after the grant expires_at has passed; the updated row must be unapproved in that tenant.",
+    "target": "auth.access_grants",
+    "gold_tables": [
+      "auth.access_grants"
+    ],
+    "split": "train"
+  },
+  "438": {
+    "question": "Product managers can update active feature rows only inside the current tenant.",
+    "target": "product.features",
+    "gold_tables": [
+      "product.features"
+    ],
+    "split": "test"
+  },
+  "439": {
+    "question": "Product managers may update active metrics only within their tenant.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "440": {
+    "question": "Data analysts may insert analytics rows only for the current tenant.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "dev"
+  },
+  "441": {
+    "question": "Roadmap owners may delete their own deferred roadmap items only within their tenant.",
+    "target": "product.roadmap",
+    "gold_tables": [
+      "product.roadmap"
+    ],
+    "split": "train"
+  },
+  "442": {
+    "question": "Support users can escalate customer feedback assigned to them inside the current tenant; they may update only open feedback.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "product.user_feedback"
+    ],
+    "split": "train"
+  },
+  "443": {
+    "question": "Account managers can update active customer rows assigned to them only inside the current tenant.",
+    "target": "sales.customers",
+    "gold_tables": [
+      "sales.customers"
+    ],
+    "split": "test"
+  },
+  "444": {
+    "question": "Account managers may update active contracts only within their tenant.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "445": {
+    "question": "Sales representatives may create orders only for their tenant.",
+    "target": "sales.orders",
+    "gold_tables": [
+      "sales.orders"
+    ],
+    "split": "train"
+  },
+  "446": {
+    "question": "Finance managers may delete draft invoices only inside the current tenant.",
+    "target": "sales.invoices",
+    "gold_tables": [
+      "sales.invoices"
+    ],
+    "split": "train"
+  },
+  "447": {
+    "question": "Account managers can close pending customer communication records for accounts they manage inside the current tenant.",
+    "target": "sales.customer_communications",
+    "gold_tables": [
+      "sales.customer_communications"
+    ],
+    "split": "train"
+  },
+  "448": {
+    "question": "Account managers may update in-progress onboarding rows assigned to them only within their tenant.",
+    "target": "sales.customer_onboarding",
+    "gold_tables": [
+      "sales.customer_onboarding"
+    ],
+    "split": "train"
+  },
+  "449": {
+    "question": "Call center supervisors can update call recording rows only for their current tenant and team.",
+    "target": "support.call_recordings",
+    "gold_tables": [
+      "support.call_recordings"
+    ],
+    "split": "train"
+  },
+  "450": {
+    "question": "Call center supervisors may update recorded call recordings to reviewed only within their tenant.",
+    "target": "support.call_recordings",
+    "gold_tables": [
+      "support.call_recordings"
+    ],
+    "split": "train"
+  },
+  "451": {
+    "question": "Support operations users can read customer rows in their own tenant. To read a customer from another tenant, they must have active, approved, unexpired break-glass read access for that customer record.",
+    "target": "sales.customers",
+    "gold_tables": [
+      "operations.temporal_access",
+      "sales.customers"
+    ],
+    "split": "train"
+  },
+  "452": {
+    "question": "Support operations users can update contract rows in their own tenant. Cross-tenant contract updates are allowed only during an approved emergency update window for the target tenant's contract records, and updated rows must stay within a permitted tenant.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "operations.temporal_access",
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "453": {
+    "question": "Support operations users can read expense rows in their own tenant. Cross-tenant expense reads require an active finance-review access record for the target tenant that is still within its expiration time.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses",
+      "operations.temporal_access"
+    ],
+    "split": "test"
+  },
+  "454": {
+    "question": "SREs can read engineering projects in their own tenant. Cross-tenant project requires project-specific read access from an approved device with a completed step-up check in the last eight hours.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects",
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "455": {
+    "question": "SREs can read audit logs in their own tenant. Cross-tenant audit log reads require an active, verified audit-read temporal access record for the target tenant that has not expired.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs",
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "456": {
+    "question": "SecOps responders can update security events in their own tenant. Cross-tenant event updates require a verified severity-matched update access record with real-time alerting enabled and a response SLA of at most 60 minutes, and the updated row must remain covered by the same rule.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events",
+      "operations.temporal_access"
+    ],
+    "split": "dev"
+  },
+  "457": {
+    "question": "Customer support users can read product metrics in their own tenant. Cross-tenant metric reads require an active, minimum-necessary access record scoped for the target tenant.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "operations.temporal_access",
+      "product.metrics"
+    ],
+    "split": "dev"
+  },
+  "458": {
+    "question": "Data analysts can read analytics rows in their own tenant; analytics rows from another tenant require an approved, unexpired read grant issued to their application account for the row's tenant and a recorded approver.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "auth.access_grants",
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "459": {
+    "question": "Support operations users can read call recordings in their own tenant; a recording from another tenant requires an approved, unexpired read grant issued to their application account for that tenant and targeting support call recordings.",
+    "target": "support.call_recordings",
+    "gold_tables": [
+      "auth.access_grants",
+      "support.call_recordings"
+    ],
+    "split": "train"
+  },
+  "460": {
+    "question": "HR administrators can read employee rows in their own tenant; employee rows from another tenant require a non-deleted read grant issued to their application account for the employee row's tenant.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "auth.access_grants",
+      "hr.employees"
+    ],
+    "split": "dev"
+  },
+  "461": {
+    "question": "Operations managers can read documents in their own tenant; documents from another tenant require an approved, unexpired operations document grant issued to their application account for the document tenant, permitting read access, marked for incident response and case review, and recorded in the manager's current tenant by a grant issuer.",
+    "target": "operations.documents",
+    "gold_tables": [
+      "auth.access_grants",
+      "operations.documents"
+    ],
+    "split": "train"
+  },
+  "462": {
+    "question": "Finance managers can read invoices in their own tenant; invoices from another tenant require an approved, unexpired sales invoice financial-review grant issued to their application account, permitting read access and naming an approver.",
+    "target": "sales.invoices",
+    "gold_tables": [
+      "auth.access_grants",
+      "sales.invoices"
+    ],
+    "split": "train"
+  },
+  "463": {
+    "question": "Auditors and compliance officers can read all expense rows, but audit roles are blocked from inserting or updating expense records.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "464": {
+    "question": "Auditors and compliance officers can read all audit logs, but audit roles cannot insert or update audit log rows.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "465": {
+    "question": "Auditors and compliance officers can read all engineering issues, but audit roles are prevented from writing issue records.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues"
+    ],
+    "split": "test"
+  },
+  "466": {
+    "question": "Auditors and compliance officers can read all product metrics, but audit roles cannot insert or update metric rows.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "test"
+  },
+  "467": {
+    "question": "Auditors and compliance officers can read all sales contracts, but audit roles are blocked from inserting or updating contract rows.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "dev"
+  },
+  "468": {
+    "question": "AppSec engineers can insert code repository rows they own only when the row stays in the current tenant, references an active project in that tenant whose required clearance does not exceed their session clearance, uses internal or private visibility, has branch protection enabled, and is not archived.",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository",
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "469": {
+    "question": "Engineering managers can insert pull requests they author only with status Open, and only for repositories that are not archived and belong to projects they own.",
+    "target": "engineering.pull_requests",
+    "gold_tables": [
+      "engineering.code_repository",
+      "engineering.projects",
+      "engineering.pull_requests"
+    ],
+    "split": "train"
+  },
+  "470": {
+    "question": "DevOps engineers can insert build rows they triggered only when the build is queued, references a planned release, and the release belongs to an active project in the current tenant.",
+    "target": "engineering.builds",
+    "gold_tables": [
+      "engineering.builds",
+      "engineering.projects",
+      "engineering.releases"
+    ],
+    "split": "dev"
+  },
+  "471": {
+    "question": "QA engineers can insert security test rows assigned to themselves only when the test belongs to the current tenant, references an active project, and is tied to an open engineering issue in that same project.",
+    "target": "engineering.tests",
+    "gold_tables": [
+      "engineering.issues",
+      "engineering.projects",
+      "engineering.tests"
+    ],
+    "split": "test"
+  },
+  "472": {
+    "question": "Compliance officers can insert confidential operations documents only for their current tenant and department, only when the document has a future expiration time, and only when the author is an active employee in the same department.",
+    "target": "operations.documents",
+    "gold_tables": [
+      "hr.employees",
+      "operations.documents"
+    ],
+    "split": "train"
+  },
+  "473": {
+    "question": "Managers can insert approved attendance rows for employees in their recursive subordinate chain only when the employee belongs to the manager's department and the referenced shift is in that department.",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance",
+      "hr.employees",
+      "hr.shifts"
+    ],
+    "split": "train"
+  },
+  "474": {
+    "question": "Users whose role is 'employee' and who have a recorded hire date may update their own performance records. Managers may also update performance reviews for employees they oversee, but writes cannot set the review status to 'Archived'. Managers may insert new performance reviews only with status 'Submitted'.",
+    "target": "hr.performance",
+    "gold_tables": [
+      "hr.performance"
+    ],
+    "split": "test"
+  },
+  "475": {
+    "question": "Users whose role is 'employee' and who are verified in the HR system may update their own expense records. Finance managers may also update expense records for employees they manage, but writes cannot set the approval status to 'Archived'. Finance managers may insert new expense records only with status 'Submitted'.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "476": {
+    "question": "Account managers may update invoices they own. Finance managers may also update invoices they own, but writes cannot set the payment status to 'Archived'. Finance managers may insert new invoices only with status 'Paid'.",
+    "target": "sales.invoices",
+    "gold_tables": [
+      "sales.invoices"
+    ],
+    "split": "train"
+  },
+  "477": {
+    "question": "Sales representatives may update orders they are responsible for. Sales managers may also update orders for their representatives, but writes cannot set the fulfillment status to 'Archived'. Sales managers may insert new orders only with status 'Pending'.",
+    "target": "sales.orders",
+    "gold_tables": [
+      "sales.orders"
+    ],
+    "split": "train"
+  },
+  "478": {
+    "question": "Product managers with a recorded hire date may update metrics they own. Data analysts may also update metrics they own, but writes cannot set the metric status to 'Archived'. Data analysts may insert new metrics only with status 'Live'.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "479": {
+    "question": "Engineers who are verified employees may update features they own. Product managers may also update features they own, but writes cannot set the feature status to 'Archived'. Product managers may insert new features only with status 'Released'.",
+    "target": "product.features",
+    "gold_tables": [
+      "product.features"
+    ],
+    "split": "dev"
+  },
+  "480": {
+    "question": "Customer support agents may update user feedback entries they own. Customer advocacy managers may also update feedback they own, but writes cannot set the feedback status to 'Archived'. Customer advocacy managers may insert new feedback only with status 'Closed'.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "product.user_feedback"
+    ],
+    "split": "dev"
+  },
+  "481": {
+    "question": "Sales representatives may update customer communication records for accounts they manage. Account managers may also update communications for their accounts, but writes cannot set the communication type to 'Archived'. Account managers may insert new communication records only of type 'email'.",
+    "target": "sales.customer_communications",
+    "gold_tables": [
+      "sales.customer_communications"
+    ],
+    "split": "train"
+  },
+  "482": {
+    "question": "Customer support agents with a recorded hire date may update call recordings they handle. Call center supervisors may also update call recordings for their agents, but writes cannot set the recording status to 'Archived'. Supervisors may insert new recordings only with status 'recorded'.",
+    "target": "support.call_recordings",
+    "gold_tables": [
+      "support.call_recordings"
+    ],
+    "split": "train"
+  },
+  "483": {
+    "question": "HR specialists who are verified employees may update salary history records for their employees. HR administrators may also update salary history records, but writes cannot set the change status to 'Archived'. HR admins may insert new salary history entries only with status 'Final'.",
+    "target": "hr.salary_history",
+    "gold_tables": [
+      "hr.salary_history"
+    ],
+    "split": "train"
+  },
+  "484": {
+    "question": "Finance analysts may update revenue records they own. Finance managers may also update revenue records they own, but writes cannot set the report status to 'Archived'. Finance managers may insert new revenue records only with status 'Closed'.",
+    "target": "finance.revenue",
+    "gold_tables": [
+      "finance.revenue"
+    ],
+    "split": "train"
+  },
+  "485": {
+    "question": "Compliance officers may update audit log entries for their own employee activity. Audit leads may also update audit logs where they are the recorded employee, but writes cannot set the audit status to 'Archived'. Audit leads may insert new audit log entries only with status 'Final'.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "test"
+  },
+  "486": {
+    "question": "DevOps engineers with a recorded hire date may update system configuration records they own. SRE engineers may also update system configs they own, but writes cannot set the config status to 'Archived'. SREs may insert new configurations only with status 'Active'.",
+    "target": "operations.system_config",
+    "gold_tables": [
+      "operations.system_config"
+    ],
+    "split": "train"
+  },
+  "487": {
+    "question": "DevOps engineers who are verified employees may update backup records they initiated. Database administrators may also update backups they initiated, but writes cannot set the backup status to Archived. DBAs may insert new backup records only with backup status Completed.",
+    "target": "operations.backups",
+    "gold_tables": [
+      "operations.backups"
+    ],
+    "split": "train"
+  },
+  "488": {
+    "question": "Engineers may update projects they lead. Engineering managers may also update projects they lead, but writes cannot set the project status to 'Archived'. Engineering managers may insert new projects only with status 'Active'.",
+    "target": "engineering.projects",
+    "gold_tables": [
+      "engineering.projects"
+    ],
+    "split": "dev"
+  },
+  "489": {
+    "question": "HR specialists may update benefits records for their assigned employees. HR administrators may also update benefits records, but writes cannot set the benefit status to 'Archived'. HR admins may insert new benefit entries only with status 'Active'.",
+    "target": "hr.benefits",
+    "gold_tables": [
+      "hr.benefits"
+    ],
+    "split": "train"
+  },
+  "490": {
+    "question": "Finance analysts with a recorded hire date may update tax records they own. Tax specialists may also update tax records they own, but writes cannot set the filing status to 'Archived'. Tax specialists may insert new tax records only with status 'Filed'.",
+    "target": "finance.tax_records",
+    "gold_tables": [
+      "finance.tax_records"
+    ],
+    "split": "train"
+  },
+  "491": {
+    "question": "Accountants who are verified employees may update bank account records they own. Finance managers may also update bank accounts they own, but writes cannot set the account status to 'Archived'. Finance managers may insert new bank account records only with status 'Open'.",
+    "target": "finance.bank_accounts",
+    "gold_tables": [
+      "finance.bank_accounts"
+    ],
+    "split": "train"
+  },
+  "492": {
+    "question": "Sales representatives may update customer records for accounts they manage. Account managers may also update customer records for their accounts, but writes cannot set the customer status to 'Archived'. Account managers may insert new customer records only with status 'Active'.",
+    "target": "sales.customers",
+    "gold_tables": [
+      "sales.customers"
+    ],
+    "split": "train"
+  },
+  "493": {
+    "question": "Employees may update their own payroll records (permissive). However, a restrictive policy additionally requires that the row's data type is not PII or the user is an HR administrator; non-HR users are blocked from PII rows.",
+    "target": "hr.payroll",
+    "gold_tables": [
+      "hr.payroll"
+    ],
+    "split": "dev"
+  },
+  "494": {
+    "question": "Employees with a recorded hire date may update their own expense records (permissive). However, a restrictive policy additionally limits access so that only finance managers or accountants can view expenses across departments; other employees may only update expenses within their own department.",
+    "target": "finance.expenses",
+    "gold_tables": [
+      "finance.expenses"
+    ],
+    "split": "train"
+  },
+  "495": {
+    "question": "SIEM administrators who are verified employees may update security event records (permissive). However, a restrictive policy additionally blocks access to events with confidentiality level 'Confidential' unless the user has a security clearance level of 4 or higher.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "496": {
+    "question": "Account managers may update contracts they manage (permissive). However, a restrictive policy additionally blocks updates to contracts under 'Legal Hold' status unless the user is a compliance officer.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts"
+    ],
+    "split": "train"
+  },
+  "497": {
+    "question": "Audit leads may update audit log entries (permissive). However, a restrictive policy additionally blocks updates to log entries with evidence status 'Sealed' unless the user type is 'forensic'.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "498": {
+    "question": "Team members with a recorded hire date may update code repositories assigned to their team (permissive). However, a restrictive policy additionally blocks access to repositories with a sensitivity level above 2 unless the user has a clearance level of 3 or higher.",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository"
+    ],
+    "split": "train"
+  },
+  "499": {
+    "question": "Product managers who are verified employees may update features they own (permissive). However, a restrictive policy additionally blocks updates to features with sensitivity level 'Confidential' or higher unless the user holds a clearance level of at least 3.",
+    "target": "product.features",
+    "gold_tables": [
+      "product.features"
+    ],
+    "split": "train"
+  },
+  "500": {
+    "question": "Data analysts may update analytics records they own (permissive). However, a restrictive policy additionally prevents updates unless the status is null or not 'Archived'.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "501": {
+    "question": "HR admins and managers can read salary history for employees in their reporting hierarchy; deletion is limited to archived salary history older than seven years for those same subordinate employees.",
+    "target": "hr.salary_history",
+    "gold_tables": [
+      "hr.employees",
+      "hr.salary_history"
+    ],
+    "split": "train"
+  },
+  "502": {
+    "question": "Regional directors can read contracts in their region hierarchy; deletion is limited to archived contracts in that hierarchy after two years.",
+    "target": "sales.contracts",
+    "gold_tables": [
+      "sales.contracts",
+      "sales.regions"
+    ],
+    "split": "train"
+  },
+  "503": {
+    "question": "Finance managers can read bank accounts in their department hierarchy; deletion is limited to closed non-current accounts older than seven years.",
+    "target": "finance.bank_accounts",
+    "gold_tables": [
+      "finance.bank_accounts",
+      "hr.departments"
+    ],
+    "split": "dev"
+  },
+  "504": {
+    "question": "Engineering managers can read releases in a recursive project tree; deletion is limited to cancelled releases in that tree after 180 days.",
+    "target": "engineering.releases",
+    "gold_tables": [
+      "engineering.projects",
+      "engineering.releases"
+    ],
+    "split": "train"
+  },
+  "505": {
+    "question": "Operations managers can read security events in their department hierarchy; deletion is limited to resolved low or medium severity events older than one year.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "hr.departments",
+      "operations.security_events"
+    ],
+    "split": "train"
+  },
+  "506": {
+    "question": "Account managers can read onboarding rows for a recursive customer hierarchy; deletion is limited to abandoned onboarding rows in that hierarchy after one year.",
+    "target": "sales.customer_onboarding",
+    "gold_tables": [
+      "sales.customer_onboarding",
+      "sales.customers"
+    ],
+    "split": "train"
+  },
+  "507": {
+    "question": "Call center supervisors can read recordings for agents in their reporting hierarchy; deletion is limited to archived recordings older than two years for those subordinate agents.",
+    "target": "support.call_recordings",
+    "gold_tables": [
+      "hr.employees",
+      "support.call_recordings"
+    ],
+    "split": "train"
+  },
+  "508": {
+    "question": "Product managers can read metrics owned by employees in their reporting hierarchy; deletion is limited to archived metrics older than one year.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "hr.employees",
+      "product.metrics"
+    ],
+    "split": "test"
+  },
+  "509": {
+    "question": "Audit leads can read audit logs for employees in their reporting hierarchy; deletion is limited to archived logs older than seven years for those employees.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "hr.employees",
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "510": {
+    "question": "Account managers can read sales pipeline rows for customers in a recursive customer hierarchy; deletion is limited to abandoned stale pipeline rows in that hierarchy.",
+    "target": "sales.sales_pipeline",
+    "gold_tables": [
+      "sales.customers",
+      "sales.sales_pipeline"
+    ],
+    "split": "train"
+  },
+  "511": {
+    "question": "Account managers can read onboarding rows for customers in their recursive customer hierarchy and can insert only new Not Started onboarding rows for customers in that same hierarchy.",
+    "target": "sales.customer_onboarding",
+    "gold_tables": [
+      "sales.customer_onboarding",
+      "sales.customers"
+    ],
+    "split": "train"
+  },
+  "512": {
+    "question": "Finance managers can read payroll rows in their department hierarchy and can insert only payroll rows with status Pending for that same department hierarchy.",
+    "target": "finance.payroll",
+    "gold_tables": [
+      "finance.payroll",
+      "hr.departments"
+    ],
+    "split": "train"
+  },
+  "513": {
+    "question": "Call center supervisors can update recordings in their team only from Recorded to Reviewed, and can delete only archived team recordings older than two years.",
+    "target": "support.call_recordings",
+    "gold_tables": [
+      "support.call_recordings"
+    ],
+    "split": "train"
+  },
+  "514": {
+    "question": "Finance managers can update balance sheet correction rows only from Draft to Reviewed, and can delete only voided correction rows older than one year.",
+    "target": "finance.balance_sheet",
+    "gold_tables": [
+      "finance.balance_sheet"
+    ],
+    "split": "dev"
+  },
+  "515": {
+    "question": "Product managers who are verified employees may update metrics they own (permissive). However, a restrictive policy additionally prevents updates unless the status is null or not 'Archived'.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "516": {
+    "question": "Audit leads may update temporal access records they own (permissive). However, a restrictive policy additionally blocks updates unless the record's tenant matches the session tenant, enforcing multi-tenant data isolation.",
+    "target": "operations.temporal_access",
+    "gold_tables": [
+      "operations.temporal_access"
+    ],
+    "split": "train"
+  },
+  "517": {
+    "question": "Account managers may update customer communication records for their accounts (permissive). However, a restrictive policy additionally prevents updates unless the status is null or not 'Archived'.",
+    "target": "sales.customer_communications",
+    "gold_tables": [
+      "sales.customer_communications"
+    ],
+    "split": "train"
+  },
+  "518": {
+    "question": "Call center supervisors with a recorded hire date may update call recordings for their agents (permissive). However, a restrictive policy additionally prevents updates unless the status is null or not 'Archived'.",
+    "target": "support.call_recordings",
+    "gold_tables": [
+      "support.call_recordings"
+    ],
+    "split": "train"
+  },
+  "519": {
+    "question": "HR administrators who are verified employees may update salary history records for their employees (permissive). However, a restrictive policy additionally blocks updates unless the salary record's approving manager exists in the same department as the employee, ensuring departmental oversight integrity.",
+    "target": "hr.salary_history",
+    "gold_tables": [
+      "hr.salary_history"
+    ],
+    "split": "train"
+  },
+  "520": {
+    "question": "Finance managers may update payroll records for their assigned employees (permissive). However, a restrictive policy additionally blocks updates to payroll records with data type 'PII' unless the user has a position level of 8 or higher.",
+    "target": "finance.payroll",
+    "gold_tables": [
+      "finance.payroll"
+    ],
+    "split": "test"
+  },
+  "521": {
+    "question": "IAM administrators may update employee records for employees they manage (permissive). However, a restrictive policy additionally prevents updates unless the status is null or not 'Archived'.",
+    "target": "hr.employees",
+    "gold_tables": [
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "522": {
+    "question": "Engineering managers with a recorded hire date may update release records they created (permissive). However, a restrictive policy additionally blocks release updates during the current date's first seven days of the month (release freeze window) unless the release status is 'Hotfix'.",
+    "target": "engineering.releases",
+    "gold_tables": [
+      "engineering.releases"
+    ],
+    "split": "train"
+  },
+  "523": {
+    "question": "Managers and HR admins can delete archived salary history for subordinate employees only inside the current tenant and only when the salary history effective_date is older than seven years.",
+    "target": "hr.salary_history",
+    "gold_tables": [
+      "hr.employees",
+      "hr.salary_history"
+    ],
+    "split": "train"
+  },
+  "524": {
+    "question": "Finance managers can delete closed payroll rows in their department hierarchy inside the current tenant only after 90 days.",
+    "target": "finance.payroll",
+    "gold_tables": [
+      "finance.payroll",
+      "hr.departments"
+    ],
+    "split": "train"
+  },
+  "525": {
+    "question": "Finance managers can delete voided balance sheet entries in their region hierarchy inside the current tenant only after one year.",
+    "target": "finance.balance_sheet",
+    "gold_tables": [
+      "finance.balance_sheet",
+      "sales.regions"
+    ],
+    "split": "test"
+  },
+  "526": {
+    "question": "Finance managers can delete closed non-current bank accounts in their department hierarchy only after seven years.",
+    "target": "finance.bank_accounts",
+    "gold_tables": [
+      "finance.bank_accounts",
+      "hr.departments"
+    ],
+    "split": "test"
+  },
+  "527": {
+    "question": "DevOps engineers can delete failed builds in recursive project trees rooted at projects they own inside the current tenant only after 90 days.",
+    "target": "engineering.builds",
+    "gold_tables": [
+      "engineering.builds",
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "528": {
+    "question": "Engineering managers can delete cancelled releases in recursive project trees they own inside the current tenant only when the release_date is older than 180 days.",
+    "target": "engineering.releases",
+    "gold_tables": [
+      "engineering.projects",
+      "engineering.releases"
+    ],
+    "split": "train"
+  },
+  "529": {
+    "question": "Account managers can delete abandoned pipeline rows for customers in their recursive customer hierarchy inside the current tenant after 180 days.",
+    "target": "sales.sales_pipeline",
+    "gold_tables": [
+      "sales.customers",
+      "sales.sales_pipeline"
+    ],
+    "split": "test"
+  },
+  "530": {
+    "question": "Account managers can delete abandoned onboarding rows for customers in their recursive customer hierarchy inside the current tenant after one year.",
+    "target": "sales.customer_onboarding",
+    "gold_tables": [
+      "sales.customer_onboarding",
+      "sales.customers"
+    ],
+    "split": "train"
+  },
+  "531": {
+    "question": "Call center supervisors can delete archived recordings for recursive subordinate agents inside the current tenant only after two years.",
+    "target": "support.call_recordings",
+    "gold_tables": [
+      "hr.employees",
+      "support.call_recordings"
+    ],
+    "split": "train"
+  },
+  "532": {
+    "question": "Audit leads can delete archived audit logs for employees in their recursive reporting hierarchy inside the current tenant only after seven years.",
+    "target": "operations.audit_logs",
+    "gold_tables": [
+      "hr.employees",
+      "operations.audit_logs"
+    ],
+    "split": "train"
+  },
+  "533": {
+    "question": "Operations managers can delete resolved low or medium security events for recursive subordinate employees inside the current tenant only after one year.",
+    "target": "operations.security_events",
+    "gold_tables": [
+      "hr.employees",
+      "operations.security_events"
+    ],
+    "split": "dev"
+  },
+  "534": {
+    "question": "Operations managers can delete expired documents in their department hierarchy inside the current tenant after the expiration timestamp passes.",
+    "target": "operations.documents",
+    "gold_tables": [
+      "hr.departments",
+      "operations.documents"
+    ],
+    "split": "dev"
+  },
+  "535": {
+    "question": "Product managers can delete archived metrics owned by recursive subordinate employees inside the current tenant only after one year.",
+    "target": "product.metrics",
+    "gold_tables": [
+      "hr.employees",
+      "product.metrics"
+    ],
+    "split": "train"
+  },
+  "536": {
+    "question": "Data analysts can delete archived analytics owned by recursive subordinate employees inside the current tenant only after one year.",
+    "target": "product.analytics",
+    "gold_tables": [
+      "hr.employees",
+      "product.analytics"
+    ],
+    "split": "train"
+  },
+  "537": {
+    "question": "Customer support can delete duplicate resolved feedback assigned to recursive subordinate employees inside the current tenant after 30 days.",
+    "target": "product.user_feedback",
+    "gold_tables": [
+      "hr.employees",
+      "product.user_feedback"
+    ],
+    "split": "dev"
+  },
+  "538": {
+    "question": "Project managers can delete archived issues in recursive project trees they own inside the current tenant only when the issue updated_at is older than 180 days.",
+    "target": "engineering.issues",
+    "gold_tables": [
+      "engineering.issues",
+      "engineering.projects"
+    ],
+    "split": "test"
+  },
+  "539": {
+    "question": "Senior engineers can delete archived repositories in recursive project trees rooted at projects they own inside the current tenant only when the repository archived_at is older than 90 days.",
+    "target": "engineering.code_repository",
+    "gold_tables": [
+      "engineering.code_repository",
+      "engineering.projects"
+    ],
+    "split": "train"
+  },
+  "540": {
+    "question": "Customers can delete draft unfulfilled orders for themselves or child customers in their recursive customer hierarchy inside the current tenant.",
+    "target": "sales.orders",
+    "gold_tables": [
+      "sales.customers",
+      "sales.orders"
+    ],
+    "split": "train"
+  },
+  "541": {
+    "question": "Finance managers can delete voided invoices for customers in a recursive customer hierarchy inside the current tenant only after one year.",
+    "target": "sales.invoices",
+    "gold_tables": [
+      "sales.customers",
+      "sales.invoices"
+    ],
+    "split": "train"
+  },
+  "542": {
+    "question": "Managers can delete stale pending attendance correction requests for recursive subordinate employees inside the current tenant after 30 days.",
+    "target": "hr.attendance",
+    "gold_tables": [
+      "hr.attendance",
+      "hr.employees"
+    ],
+    "split": "train"
+  },
+  "543": {
+    "question": "Finance managers can perform all row-level operations on non-archived balance sheet rows in their region hierarchy, and new or updated rows must remain in that same region hierarchy and non-archived.",
+    "target": "finance.balance_sheet",
+    "gold_tables": [
+      "finance.balance_sheet",
+      "sales.regions"
+    ],
+    "split": "train"
+  },
+  "544": {
+    "question": "Account managers can perform all operations on their own non-archived sales pipeline rows, and new or updated rows must remain assigned to them.",
+    "target": "sales.sales_pipeline",
+    "gold_tables": [
+      "sales.sales_pipeline"
+    ],
+    "split": "train"
+  },
+  "545": {
+    "question": "Call center supervisors can perform all operations on non-archived call recordings for their team, and new or updated rows must stay in that team.",
+    "target": "support.call_recordings",
+    "gold_tables": [
+      "support.call_recordings"
+    ],
+    "split": "train"
+  },
+  "546": {
+    "question": "Engineering managers can perform all row-level operations on planned or hotfix releases in recursive project trees rooted they own inside the current tenant, and new or updated rows must remain planned or hotfix releases in those project trees.",
+    "target": "engineering.releases",
+    "gold_tables": [
+      "engineering.projects",
+      "engineering.releases"
+    ],
+    "split": "train"
+  },
+  "547": {
+    "question": "Finance managers can perform all row-level operations on active or pending-review bank accounts in their region hierarchy inside the current tenant, and new or updated rows must remain in that region hierarchy and tenant with an allowed account status.",
+    "target": "finance.bank_accounts",
+    "gold_tables": [
+      "finance.bank_accounts",
+      "sales.regions"
+    ],
+    "split": "dev"
+  },
+  "548": {
+    "question": "Finance managers can insert pending payroll rows inside the current tenant only when the employee exists in their department hierarchy in that tenant, and the payroll row department matches that employee department.",
+    "target": "finance.payroll",
+    "gold_tables": [
+      "finance.payroll",
+      "hr.departments",
+      "hr.employees"
+    ],
+    "split": "test"
+  },
+  "549": {
+    "question": "Account managers can insert Not Started onboarding rows only for customers they manage in the current tenant.",
+    "target": "sales.customer_onboarding",
+    "gold_tables": [
+      "sales.customer_onboarding",
+      "sales.customers"
+    ],
+    "split": "train"
+  },
+  "550": {
+    "question": "DevOps engineers can insert queued build rows inside the current tenant only for planned or hotfix releases in recursive project trees rooted at projects they own.",
+    "target": "engineering.builds",
+    "gold_tables": [
+      "engineering.builds",
+      "engineering.projects",
+      "engineering.releases"
+    ],
+    "split": "dev"
+  }
+}

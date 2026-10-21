@@ -1,0 +1,17 @@
+{
+  "description": "Runtime context variables exposed via PostgreSQL current_setting('app.<name>', true).",
+  "variables": [
+    {"name": "app.employee_id", "type": "int", "purpose": "Acting employee id (internal identity)"},
+    {"name": "app.user_id", "type": "int", "purpose": "Application account id (auth.users, access grants, security events)"},
+    {"name": "app.customer_id", "type": "int", "purpose": "Customer portal identity"},
+    {"name": "app.job_role", "type": "text", "purpose": "Acting employee job role (values in job_role_vocab.json)"},
+    {"name": "app.department_id", "type": "int", "purpose": "Department of the acting employee"},
+    {"name": "app.team_id", "type": "int", "purpose": "Team of the acting employee"},
+    {"name": "app.region_id", "type": "int", "purpose": "Sales region of the acting employee"},
+    {"name": "app.user_clearance_level", "type": "int", "purpose": "Security clearance level of the acting user"},
+    {"name": "app.position_level", "type": "int", "purpose": "Position level of the acting employee"},
+    {"name": "app.tenant_id", "type": "int", "purpose": "Tenant scope (multi-tenant database)"},
+    {"name": "app.hire_date", "type": "date", "purpose": "Hire date of the acting employee (multi-policy bundles only)"}
+  ],
+  "missing_session_semantics": "If a required variable is NULL (current_setting('x', true) IS NULL), the policy must deny."
+}

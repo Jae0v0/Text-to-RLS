@@ -1,0 +1,723 @@
+{
+  "CARGO": {
+    "metrics": {
+      "PCS": 0.9857,
+      "BA": 0.8842,
+      "OPR": 0.1509,
+      "UPR": 0.319,
+      "Sec": 0.7796,
+      "DDeny": 0.981,
+      "IA": 0.6245
+    },
+    "by_difficulty": {
+      "simple": 0.6618,
+      "hard": 0.6087,
+      "moderate": 0.6739,
+      "extra_hard": 0.5455
+    },
+    "by_difficulty_counts": {
+      "simple": [
+        45,
+        68
+      ],
+      "hard": [
+        126,
+        207
+      ],
+      "moderate": [
+        93,
+        138
+      ],
+      "extra_hard": [
+        42,
+        77
+      ]
+    },
+    "by_operation": {
+      "SELECT": 0.6377,
+      "DELETE": 0.6852,
+      "UPDATE": 0.5833,
+      "INSERT": 0.5938,
+      "ALL": 0.7143
+    },
+    "by_operation_counts": {
+      "SELECT": [
+        132,
+        207
+      ],
+      "DELETE": [
+        37,
+        54
+      ],
+      "UPDATE": [
+        84,
+        144
+      ],
+      "INSERT": [
+        38,
+        64
+      ],
+      "ALL": [
+        15,
+        21
+      ]
+    },
+    "by_pattern": {
+      "relational": 0.6854,
+      "temporal": 0.7532,
+      "compliance_invariant": 0.5385,
+      "combined": 0.6145,
+      "nested": 0.5278,
+      "hierarchy_recursive": 0.6061,
+      "ordinal": 0.4865
+    },
+    "by_pattern_counts": {
+      "relational": [
+        61,
+        89
+      ],
+      "temporal": [
+        58,
+        77
+      ],
+      "compliance_invariant": [
+        28,
+        52
+      ],
+      "combined": [
+        102,
+        166
+      ],
+      "nested": [
+        19,
+        36
+      ],
+      "hierarchy_recursive": [
+        20,
+        33
+      ],
+      "ordinal": [
+        18,
+        37
+      ]
+    }
+  },
+  "GPT-4.1": {
+    "metrics": {
+      "PCS": 0.9265,
+      "BA": 0.7471,
+      "OPR": 0.3315,
+      "UPR": 0.5401,
+      "Sec": 0.5041,
+      "DDeny": 0.9058,
+      "IA": 0.2755
+    },
+    "by_difficulty": {
+      "simple": 0.3529,
+      "hard": 0.2609,
+      "moderate": 0.2609,
+      "extra_hard": 0.2727
+    },
+    "by_operation": {
+      "SELECT": 0.314,
+      "DELETE": 0.1296,
+      "UPDATE": 0.2639,
+      "INSERT": 0.3281,
+      "ALL": 0.1905
+    },
+    "by_operation_counts": {
+      "SELECT": [
+        65,
+        207
+      ],
+      "DELETE": [
+        7,
+        54
+      ],
+      "UPDATE": [
+        38,
+        144
+      ],
+      "INSERT": [
+        21,
+        64
+      ],
+      "ALL": [
+        4,
+        21
+      ]
+    },
+    "by_pattern": {
+      "relational": 0.4157,
+      "temporal": 0.3636,
+      "compliance_invariant": 0.1154,
+      "combined": 0.2169,
+      "nested": 0.2778,
+      "hierarchy_recursive": 0.2424,
+      "ordinal": 0.2703
+    },
+    "by_difficulty_counts": {
+      "simple": [
+        24,
+        68
+      ],
+      "hard": [
+        54,
+        207
+      ],
+      "moderate": [
+        36,
+        138
+      ],
+      "extra_hard": [
+        21,
+        77
+      ]
+    },
+    "by_pattern_counts": {
+      "relational": [
+        37,
+        89
+      ],
+      "temporal": [
+        28,
+        77
+      ],
+      "compliance_invariant": [
+        6,
+        52
+      ],
+      "combined": [
+        36,
+        166
+      ],
+      "nested": [
+        10,
+        36
+      ],
+      "hierarchy_recursive": [
+        8,
+        33
+      ],
+      "ordinal": [
+        10,
+        37
+      ]
+    }
+  },
+  "GPT-5.2": {
+    "metrics": {
+      "PCS": 0.9653,
+      "BA": 0.7758,
+      "OPR": 0.2983,
+      "UPR": 0.5538,
+      "Sec": 0.5163,
+      "DDeny": 0.9458,
+      "IA": 0.2755
+    },
+    "by_difficulty": {
+      "simple": 0.3088,
+      "hard": 0.2754,
+      "moderate": 0.2029,
+      "extra_hard": 0.3766
+    },
+    "by_operation": {
+      "SELECT": 0.256,
+      "DELETE": 0.1852,
+      "UPDATE": 0.3264,
+      "INSERT": 0.2969,
+      "ALL": 0.2857
+    },
+    "by_operation_counts": {
+      "SELECT": [
+        53,
+        207
+      ],
+      "DELETE": [
+        10,
+        54
+      ],
+      "UPDATE": [
+        47,
+        144
+      ],
+      "INSERT": [
+        19,
+        64
+      ],
+      "ALL": [
+        6,
+        21
+      ]
+    },
+    "by_pattern": {
+      "relational": 0.3708,
+      "temporal": 0.3506,
+      "compliance_invariant": 0.1538,
+      "combined": 0.2048,
+      "nested": 0.4444,
+      "hierarchy_recursive": 0.2727,
+      "ordinal": 0.2162
+    },
+    "by_difficulty_counts": {
+      "simple": [
+        21,
+        68
+      ],
+      "hard": [
+        57,
+        207
+      ],
+      "moderate": [
+        28,
+        138
+      ],
+      "extra_hard": [
+        29,
+        77
+      ]
+    },
+    "by_pattern_counts": {
+      "relational": [
+        33,
+        89
+      ],
+      "temporal": [
+        27,
+        77
+      ],
+      "compliance_invariant": [
+        8,
+        52
+      ],
+      "combined": [
+        34,
+        166
+      ],
+      "nested": [
+        16,
+        36
+      ],
+      "hierarchy_recursive": [
+        9,
+        33
+      ],
+      "ordinal": [
+        8,
+        37
+      ]
+    }
+  },
+  "DS-V3.2": {
+    "metrics": {
+      "PCS": 0.9673,
+      "BA": 0.7706,
+      "OPR": 0.2983,
+      "UPR": 0.5421,
+      "Sec": 0.5061,
+      "DDeny": 0.9309,
+      "IA": 0.2633
+    },
+    "by_difficulty": {
+      "simple": 0.3824,
+      "hard": 0.2222,
+      "moderate": 0.2681,
+      "extra_hard": 0.2597
+    },
+    "by_operation": {
+      "SELECT": 0.2802,
+      "DELETE": 0.1296,
+      "UPDATE": 0.2222,
+      "INSERT": 0.3906,
+      "ALL": 0.3333
+    },
+    "by_operation_counts": {
+      "SELECT": [
+        58,
+        207
+      ],
+      "DELETE": [
+        7,
+        54
+      ],
+      "UPDATE": [
+        32,
+        144
+      ],
+      "INSERT": [
+        25,
+        64
+      ],
+      "ALL": [
+        7,
+        21
+      ]
+    },
+    "by_pattern": {
+      "relational": 0.427,
+      "temporal": 0.2987,
+      "compliance_invariant": 0.1154,
+      "combined": 0.2108,
+      "nested": 0.3056,
+      "hierarchy_recursive": 0.2121,
+      "ordinal": 0.2432
+    },
+    "by_difficulty_counts": {
+      "simple": [
+        26,
+        68
+      ],
+      "hard": [
+        46,
+        207
+      ],
+      "moderate": [
+        37,
+        138
+      ],
+      "extra_hard": [
+        20,
+        77
+      ]
+    },
+    "by_pattern_counts": {
+      "relational": [
+        38,
+        89
+      ],
+      "temporal": [
+        23,
+        77
+      ],
+      "compliance_invariant": [
+        6,
+        52
+      ],
+      "combined": [
+        35,
+        166
+      ],
+      "nested": [
+        11,
+        36
+      ],
+      "hierarchy_recursive": [
+        7,
+        33
+      ],
+      "ordinal": [
+        9,
+        37
+      ]
+    }
+  },
+  "Qwen3-30B": {
+    "metrics": {
+      "PCS": 0.8592,
+      "BA": 0.6458,
+      "OPR": 0.4573,
+      "UPR": 0.6693,
+      "Sec": 0.4245,
+      "DDeny": 0.8327,
+      "IA": 0.198
+    },
+    "by_difficulty": {
+      "simple": 0.3676,
+      "hard": 0.1739,
+      "moderate": 0.1594,
+      "extra_hard": 0.1818
+    },
+    "by_operation": {
+      "SELECT": 0.2415,
+      "DELETE": 0.1111,
+      "UPDATE": 0.2014,
+      "INSERT": 0.1562,
+      "ALL": 0.0952
+    },
+    "by_operation_counts": {
+      "SELECT": [
+        50,
+        207
+      ],
+      "DELETE": [
+        6,
+        54
+      ],
+      "UPDATE": [
+        29,
+        144
+      ],
+      "INSERT": [
+        10,
+        64
+      ],
+      "ALL": [
+        2,
+        21
+      ]
+    },
+    "by_pattern": {
+      "relational": 0.3258,
+      "temporal": 0.2078,
+      "compliance_invariant": 0.0962,
+      "combined": 0.1807,
+      "nested": 0.2778,
+      "hierarchy_recursive": 0.0909,
+      "ordinal": 0.1081
+    },
+    "by_difficulty_counts": {
+      "simple": [
+        25,
+        68
+      ],
+      "hard": [
+        36,
+        207
+      ],
+      "moderate": [
+        22,
+        138
+      ],
+      "extra_hard": [
+        14,
+        77
+      ]
+    },
+    "by_pattern_counts": {
+      "relational": [
+        29,
+        89
+      ],
+      "temporal": [
+        16,
+        77
+      ],
+      "compliance_invariant": [
+        5,
+        52
+      ],
+      "combined": [
+        30,
+        166
+      ],
+      "nested": [
+        10,
+        36
+      ],
+      "hierarchy_recursive": [
+        3,
+        33
+      ],
+      "ordinal": [
+        4,
+        37
+      ]
+    }
+  },
+  "GLM-4-32B": {
+    "metrics": {
+      "PCS": 0.4082,
+      "BA": 0.2981,
+      "OPR": 0.743,
+      "UPR": 0.8904,
+      "Sec": 0.1857,
+      "DDeny": 0.3943,
+      "IA": 0.049
+    },
+    "by_difficulty": {
+      "simple": 0.1618,
+      "hard": 0.0531,
+      "moderate": 0.0145,
+      "extra_hard": 0.0
+    },
+    "by_operation": {
+      "SELECT": 0.0628,
+      "DELETE": 0.0,
+      "UPDATE": 0.0625,
+      "INSERT": 0.0156,
+      "ALL": 0.0476
+    },
+    "by_operation_counts": {
+      "SELECT": [
+        13,
+        207
+      ],
+      "DELETE": [
+        0,
+        54
+      ],
+      "UPDATE": [
+        9,
+        144
+      ],
+      "INSERT": [
+        1,
+        64
+      ],
+      "ALL": [
+        1,
+        21
+      ]
+    },
+    "by_pattern": {
+      "relational": 0.1685,
+      "temporal": 0.0519,
+      "compliance_invariant": 0.0192,
+      "combined": 0.0181,
+      "nested": 0.0,
+      "hierarchy_recursive": 0.0,
+      "ordinal": 0.027
+    },
+    "by_difficulty_counts": {
+      "simple": [
+        11,
+        68
+      ],
+      "hard": [
+        11,
+        207
+      ],
+      "moderate": [
+        2,
+        138
+      ],
+      "extra_hard": [
+        0,
+        77
+      ]
+    },
+    "by_pattern_counts": {
+      "relational": [
+        15,
+        89
+      ],
+      "temporal": [
+        4,
+        77
+      ],
+      "compliance_invariant": [
+        1,
+        52
+      ],
+      "combined": [
+        3,
+        166
+      ],
+      "nested": [
+        0,
+        36
+      ],
+      "hierarchy_recursive": [
+        0,
+        33
+      ],
+      "ordinal": [
+        1,
+        37
+      ]
+    }
+  },
+  "Gemini-3.1-Pro": {
+    "metrics": {
+      "PCS": 0.8367,
+      "BA": 0.6613,
+      "OPR": 0.3819,
+      "UPR": 0.6243,
+      "Sec": 0.4755,
+      "DDeny": 0.7927,
+      "IA": 0.2796
+    },
+    "by_difficulty": {
+      "simple": 0.4265,
+      "hard": 0.2464,
+      "moderate": 0.2971,
+      "extra_hard": 0.2078
+    },
+    "by_difficulty_counts": {
+      "simple": [
+        29,
+        68
+      ],
+      "hard": [
+        51,
+        207
+      ],
+      "moderate": [
+        41,
+        138
+      ],
+      "extra_hard": [
+        16,
+        77
+      ]
+    },
+    "by_operation": {
+      "SELECT": 0.3237,
+      "DELETE": 0.1296,
+      "UPDATE": 0.25,
+      "INSERT": 0.3594,
+      "ALL": 0.1905
+    },
+    "by_operation_counts": {
+      "SELECT": [
+        67,
+        207
+      ],
+      "DELETE": [
+        7,
+        54
+      ],
+      "UPDATE": [
+        36,
+        144
+      ],
+      "INSERT": [
+        23,
+        64
+      ],
+      "ALL": [
+        4,
+        21
+      ]
+    },
+    "by_pattern": {
+      "relational": 0.4382,
+      "temporal": 0.3506,
+      "compliance_invariant": 0.0962,
+      "combined": 0.259,
+      "nested": 0.3056,
+      "hierarchy_recursive": 0.1212,
+      "ordinal": 0.2162
+    },
+    "by_pattern_counts": {
+      "relational": [
+        39,
+        89
+      ],
+      "temporal": [
+        27,
+        77
+      ],
+      "compliance_invariant": [
+        5,
+        52
+      ],
+      "combined": [
+        43,
+        166
+      ],
+      "nested": [
+        11,
+        36
+      ],
+      "hierarchy_recursive": [
+        4,
+        33
+      ],
+      "ordinal": [
+        8,
+        37
+      ]
+    }
+  }
+}
